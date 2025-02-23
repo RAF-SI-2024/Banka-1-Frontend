@@ -1,0 +1,64 @@
+<div class="user-portal">
+  <!-- Top Container -->
+  <!-- Top Container -->
+  <div class="top-container">
+    <img src="assets/banka1.png" alt="Bank Logo" class="bank-logo">
+  </div>
+
+
+  <div class="content">
+    <!-- Sidebar / Navbar -->
+    <nav class="sidebar">
+      <ul>
+        <li><button>Musterije</button></li>
+        <li><button>Zaposleni</button></li>
+        <li><button>Administratori</button></li>
+      </ul>
+    </nav>
+
+    <div class="add-employee-btn-container">
+      <img src="assets/plus.png" alt="Add Employee" class="add-employee-btn" (click)="addEmployee()">
+    </div>
+
+    <!-- Main Section -->
+    <div class="main-content">
+      <!-- Employee Table -->
+      <div class="table-container">
+        <div class="table-overlay">
+          <table>
+            <thead>
+            <tr>
+              <th>Ime i Prezime</th>
+              <th>Email</th>
+              <th>Pozicija</th>
+              <th>Broj Telefona</th>
+              <th>Aktivan</th>
+              <th>Akcije</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let employee of employees">
+              <td>{{ employee.ime }}</td>
+              <td>{{ employee.prezime }}</td>
+              <td>{{ employee.email }}</td>
+              <td>{{ employee.pozicija }}</td>
+              <td>{{ employee.broj_telefona }}</td>
+              <td>{{ employee.aktivan ? 'Da' : 'Ne' }}</td>
+              <td><img src="assets/edit-icon.png" class="edit-icon" (click)="editEmployee(employee)"></td>
+            </tr>
+
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Button Below Table -->
+      <div class="next-button-container">
+        <button class="next-button" (click)="sledece()">Sledeće</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Container -->
+  <div class="bottom-container"></div>
+</div>

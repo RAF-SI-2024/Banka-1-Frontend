@@ -1,7 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { UserPortalComponent } from './user-portal/user-portal.component';
 
-const routes: Routes = [];
+const routes: Routes = [
+  { path: 'user-portal', component: UserPortalComponent },
+  { path: '', redirectTo: '/user-portal', pathMatch: 'full' } // Default route to user portal
+];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

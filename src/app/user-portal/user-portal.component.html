@@ -1,26 +1,34 @@
 <div class="user-portal">
   <!-- Top Container -->
-  <!-- Top Container -->
   <div class="top-container">
     <img src="assets/banka1.png" alt="Bank Logo" class="bank-logo">
-  </div>
-
-  <div class="add-employee-btn-container">
-    <button class="add-employee-btn" (click)="addEmployee()">Dodaj</button>
   </div>
 
   <div class="content">
     <!-- Sidebar / Navbar -->
     <nav class="sidebar">
       <ul>
-        <li><button>Musterije</button></li>
-        <li><button>Zaposleni</button></li>
-        <li><button>Administratori</button></li>
+        <li><button class="sidebar-button">Musterije</button></li>
+        <li><button class="sidebar-button">Zaposleni</button></li>
+        <li><button class="sidebar-button">Administratori</button></li>
       </ul>
+
+      <button class="logout-btn" (click)="logout()">Izloguj se</button>
+
     </nav>
 
     <!-- Main Section -->
     <div class="main-content">
+      <!-- Search & Add Employee Section -->
+      <div class="filter-add-container">
+        <!-- Search Input -->
+        <input type="text" class="filter-input" [(ngModel)]="searchQuery" (input)="filterEmployees($event)" placeholder="Pretraga...">
+
+        <!-- Add Employee Button -->
+        <button class="add-employee-btn" (click)="addEmployee()">Dodaj</button>
+      </div>
+
+
       <!-- Employee Table -->
       <div class="table-container">
         <div class="table-overlay">
@@ -37,15 +45,18 @@
             </thead>
             <tbody>
             <tr *ngFor="let employee of employees">
-              <td>{{ employee.ime }}</td>
+<!--            <tr *ngFor="let employee of filteredEmployees">-->
+            <td>{{ employee.ime }}</td>
               <td>{{ employee.prezime }}</td>
               <td>{{ employee.email }}</td>
               <td>{{ employee.pozicija }}</td>
               <td>{{ employee.broj_telefona }}</td>
               <td>{{ employee.aktivan ? 'Da' : 'Ne' }}</td>
-              <td><img src="assets/edit-icon.png" class="edit-icon" (click)="editEmployee(employee)"></td>
-            </tr>
+              <td>
+                <img src="assets/bin.jpg" class="delete-icon" (click)="deleteEmployee(employee)">
+              </td>
 
+            </tr>
             </tbody>
           </table>
         </div>

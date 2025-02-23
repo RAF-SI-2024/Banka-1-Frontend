@@ -18,6 +18,7 @@ interface Employee {
 })
 export class UserPortalComponent implements OnInit {
   employees: Employee[] = [];
+  searchQuery: any;
 
   constructor(private http: HttpClient) {}
 
@@ -45,6 +46,18 @@ export class UserPortalComponent implements OnInit {
   }
 
   sledece(){
+
+  }
+
+  filterEmployees($event: Event){
+
+  }
+
+  deleteEmployee(employee: Employee){
+
+  }
+
+  logout(){
 
   }
 }

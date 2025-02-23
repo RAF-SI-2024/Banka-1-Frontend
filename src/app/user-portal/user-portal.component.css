@@ -14,7 +14,7 @@
   border-radius: 30px; /* Curved edges */
   position: relative;
   display: flex;
-  top: -20px; /* Slight offset for the top container */
+  top: -25px; /* Slight offset for the top container */
 }
 
 .bank-logo {
@@ -30,7 +30,7 @@
   border-radius: 30px; /* Curved edges */
   position: relative;
   top: 25px;
-  bottom: 25px;
+  bottom: -25px;
 }
 
 /* Content Layout */
@@ -44,7 +44,9 @@
 .sidebar {
   width: 200px;
   background: rgba(236, 212, 135, 0.6);
-  padding: 20px;
+  padding: 10px;
+  flex-direction: column;
+  align-items: center; /* Centers content horizontally */
 }
 
 .sidebar ul {
@@ -52,15 +54,18 @@
   padding: 0;
 }
 
-.sidebar button {
-  width: 100%;
+.sidebar-button {
+  width: 70%;
   padding: 10px;
+  margin-left: 15%;
   background: #ECD487;
   border: 1px solid #3B4754;
   box-shadow: 0px 4px 4px 0px #00000040;
   margin-bottom: 10px;
   border-radius: 10px;
   cursor: pointer;
+  font-size: 14px; /* Adjust font size */
+
 }
 
 /* Main Content */
@@ -95,19 +100,6 @@ th, td {
   border-bottom: 1px solid #ccc;
 }
 
-.add-employee-btn-container {
-  text-align: right;
-  margin-top: 20px;
-}
-
-.add-employee-btn {
-  background: rgba(236, 212, 135, 1);
-  color: rgb(34, 41, 66, 1);
-  border-radius: 30px;
-  border: rgba(236, 212, 135, 1);
-  cursor: pointer;
-}
-
 .next-button-container {
   text-align: right;
   margin-top: 20px;
@@ -117,6 +109,69 @@ th, td {
   background: rgba(236, 212, 135, 1);
   color: rgb(34, 41, 66, 1);
   border-radius: 30px;
-  border: rgba(236, 212, 135, 1);
+  border: none;
+  padding: 10px 20px;
   cursor: pointer;
+  font-size: 14px;
+}
+
+.search-bar {
+  width: 100%;
+  max-width: 300px;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+}
+
+.filter-add-container {
+  display: flex;
+  justify-content: space-between; /* Moves elements to opposite ends */
+  align-items: center;
+  width: 100%; /* Takes full width of the parent container */
+  margin-bottom: 10px;
+}
+
+.filter-input {
+  flex-grow: 1; /* Makes the input take up available space */
+  max-width: 300px; /* Limit width */
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.add-employee-btn {
+  background: rgba(236, 212, 135, 1);
+  color: rgb(34, 41, 66, 1);
+  border-radius: 30px;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  margin-left: 10px; /* Space between input and button */
+  font-size: 14px;
+}
+
+.delete-icon {
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+}
+
+.logout-btn {
+  width: auto; /* Adjust width to fit text */
+  padding: 8px 12px; /* Reduce padding */
+  background: red;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 200%;
+  bottom: 30px;
+  font-size: 14px; /* Adjust font size */
+  margin-left: 25%;
+}
+
+.logout-btn:hover {
+  background: darkred;
 }

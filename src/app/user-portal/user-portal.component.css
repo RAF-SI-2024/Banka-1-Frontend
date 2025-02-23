@@ -95,27 +95,22 @@ th, td {
   border-bottom: 1px solid #ccc;
 }
 
-/* Edit Icon */
-.edit-icon {
-  width: 20px;
-  height: 20px;
-  cursor: pointer;
-}
-
 .add-employee-btn-container {
-  text-align: left;  /* Align to the left */
-  margin-bottom: 10px; /* Space below the button */
+  text-align: right;
+  margin-top: 20px;
 }
 
 .add-employee-btn {
-  width: 40px;  /* Icon size */
-  height: 40px;
-  cursor: pointer; /* Make it clickable */
+  background: rgba(236, 212, 135, 1);
+  color: rgb(34, 41, 66, 1);
+  border-radius: 30px;
+  border: rgba(236, 212, 135, 1);
+  cursor: pointer;
 }
 
 .next-button-container {
-  text-align: right;  /* Align to the right */
-  margin-top: 20px;   /* Space above the button */
+  text-align: right;
+  margin-top: 20px;
 }
 
 .next-button {
@@ -123,4 +118,5 @@ th, td {
   color: rgb(34, 41, 66, 1);
   border-radius: 30px;
   border: rgba(236, 212, 135, 1);
+  cursor: pointer;
 }

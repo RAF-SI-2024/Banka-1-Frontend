@@ -1,0 +1,26 @@
+<div class="login-container">
+  <h1 class="title">PRIJAVI SE</h1>
+
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+    <div class="input-group">
+      <label for="email">E-mail</label>
+      <input id="email" type="email" formControlName="email" placeholder="Unesite email" />
+    </div>
+
+    <div class="input-group">
+      <label for="password">Lozinka</label>
+      <input id="password" type="password" formControlName="password" placeholder="Unesite lozinku" />
+    </div>
+
+    <div class="reset-password">
+      <span>Zaboravili ste lozinku? </span>
+      <a (click)="onResetPassword()">Resetuj lozinku</a>
+    </div>
+
+    <button type="submit" class="login-btn">PRIJAVI SE</button>
+  </form>
+
+  <div *ngIf="errorMessage" class="error-message">
+    {{ errorMessage }}
+  </div>
+</div>

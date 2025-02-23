@@ -15,12 +15,12 @@
   position: relative;
   display: flex;
   top: -20px; /* Slight offset for the top container */
-  /*padding-left: 20px;*/
 }
 
 .bank-logo {
   height: 130px;
   width: auto;
+  padding-top: 20px;
 }
 
 .bottom-container {

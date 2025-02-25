@@ -139,17 +139,17 @@ export class AuthService {
     );
   }
 
-  changePassword(newPassword: string, token: string): Observable<any> {
+  changePassword(data: { token: string, newPassword: string }): Observable<any> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    const body = { password: newPassword, token: token };
 
-    return this.http.post(`${this.apiUrl}/change-password`, body, { headers }).pipe(
-        tap(() => console.log('Lozinka uspešno promenjena.')),
+    return this.http.post(`${this.apiUrl}/change-password`, data, { headers }).pipe(
+        tap(() => console.log('✅ Zahtev za promenu lozinke uspešno poslat.')),
         catchError((error) => {
-          console.error('Greška prilikom promene lozinke:', error);
+          console.error('❌ Greška prilikom slanja zahteva za promenu lozinke:', error);
           return throwError(() => new Error('Neuspešna promena lozinke.'));
         })
     );
   }
+
 
 }

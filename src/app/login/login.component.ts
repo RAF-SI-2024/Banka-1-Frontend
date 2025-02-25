@@ -51,7 +51,7 @@ export class LoginComponent {
       }
     });
   }
-
+/*
   onResetPassword(): void {
     const email = this.loginForm.get('email')?.value;
     if (!email) {
@@ -64,4 +64,32 @@ export class LoginComponent {
       error: () => alert('Greška prilikom slanja linka za reset.')
     });
   }
+  */
+
+  onResetPassword(): void {
+    const email = this.loginForm.get('email')?.value;
+    console.log('Pokušaj resetovanja lozinke za email:', email);
+
+    if (!email) {
+      alert('⚠️ Unesite email za reset lozinke.');
+      return;
+    }
+
+    this.authService.resetPassword(email).subscribe({
+      next: (response) => {
+        console.log('Uspešno poslata simulacija linka za reset:', response);
+
+        // Generisanje lažnog linka sa tokenom (simulacija)
+        const fakeResetLink = `http://localhost:4200/reset-password?token=testniToken123`;
+        console.log('Simulirani link za reset lozinke:', fakeResetLink);
+
+        alert('Link za reset lozinke je poslat. Simulacija: ' + fakeResetLink);
+      },
+      error: (err) => {
+        console.error('Greška prilikom slanja linka za reset:', err);
+        alert('Došlo je do greške. Proverite email i pokušajte ponovo.');
+      }
+    });
+  }
+
 }

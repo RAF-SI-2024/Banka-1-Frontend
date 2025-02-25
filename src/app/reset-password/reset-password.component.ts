@@ -32,27 +32,38 @@ export class ResetPasswordComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // Uzimanje tokena iz URL-a za resetovanje lozinke
+    // Preuzimanje tokena iz URL-a
     this.resetToken = this.route.snapshot.queryParamMap.get('token');
+    console.log('Reset token iz URL-a:', this.resetToken); // Dodato za prikaz tokena
+    if (!this.resetToken) {
+      alert('Token za reset lozinke nije pronađen.');
+      this.router.navigate(['/login']);
+    }
   }
 
-  // Proverava da li su lozinke iste
+  // Provera da li su lozinke identične
   passwordsMatchValidator(control: AbstractControl): { [key: string]: boolean } | null {
     const password = control.get('password')?.value;
     const confirmPassword = control.get('confirmPassword')?.value;
     return password === confirmPassword ? null : { passwordMismatch: true };
   }
 
-  // Podnošenje forme
+  // Podnošenje forme za promenu lozinke
   onSubmit(): void {
     this.submitted = true;
 
     if (this.passwordForm.valid && this.resetToken) {
       const newPassword = this.passwordForm.get('password')?.value;
 
-      this.authService.changePassword(newPassword, this.resetToken).subscribe({
+      // Kreiranje JSON objekta za backend
+      const requestData = {
+        token: this.resetToken,
+        newPassword: newPassword
+      };
+
+      this.authService.changePassword(requestData).subscribe({
         next: () => {
-          alert('Lozinka uspešno promenjena!');
+          alert('Lozinka je uspešno promenjena!');
           this.router.navigate(['/login']);
         },
         error: (err) => {
@@ -60,6 +71,13 @@ export class ResetPasswordComponent implements OnInit {
           alert('Došlo je do greške. Pokušajte ponovo.');
         }
       });
+    } else {
+      console.error('Forma nije validna ili nema tokena.');
     }
+  }
+
+  // Pomoćna metoda za lakši pristup poljima forme
+  get f() {
+    return this.passwordForm.controls;
   }
 }

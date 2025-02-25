@@ -31,7 +31,7 @@ export class TestAuthService {
       credentials.email === this.testUser.email &&
       credentials.password === this.testUser.password
     ) {
-      const fakeToken = btoa(JSON.stringify(this.testUser)); // Simulirani JWT token
+      const fakeToken = this.generateToken(this.testUser.email);
       localStorage.setItem('test-token', fakeToken);
       this.loginStatus.next(true);
       return of({ success: true, token: fakeToken });
@@ -40,22 +40,37 @@ export class TestAuthService {
     }
   }
 
-  // Simulacija resetovanja lozinke
+  // Generisanje lažnog tokena (base64)
+  private generateToken(email: string): string {
+    const payload = {
+      email: email,
+      exp: Math.floor(Date.now() / 1000) + 3600 // Token važi 1 sat
+    };
+    return btoa(JSON.stringify(payload));
+  }
+
+  // Simulacija resetovanja lozinke - generiše token za reset
   resetPassword(email: string): Observable<any> {
     if (email === this.testUser.email) {
-      return of({ success: true, message: 'Link za reset lozinke poslat na email.' });
+      const resetToken = this.generateToken(email);
+      return of({ success: true, resetToken });
     } else {
       return throwError(() => new Error('Korisnik sa tim email-om ne postoji.'));
     }
   }
 
-  // Simulacija promene lozinke
-  changePassword(newPassword: string): Observable<any> {
-    this.testUser.password = newPassword;
-    return of({ success: true, message: 'Lozinka uspešno promenjena.' });
+  // Simulacija promene lozinke uz token
+  changePassword(data: { token: string; newPassword: string }): Observable<any> {
+    const decodedToken = this.decodeToken(data.token);
+    if (decodedToken && decodedToken.email === this.testUser.email) {
+      this.testUser.password = data.newPassword;
+      return of({ success: true, message: 'Lozinka uspešno promenjena.' });
+    } else {
+      return throwError(() => new Error('Neispravan ili istekao token.'));
+    }
   }
 
-  // Simulacija odjave
+  // Odjava korisnika
   logout(): void {
     localStorage.removeItem('test-token');
     this.loginStatus.next(false);
@@ -67,22 +82,29 @@ export class TestAuthService {
   }
 
   // Parsiranje tokena
-  getDecodedToken(): any | null {
-    const token = this.getToken();
-    if (token) {
-      try {
-        return JSON.parse(atob(token));
-      } catch (error) {
-        console.error('Neuspešno parsiranje testnog tokena:', error);
-        return null;
-      }
+  private decodeToken(token: string): any | null {
+    try {
+      return JSON.parse(atob(token));
+    } catch (error) {
+      console.error('❌ Neuspešno parsiranje tokena:', error);
+      return null;
     }
-    return null;
   }
 
   // Dobijanje uloge korisnika
   getUserRole(): string | null {
-    const decoded = this.getDecodedToken();
+    const token = this.getToken();
+    const decoded = token ? this.decodeToken(token) : null;
     return decoded?.role ?? null;
+  }
+
+  // Provera da li je token istekao
+  isTokenExpired(token: string): boolean {
+    const decoded = this.decodeToken(token);
+    if (decoded?.exp) {
+      const expirationDate = new Date(decoded.exp * 1000);
+      return expirationDate < new Date();
+    }
+    return true;
   }
 }

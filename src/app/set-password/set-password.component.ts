@@ -36,8 +36,8 @@ export class SetPasswordComponent implements OnInit {
     this.token = this.route.snapshot.queryParamMap.get('token');
 
     if (!this.token) {
-      alert('Neispravan ili nedostajući token!');
-      this.router.navigate(['/']); 
+      alert('❌ Token nije pronađen! Povratak na početnu stranicu.');
+      this.router.navigate(['/']);
     }
   }
 
@@ -67,11 +67,11 @@ export class SetPasswordComponent implements OnInit {
       this.http.put('/api/users/set-password', payload).subscribe({
         next: () => {
           console.log("✅ API uspešno odgovorio!");
-          alert('Lozinka uspešno postavljena!');
+          alert('✔️ Lozinka uspešno postavljena!');
           this.router.navigate(['/login']);
         },
         error: (error) => {
-          console.error("❌ Greška sa API-ja:", error);
+          console.error(" Greška sa API-ja:", error);
           this.errorMessage = error.error?.message || 'Došlo je do greške prilikom postavljanja lozinke.';
         },
         complete: () => {

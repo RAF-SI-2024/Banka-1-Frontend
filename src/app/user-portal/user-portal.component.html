@@ -1,0 +1,137 @@
+<p>home works!</p>
+
+
+
+<button [routerLink]="'/edit'">Edit</button>
+
+<button (click)="editPerson(klijent)">Pop-up</button>
+
+<div class="modal-overlay" *ngIf="isModalOpen" (click)="closeModal()"></div>
+<div class="modal" #modal *ngIf="isModalOpen">
+  <div class="modal-header" >
+
+    <span class="close" (click)="closeModal()">✖</span>
+  </div>
+  <div class="modal-body">
+
+    <div class="edit-container">
+      <h1>Azuriraj podatke</h1>
+
+      <div class ="edit-form-container">
+
+
+
+        <form *ngIf="activeCategory === 'customers'">
+          <label>Id</label>
+          <input type="text" class="edit-textbox" readonly [(ngModel)]="updatedClient.id" name="id" />
+          <label>Ime</label>
+          <input type="text"  class="edit-textbox" readonly [(ngModel)]="updatedClient.Ime" name="Ime"/>
+          <label>Prezime</label>
+          <input type="text"  class="edit-textbox" [(ngModel)]="updatedClient.Prezime" (ngModelChange)="trackCustomerChanges()" name="Prezime"/>
+          <label>Datum rodjenja</label>
+          <input type="text"  class="edit-textbox" readonly [(ngModel)]="updatedClient.Datum_rodjenja" name="Datum_rodjenja"/>
+          <label>Pol</label>
+          <input type="text"  class="edit-textbox" [(ngModel)]="updatedClient.Pol" (ngModelChange)="trackCustomerChanges()" name="Pol"/>
+        </form>
+
+        <form *ngIf="activeCategory === 'customers'">
+          <label>Email adresa</label>
+          <input type="email"  class="edit-textbox" readonly [(ngModel)]="updatedClient.Email_adresa" name="Email_adresa"/>
+          <label>Broj telefona</label>
+          <input type="text"  class="edit-textbox" [(ngModel)]="updatedClient.Broj_telefona" (ngModelChange)="trackCustomerChanges()" name="Broj_telefona"/>
+          <label>Adresa</label>
+          <input type="text"  class="edit-textbox" [(ngModel)]="updatedClient.Adresa" (ngModelChange)="trackCustomerChanges()" name="Adresa"/>
+          <label>Password</label>
+          <input type="password"  class="edit-textbox" readonly [(ngModel)]="updatedClient.Password" (ngModelChange)="trackCustomerChanges()" name="Password"/>
+          <label>Povezani racuni</label>
+          <div class="account-selector">
+            <select class="select-account" [(ngModel)]="selectedAccount" (ngModelChange)="trackCustomerChanges()"   name="accountSelect">
+              <option value="" disabled selected>Izaberite racun</option>
+              <option *ngFor="let account of updatedClient.Povezani_racuni"  [value]="account">
+                {{ account }}
+              </option>
+            </select>
+            <button class="account-add-button" (click)="openAccountModal()">+</button>
+            <button class="account-remove-button" (click)="removeAccount()">-</button>
+          </div>
+        </form>
+
+        <form *ngIf="activeCategory === 'employees'">
+          <label>Id</label>
+          <input type="text" class="edit-textbox" readonly [(ngModel)]="updatedEmployee.id"  name="id"/>
+          <label>Ime</label>
+          <input type="text" class="edit-textbox" readonly [(ngModel)]="updatedEmployee.Ime" name="ime"/>
+          <label>Prezime</label>
+          <input type="text" class="edit-textbox" [(ngModel)]="updatedEmployee.Prezime" (ngModelChange)="trackEmployeeChanges()" name="Prezime"/>
+          <label>Datum rodjenja</label>
+          <input type="text" class="edit-textbox" readonly [(ngModel)]="updatedEmployee.Datum_rodjenja" name="Datum_rodjenja"/>
+          <label>Pol</label>
+          <input type="text" class="edit-textbox" [(ngModel)]="updatedEmployee.Pol" (ngModelChange)="trackEmployeeChanges()" name="Pol"/>
+          <label>Email adresa</label>
+          <input type="text" class="edit-textbox" readonly [(ngModel)]="updatedEmployee.Email_adresa" name="Email_adresa"/>
+          <label>Permissions</label>
+
+          <div class="permission-selector">
+            <select class="select-permission" [(ngModel)]="newPermission" name="permissionSelect">
+              <option value="" disabled selected>Izaberite permisiju</option>
+              <option *ngFor="let permission of availablePermissions" [value]="permission">
+                {{ permission }}
+              </option>
+            </select>
+            <button class="add-button" (click)="addPermission()">Add</button>
+          </div>
+        </form>
+
+        <form *ngIf="activeCategory === 'employees'">
+          <label>Broj telefona</label>
+          <input type="text" class="edit-textbox" [(ngModel)]="updatedEmployee.Broj_telefona" (ngModelChange)="trackEmployeeChanges()" name="Broj_telefona"/>
+          <label>Adresa</label>
+          <input type="text" class="edit-textbox" [(ngModel)]="updatedEmployee.Adresa" (ngModelChange)="trackEmployeeChanges()" name="Adresa"/>
+          <label>Username</label>
+          <input type="text" class="edit-textbox" readonly [(ngModel)]="updatedEmployee.Username" name="Username"/>
+          <label>Password</label>
+          <input type="password" class="edit-textbox" [(ngModel)]="updatedEmployee.Password" (ngModelChange)="trackEmployeeChanges()" name="Password"/>
+          <label>Pozicija</label>
+          <input type="text" class="edit-textbox" [(ngModel)]="updatedEmployee.Pozicija" (ngModelChange)="trackEmployeeChanges()" name="Pozicija"/>
+          <label>Departman</label>
+          <input type="text" class="edit-textbox" [(ngModel)]="updatedEmployee.Departman" (ngModelChange)="trackEmployeeChanges()" name="Departman"/>
+          <label>Aktivan </label>
+          <input type="checkbox" class = "edit-checkbox" [(ngModel)]="updatedEmployee.Aktivan" (ngModelChange)="trackEmployeeChanges()" name="Aktivan">
+
+        </form>
+
+
+      </div>
+
+      <div class="permission-list">
+            <span *ngFor="let permission of selectedPermissions" class="permission-badge">
+              {{ permission }}
+              <span class="remove-btn" (click)="removePermission(permission)">✖</span>
+            </span>
+      </div>
+
+      <div class="modal-overlay" *ngIf="isAccountModalOpen" (click)="closeAccountModal()"></div>
+      <div class="account-modal" *ngIf="isAccountModalOpen">
+        <div class="modal-header">
+          <h2>Kreiranje racuna</h2>
+          <span class="close" (click)="closeAccountModal()">✖</span>
+        </div>
+        <label class="edit-account-label">Broj racuna</label>
+        <div class="modal-body">
+          <input class="edit-account-textbox" [(ngModel)]="newAccount"  type="text"  placeholder="Enter title..." />
+          <button class="edit-submit-button" style="left: 80%" (click)="addAccount()">Kreiraj</button>
+        </div>
+      </div>
+
+
+
+
+
+    </div>
+
+    <button type="submit" class="edit-submit-button" (click)="updateEmployee()">Nastavi</button>
+
+  </div>
+</div>
+
+

@@ -1,29 +1,55 @@
 import { TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { AppComponent } from './app.component';
+// import { AuthService } from './services/auth.service';
 
 describe('AppComponent', () => {
-  beforeEach(() => TestBed.configureTestingModule({
-    imports: [RouterTestingModule],
-    declarations: [AppComponent]
-  }));
+  let component: AppComponent;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      imports: [RouterTestingModule],
+      declarations: [AppComponent],
+      providers: [
+        // {
+        //   provide: AuthService,
+        //   useValue: {
+        //     getUserPermissions: () => ['user.employee.create'],
+        //   },
+        // },
+      ],
+    });
+
+    const fixture = TestBed.createComponent(AppComponent);
+    component = fixture.componentInstance;
+  });
 
   it('should create the app', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app).toBeTruthy();
+    expect(component).toBeTruthy();
   });
 
-  it(`should have as title 'banka1Front'`, () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app.title).toEqual('banka1Front');
+  it(`should have title 'banka1Front'`, () => {
+    expect(component.title).toEqual('banka1Front');
   });
 
-  it('should render title', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-    const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('.content span')?.textContent).toContain('banka1Front app is running!');
+  it('should set default permission values to true (temporary)', () => {
+    expect(component.hasCreateEmployeePermission).toBeTrue();
+    expect(component.hasCreateCustomerPermission).toBeTrue();
+  });
+
+  it('should open and close customer modal', () => {
+    component.openCustomerModal();
+    expect(component.isCustomerModalOpen).toBeTrue();
+
+    component.closeCustomerModal();
+    expect(component.isCustomerModalOpen).toBeFalse();
+  });
+
+  it('should open and close employee modal', () => {
+    component.openEmployeeModal();
+    expect(component.isEmployeeModalOpen).toBeTrue();
+
+    component.closeEmployeeModal();
+    expect(component.isEmployeeModalOpen).toBeFalse();
   });
 });

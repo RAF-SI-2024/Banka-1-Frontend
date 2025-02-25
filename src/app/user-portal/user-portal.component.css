@@ -136,9 +136,11 @@ th, td {
   flex-grow: 1; /* Makes the input take up available space */
   max-width: 300px; /* Limit width */
   padding: 8px;
-  border: 1px solid #ccc;
+  border: none;
   border-radius: 5px;
   font-size: 14px;
+  color: white;
+  background: rgb(34, 41, 66, 1);;
 }
 
 .add-employee-btn {

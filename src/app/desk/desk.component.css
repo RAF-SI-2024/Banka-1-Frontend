@@ -3,7 +3,7 @@ body {
   padding: 0;
   background-color: #121623;
   color: #ecd487;
-  font-family: Arial, sans-serif;
+  font-family: Montserrat, sans-serif;
   height: 100vh;
   display: flex;
   align-items: center;
@@ -43,7 +43,6 @@ body {
   box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.7);
 }
 
-/* Logo */
 .logo-container {
   position: absolute;
   top: 10px;
@@ -72,6 +71,7 @@ body {
   position: relative;
   top: -100px;
   color: #F2E7C6;
+  font-family: Montserrat, sans-serif;
   font-size: 17px;
   font-style: italic;
   text-align: center;
@@ -91,11 +91,10 @@ body {
   border: 1px;
   border-color: #3B4754;
   border-radius: 24px;
+  font-family: Montserrat, sans-serif;
   font-size: 22px;
   font-weight: normal;
-  text-decoration: underline;
-  text-decoration-color: #ECD487;
-  text-decoration-thickness: from-font;
+  text-decoration: unset;
   text-align: center;
   cursor: pointer;
   transition: all 0.3s ease;

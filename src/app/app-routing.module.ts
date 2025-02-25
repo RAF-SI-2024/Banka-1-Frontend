@@ -1,14 +1,15 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { DeskComponent } from './desk/desk.component';
 import { LoginComponent } from './login/login.component';
-import { ResetPasswordComponent } from './reset-password/reset-password.component'; //  UKLONI
+import { ResetPasswordComponent } from './reset-password/reset-password.component';
+import { AuthGuard } from './guards/auth.guard';
+import {DeskComponent} from "./desk/desk.component";
 
 const routes: Routes = [
   { path: '', redirectTo: 'desk', pathMatch: 'full' },
-  { path: 'desk', component: DeskComponent },
   { path: 'login', component: LoginComponent },
-  { path: 'reset-password', component: ResetPasswordComponent }, //UKLONI
+  { path: 'desk', component: DeskComponent},
+  { path: 'reset-password', component: ResetPasswordComponent },
   { path: '**', redirectTo: 'desk' }
 ];
 

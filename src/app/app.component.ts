@@ -21,12 +21,11 @@ export class AppComponent implements OnInit, OnDestroy {
     localStorage.clear();
   }
 
-  // Inicijalizacija aplikacije
+
   ngOnInit(): void {
     this.isLoggedIn = this.authService.isLoggedIn();
     this.isAppInitialized = true;
 
-    // Pretplata na promene statusa logovanja
     this.loginStatusSub = this.authService.loginStatusChanged.subscribe(
       (status: boolean) => {
         this.isLoggedIn = status;
@@ -34,7 +33,7 @@ export class AppComponent implements OnInit, OnDestroy {
     );
   }
 
-  // Odjava korisnika
+
   onLogout(): void {
     this.authService.logout().subscribe({
       next: () => {
@@ -46,7 +45,6 @@ export class AppComponent implements OnInit, OnDestroy {
     });
   }
 
-  // Oslobadja resurse
   ngOnDestroy(): void {
     this.loginStatusSub?.unsubscribe();
   }

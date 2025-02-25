@@ -9,10 +9,6 @@ import { Router } from '@angular/router';
 export class DeskComponent {
   constructor(private router: Router) {}
 
-  goToRegister(): void {
-    this.router.navigate(['/register']);
-  }
-
   goToLogin(): void {
     this.router.navigate(['/login']);
   }

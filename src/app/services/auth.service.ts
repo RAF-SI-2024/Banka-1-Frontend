@@ -21,17 +21,17 @@ export class AuthService {
 
   constructor(private http: HttpClient) {}
 
-  // Provera da li je korisnik prijavljen
+
   isLoggedIn(): boolean {
     const token = this.getToken();
     if (token && !this.isTokenExpired()) {
       return true;
     }
-    this.logout(); // Ako je token istekao, automatski briše podatke
+    this.logout();
     return false;
   }
 
-  // Prijava korisnika
+
   login(credentials: { email: string; password: string }): Observable<any> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
 
@@ -50,7 +50,7 @@ export class AuthService {
     );
   }
 
-  // Odjava korisnika
+
   logout(): Observable<any> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     return this.http.post(`${this.apiUrl}/logout`, {}, { headers }).pipe(
@@ -66,7 +66,6 @@ export class AuthService {
   }
 
 
-  // Resetovanje lozinke
   resetPassword(email: string): Observable<any> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     return this.http.post(`${this.apiUrl}/reset-password`, { email }, { headers }).pipe(
@@ -78,7 +77,7 @@ export class AuthService {
     );
   }
 
-  // Dohvatanje tokena
+
   getToken(): string | null {
     return localStorage.getItem('token');
   }
@@ -97,22 +96,18 @@ export class AuthService {
     return null;
   }
 
-  // Dobijanje ID korisnika
   getUserId(): number | null {
     return this.getDecodedToken()?.id ?? null;
   }
 
-  // Dobijanje uloge korisnika
   getUserRole(): string | null {
     return this.getDecodedToken()?.role ?? null;
   }
 
-  // Dobijanje permisija korisnika
   getUserPermissions(): string[] {
     return this.getDecodedToken()?.permissions ?? [];
   }
 
-  // Provera da li je token istekao
   isTokenExpired(): boolean {
     const decoded = this.getDecodedToken();
     if (decoded?.exp) {
@@ -123,7 +118,7 @@ export class AuthService {
     return true;
   }
 
-  // Osvežavanje tokena
+  
   refreshToken(): Observable<any> {
     return this.http.get(`${this.apiUrl}/refresh-token`).pipe(
         tap((response: any) => {
@@ -143,13 +138,12 @@ export class AuthService {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
 
     return this.http.post(`${this.apiUrl}/change-password`, data, { headers }).pipe(
-        tap(() => console.log('✅ Zahtev za promenu lozinke uspešno poslat.')),
+        tap(() => console.log('Zahtev za promenu lozinke uspešno poslat.')),
         catchError((error) => {
-          console.error('❌ Greška prilikom slanja zahteva za promenu lozinke:', error);
+          console.error('Greška prilikom slanja zahteva za promenu lozinke:', error);
           return throwError(() => new Error('Neuspešna promena lozinke.'));
         })
     );
   }
-
 
 }

@@ -19,7 +19,7 @@ export class ResetPasswordComponent implements OnInit {
       private route: ActivatedRoute,
       private router: Router
   ) {
-    // Formiranje forme sa validatorima
+
     this.passwordForm = this.fb.group({
       password: ['', [
         Validators.required,
@@ -32,52 +32,49 @@ export class ResetPasswordComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // Preuzimanje tokena iz URL-a
     this.resetToken = this.route.snapshot.queryParamMap.get('token');
-    console.log('Reset token iz URL-a:', this.resetToken); // Dodato za prikaz tokena
+    console.log('Reset token iz URL-a:', this.resetToken);
+
     if (!this.resetToken) {
       alert('Token za reset lozinke nije pronađen.');
       this.router.navigate(['/login']);
     }
   }
 
-  // Provera da li su lozinke identične
+  //da li se lozinke poklapaju
   passwordsMatchValidator(control: AbstractControl): { [key: string]: boolean } | null {
     const password = control.get('password')?.value;
     const confirmPassword = control.get('confirmPassword')?.value;
     return password === confirmPassword ? null : { passwordMismatch: true };
   }
 
-  // Podnošenje forme za promenu lozinke
+  // Slanje forme za promenu lozinke
   onSubmit(): void {
     this.submitted = true;
 
-    if (this.passwordForm.valid && this.resetToken) {
-      const newPassword = this.passwordForm.get('password')?.value;
-
-      // Kreiranje JSON objekta za backend
-      const requestData = {
-        token: this.resetToken,
-        newPassword: newPassword
-      };
-
-      this.authService.changePassword(requestData).subscribe({
-        next: () => {
-          alert('Lozinka je uspešno promenjena!');
-          this.router.navigate(['/login']);
-        },
-        error: (err) => {
-          console.error('Greška prilikom promene lozinke:', err);
-          alert('Došlo je do greške. Pokušajte ponovo.');
-        }
-      });
-    } else {
-      console.error('Forma nije validna ili nema tokena.');
+    if (this.passwordForm.invalid || !this.resetToken) {
+      alert('Molimo vas da ispravno popunite sva polja.');
+      return;
     }
+
+    const newPassword = this.passwordForm.get('password')?.value;
+    const payload = {
+      token: this.resetToken,
+      newPassword: newPassword
+    };
+
+    console.log('Slanje JSON objekta backendu:', payload);
+
+    this.authService.changePassword(payload).subscribe({
+      next: () => {
+        alert('Lozinka uspešno promenjena! Sada možete da se prijavite sa novom lozinkom.');
+        this.router.navigate(['/login']);
+      },
+      error: (err) => {
+        console.error('Greška prilikom promene lozinke:', err);
+        alert('Došlo je do greške. Pokušajte ponovo.');
+      }
+    });
   }
 
-  // Pomoćna metoda za lakši pristup poljima forme
-  get f() {
-    return this.passwordForm.controls;
-  }
 }

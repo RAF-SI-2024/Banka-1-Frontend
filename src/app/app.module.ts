@@ -3,6 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
+import { AuthGuard } from './guards/auth.guard';
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
@@ -23,7 +24,7 @@ import { DeskComponent } from './desk/desk.component';
     HttpClientModule,
     AppRoutingModule
   ],
-  providers: [],
+  providers: [AuthGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

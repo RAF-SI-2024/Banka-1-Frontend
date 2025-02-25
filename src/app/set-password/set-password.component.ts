@@ -36,8 +36,8 @@ export class SetPasswordComponent implements OnInit {
     this.token = this.route.snapshot.queryParamMap.get('token');
 
     if (!this.token) {
-      console.warn("⚠️ Token nije pronađen – TEST MOD");
-      this.token = "test-simulacija-token"; // OVO OMOGUĆAVA TESTIRANJE BEZ TOKENA
+      alert('Neispravan ili nedostajući token!');
+      this.router.navigate(['/']); 
     }
   }
 

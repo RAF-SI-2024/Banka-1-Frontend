@@ -161,7 +161,7 @@ th, td {
 .logout-btn {
   width: auto; /* Adjust width to fit text */
   padding: 8px 12px; /* Reduce padding */
-  background: red;
+  background: rgba(34, 41, 66, 0.8);;
   color: white;
   border: none;
   border-radius: 8px;
@@ -173,5 +173,5 @@ th, td {
 }
 
 .logout-btn:hover {
-  background: darkred;
+  background: rgba(18, 22, 35, 1);
 }

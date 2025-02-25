@@ -5,3 +5,6 @@ body {
   width: 100vw;
   overflow-x: hidden; /* Prevent horizontal scroll */
 }
+* {
+  font-family: 'Montserrat', sans-serif !important;
+}

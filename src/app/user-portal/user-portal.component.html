@@ -44,18 +44,15 @@
             </tr>
             </thead>
             <tbody>
-            <tr *ngFor="let employee of employees">
-<!--            <tr *ngFor="let employee of filteredEmployees">-->
-            <td>{{ employee.ime }}</td>
-              <td>{{ employee.prezime }}</td>
+            <tr *ngFor="let employee of filteredEmployees" (click)="editEmployee(employee)" style="cursor: pointer;">
+              <td>{{ employee.ime + " " + employee.prezime}}</td>
               <td>{{ employee.email }}</td>
               <td>{{ employee.pozicija }}</td>
-              <td>{{ employee.broj_telefona }}</td>
+              <td>{{ employee.brojTelefona }}</td>
               <td>{{ employee.aktivan ? 'Da' : 'Ne' }}</td>
               <td>
-                <img src="assets/bin.jpg" class="delete-icon" (click)="deleteEmployee(employee)">
+                <img src="/assets/bin.jpg.png" class="delete-icon" (click)="deleteEmployee(employee); $event.stopPropagation()">
               </td>
-
             </tr>
             </tbody>
           </table>

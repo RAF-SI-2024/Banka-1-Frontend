@@ -1,35 +1,46 @@
+/* Globalni stilovi */
 body, html {
   margin: 0;
   padding: 0;
-  height: 100%;
+  height: 100vh;
   background-color: #222942;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: Arial, sans-serif;
+  font-family: 'Montserrat';
   color: #ECD487;
   overflow: hidden;
 }
 
-.login-container {
+/* Kontejner za formu */
+.form-container {
   width: 100%;
-  background-color: #222942;
+  height: 100%;
   max-width: 500px;
   padding: 40px;
-  margin: 0 auto;
   text-align: center;
+  background-color: #222942;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
 }
 
+/* Naslovi */
 .title {
   color: #ECD487;
   font-size: 36px;
-  font-weight: normal;
-  margin-bottom: 30px;
-  text-decoration: underline;
-  text-decoration-thickness: from-font;
-  text-underline-offset: 6px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  text-transform: uppercase;
 }
 
+.subtitle {
+  color: white;
+  font-size: 18px;
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+
+/* Input grupe */
 .input-group {
   margin-bottom: 20px;
   text-align: left;
@@ -52,18 +63,11 @@ body, html {
   font-size: 16px;
 }
 
-.input-group input::placeholder {
-  color: #bbb;
-}
-
+/* Reset lozinke */
 .reset-password {
   text-align: left;
   margin-bottom: 20px;
   font-size: 14px;
-}
-
-.reset-password span {
-  color: white;
 }
 
 .reset-password a {
@@ -73,23 +77,25 @@ body, html {
   cursor: pointer;
 }
 
-.login-btn {
+/* Dugmad */
+.form-btn {
   background-color: #3B5445;
   color: white;
   padding: 15px 30px;
   border: none;
   border-radius: 10px;
   font-size: 18px;
-  font-weight: normal;
+  font-weight: bold;
   cursor: pointer;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.7);
   transition: background-color 0.3s ease;
 }
 
-.login-btn:hover {
+.form-btn:hover {
   background-color: #5470fe;
 }
 
+/* Poruka o grešci */
 .error-message {
   color: #ff4d4d;
   margin-top: 10px;

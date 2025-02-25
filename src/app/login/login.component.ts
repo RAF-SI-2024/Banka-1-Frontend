@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AuthService } from '../services/auth.service';
+import { TestAuthService } from '../services/test-auth.service'; //PROMENI
 import { Router } from '@angular/router';
 
 @Component({
@@ -12,10 +12,11 @@ export class LoginComponent {
   loginForm: FormGroup;
   errorMessage: string = '';
   isLoading = false;
+  submitted = false;  // Dodata promenljiva za praćenje slanja forme
 
   constructor(
     private fb: FormBuilder,
-    private authService: AuthService,
+    private authService: TestAuthService, //PROMENI
     private router: Router
   ) {
     this.loginForm = this.fb.group({
@@ -25,6 +26,8 @@ export class LoginComponent {
   }
 
   onSubmit(): void {
+    this.submitted = true;  // Aktivira validaciju u HTML-u
+
     if (this.loginForm.invalid) {
       this.errorMessage = 'Molimo vas da ispravno popunite sva polja.';
       return;

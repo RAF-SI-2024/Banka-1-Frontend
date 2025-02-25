@@ -8,29 +8,26 @@
     <!-- Sidebar / Navbar -->
     <nav class="sidebar">
       <ul>
-        <li><button class="sidebar-button">Musterije</button></li>
-        <li><button class="sidebar-button">Zaposleni</button></li>
-        <li><button class="sidebar-button">Administratori</button></li>
+        <li><button class="sidebar-button" (click)="changeCategory('customers')">Klijenti</button></li>
+        <li><button class="sidebar-button" (click)="changeCategory('employees')">Zaposleni</button></li>
       </ul>
 
       <button class="logout-btn" (click)="logout()">Izloguj se</button>
-
     </nav>
 
     <!-- Main Section -->
     <div class="main-content">
-      <!-- Search & Add Employee Section -->
+      <!-- Search & Add User Section -->
       <div class="filter-add-container">
         <!-- Search Input -->
-        <input type="text" class="filter-input" [(ngModel)]="searchQuery" (input)="filterEmployees($event)" placeholder="Pretraga...">
+        <input type="text" class="filter-input" [(ngModel)]="searchQuery" (input)="filterData($event)" placeholder="Pretraga...">
 
-        <!-- Add Employee Button -->
-        <button class="add-employee-btn" (click)="addEmployee()">Dodaj</button>
+        <!-- Add Employee Button (Only for Employees) -->
+        <button class="add-employee-btn" (click)="addPerson()">Dodaj</button>
       </div>
 
-
-      <!-- Employee Table -->
-      <div class="table-container">
+      <!-- Dynamic Table for Employees -->
+      <div *ngIf="activeCategory === 'employees'" class="table-container">
         <div class="table-overlay">
           <table>
             <thead>
@@ -44,14 +41,40 @@
             </tr>
             </thead>
             <tbody>
-            <tr *ngFor="let employee of filteredEmployees" (click)="editEmployee(employee)" style="cursor: pointer;">
-              <td>{{ employee.ime + " " + employee.prezime}}</td>
+            <tr *ngFor="let employee of displayedData" (click)="editPerson(employee)" style="cursor: pointer;">
+              <td>{{ employee.ime }} {{ employee.prezime }}</td>
               <td>{{ employee.email }}</td>
               <td>{{ employee.pozicija }}</td>
               <td>{{ employee.brojTelefona }}</td>
               <td>{{ employee.aktivan ? 'Da' : 'Ne' }}</td>
               <td>
-                <img src="/assets/bin.jpg.png" class="delete-icon" (click)="deleteEmployee(employee); $event.stopPropagation()">
+                <img src="/assets/bin.jpg.png" class="delete-icon" (click)="deletePerson(employee); $event.stopPropagation()">
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+
+      <div *ngIf="activeCategory === 'customers'" class="table-container">
+        <div class="table-overlay">
+          <table>
+            <thead>
+            <tr>
+              <th>Ime i Prezime</th>
+              <th>Email</th>
+              <th>Broj Telefona</th>
+              <th>Akcije</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let customer of displayedData" (click)="editPerson(customer)" style="cursor: pointer;">
+              <td>{{ customer.ime }} {{ customer.prezime }}</td>
+              <td>{{ customer.email }}</td>
+              <td>{{ customer.brojTelefona }}</td>
+              <td>
+                <img src="/assets/bin.jpg.png" class="delete-icon" (click)="deletePerson(customer); $event.stopPropagation()">
               </td>
             </tr>
             </tbody>
@@ -61,7 +84,7 @@
 
       <!-- Button Below Table -->
       <div class="next-button-container">
-        <button class="next-button" (click)="sledece()">Sledeće</button>
+        <button class="next-button" (click)="nextPage()">Sledeće</button>
       </div>
     </div>
   </div>

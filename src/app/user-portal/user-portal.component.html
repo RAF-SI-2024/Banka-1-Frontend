@@ -1,11 +1,9 @@
 <div class="user-portal">
-  <!-- Top Container -->
   <div class="top-container">
     <img src="assets/banka1.png" alt="Bank Logo" class="bank-logo">
   </div>
 
   <div class="content">
-    <!-- Sidebar / Navbar -->
     <nav class="sidebar">
       <ul>
         <li><button class="sidebar-button" (click)="changeCategory('customers')">Klijenti</button></li>
@@ -15,18 +13,13 @@
       <button class="logout-btn" (click)="logout()">Izloguj se</button>
     </nav>
 
-    <!-- Main Section -->
     <div class="main-content">
-      <!-- Search & Add User Section -->
       <div class="filter-add-container">
-        <!-- Search Input -->
         <input type="text" class="filter-input" [(ngModel)]="searchQuery" (input)="filterData($event)" placeholder="Pretraga...">
 
-        <!-- Add Employee Button (Only for Employees) -->
         <button class="add-employee-btn" (click)="addPerson()">Dodaj</button>
       </div>
 
-      <!-- Dynamic Table for Employees -->
       <div *ngIf="activeCategory === 'employees'" class="table-container">
         <div class="table-overlay">
           <table>
@@ -90,6 +83,5 @@
     </div>
   </div>
 
-  <!-- Bottom Container -->
   <div class="bottom-container"></div>
 </div>

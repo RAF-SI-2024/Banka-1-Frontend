@@ -1,38 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-
-interface Employee {
-  id: number;
-  ime: string;
-  prezime: string;
-  datumRodjenja: Date;
-  pol: string;
-  email: string;
-  brojTelefona: string;
-  adresa: string;
-  username: string;
-  password: string;
-  saltPassword: string;
-  pozicija: string;
-  departman: string;
-  aktivan: boolean;
-}
-
-interface Customer {
-  id: number;
-  ime: string;
-  prezime: string;
-  datumRodjenja: Date; // Stored as a timestamp (Long)
-  pol: string;
-  email: string;
-  brojTelefona: string;
-  adresa: string;
-  password: string;
-  saltPassword: string;
-  povezaniRacuni: number[]; // Array of connected account IDs
-  pozicija: null;
-  aktivan: null;
-}
+import {Customer, Employee, UserService} from "../services/user.service";
 
 @Component({
   selector: 'app-user-portal',
@@ -47,65 +14,22 @@ export class UserPortalComponent implements OnInit {
   activeCategory: 'employees' | 'customers' = 'employees';
   currentPage: number = 1;
   itemsPerPage: number = 8;
-  totalItems: number = 0;  // To track total number of items
-  totalPages: number = 0;  // To calculate total pages
+  totalItems: number = 0;
+  totalPages: number = 0;
 
-  constructor(private http: HttpClient) {
-    this.initializeEmployees();
-    this.initializeCustomers();
-    this.activeCategory = 'employees';  // Default category to employees
-    this.displayedData = this.employees; // Default to employees
-    this.calculatePagination();    }
+  constructor(private userService: UserService) {
+    // this.initializeEmployees();
+    // this.initializeCustomers();
+    this.activeCategory = 'employees';
+    this.displayedData = this.employees;
+    this.calculatePagination();
+
+  }
 
   ngOnInit() {
-    this.fetchData();
-    // this.fetchEmployees();
-    // this.fetchCustomers();
-  }
-
-  fetchData() {
-    const apiUrl = this.activeCategory === 'employees'
-      ? 'http://localhost:8080/api/users/employees'
-      : 'http://localhost:8080/api/users/customers';
-
-    this.http.get<any>(`${apiUrl}?page=${this.currentPage}&limit=${this.itemsPerPage}`).subscribe({
-      next: (data) => {
-        this.totalItems = data.totalItems;  // Assuming response contains totalItems
-        this.totalPages = Math.ceil(this.totalItems / this.itemsPerPage);  // Calculate total pages
-        this.displayedData = data.items;  // Assuming response contains items for current page
-      },
-      error: (err) => {
-        console.error('Error fetching data:', err);
-      }
-    });
-  }
-
-  fetchEmployees() {
-    this.http.get<Employee[]>('http://localhost:8080/api/users/employees').subscribe({
-      next: (data) => {
-        this.employees = data;
-        if (this.activeCategory === 'employees') {
-          this.displayedData = [...this.employees];
-        }
-      },
-      error: (err) => {
-        console.error('Error fetching employees:', err);
-      }
-    });
-  }
-
-  fetchCustomers() {
-    this.http.get<Customer[]>('http://localhost:8080/api/users/customers').subscribe({
-      next: (data) => {
-        this.customers = data;
-        if (this.activeCategory === 'customers') {
-          this.displayedData = [...this.customers];
-        }
-      },
-      error: (err) => {
-        console.error('Error fetching customers:', err);
-      }
-    });
+    this.userService.fetchData(this.activeCategory, this.currentPage, this.itemsPerPage, this.totalItems, this.totalPages, this.displayedData);
+    // this.userService.fetchEmployees();
+    // this.userService.fetchCustomers();
   }
 
   initializeEmployees() {
@@ -168,7 +92,7 @@ export class UserPortalComponent implements OnInit {
         id: 101,
         ime: "Petar",
         prezime: "Petrović",
-        datumRodjenja: new Date(1990, 5, 15), // Timestamp (Unix Epoch)
+        datumRodjenja: 482198400000,
         pol: "Muški",
         email: "petar@example.com",
         brojTelefona: "0603335555",
@@ -183,7 +107,7 @@ export class UserPortalComponent implements OnInit {
         id: 102,
         ime: "Jelena",
         prezime: "Jelić",
-        datumRodjenja: new Date(1988, 10, 25), // Timestamp
+        datumRodjenja: 715305600000,
         pol: "Ženski",
         email: "jelena@example.com",
         brojTelefona: "0655554444",
@@ -198,7 +122,7 @@ export class UserPortalComponent implements OnInit {
         id: 103,
         ime: "Milan",
         prezime: "Milić",
-        datumRodjenja: new Date(1995, 2, 5), // Timestamp
+        datumRodjenja: 614070400000,
         pol: "Muški",
         email: "milan@example.com",
         brojTelefona: "0621234567",
@@ -259,31 +183,7 @@ export class UserPortalComponent implements OnInit {
   }
 
   deletePerson(person: Employee | Customer) {
-    if (!person || !person.id) {
-      console.error('Invalid person object:', person);
-      return;
-    }
-
-    const id = person.id;
-
-    const isEmployee = 'pozicija' in person; // Check if the person is an employee based on 'pozicija' property
-    const apiUrl = isEmployee
-      ? `http://localhost:8080/api/users/employee/${id}`
-      : `http://localhost:8080/api/users/customer/${id}`;
-
-    this.http.delete(apiUrl).subscribe({
-      next: (response: any) => {
-        if (response.success) {
-          console.log(response.data.message);
-          this.displayedData = this.displayedData.filter(p => p.id !== id); // Remove from UI
-        } else {
-          console.error('Error deleting person:', response);
-        }
-      },
-      error: (err) => {
-        console.error('API error:', err);
-      }
-    });
+    this.userService.deletePerson(person, this.displayedData);
   }
 
 
@@ -291,7 +191,6 @@ export class UserPortalComponent implements OnInit {
     console.log('Logging out...');
   }
 
-  // Method for going to the next page
   nextPage() {
     if (this.currentPage < this.totalPages) {
       this.currentPage++;
@@ -299,7 +198,6 @@ export class UserPortalComponent implements OnInit {
     }
   }
 
-  // Method for going to the previous page
   previousPage() {
     if (this.currentPage > 1) {
       this.currentPage--;

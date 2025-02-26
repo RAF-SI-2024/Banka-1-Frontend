@@ -1,11 +1,23 @@
-/* You can add global styles to this file, and also import other style files */
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .custom-dialog .mat-dialog-container {
   background-color: transparent !important;
   border: none !important; /* Uklanja sve ivice */
   border-radius: 0 !important; /* Podesite po želji */
   box-shadow: none !important; /* Uklanja senke */
   overflow: hidden;
+
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  background: #121623;
+  font-family: 'Montserrat', sans-serif !important;
 }

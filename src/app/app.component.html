@@ -1,10 +1,4 @@
 
-<div class="container pt-3">
-  <h1>{{ title }} app is running!</h1>
-  <router-outlet></router-outlet>
-</div>
-
-
 <!-- Dugme za otvaranje modala za kreiranje musterije -->
 <button *ngIf="hasCreateCustomerPermission" (click)="openCustomerModal()">Dodaj mušteriju</button>
 
@@ -34,4 +28,5 @@
 </div>
 
 
-
+<router-outlet></router-outlet>
+<h1>banka1Front</h1>

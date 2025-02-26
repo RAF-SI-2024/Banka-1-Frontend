@@ -1,0 +1,117 @@
+body, html {
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  background-color: #222942;
+  font-family: 'Montserrat', sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ECD487;
+  overflow: hidden;
+}
+
+.form-container {
+  width: 100%;
+  max-width: 500px;
+  padding: 40px;
+  text-align: center;
+  background-color: #222942;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 70%;
+  max-width: 500px;
+}
+
+.title {
+  color: #ECD487;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 36px;
+  font-weight: normal;
+  margin-bottom: 25px;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.input-group {
+  margin-bottom: 20px;
+  width: 100%;
+  text-align: left;
+  padding-left: 40px;
+}
+
+.input-group label {
+  display: block;
+  margin-bottom: 5px;
+  color: #F2E7C6;
+  font-family: 'Montserrat', sans-serif;
+  font-style: italic;
+}
+
+.input-group input {
+  width: 75%;
+  padding: 12px 15px;
+  border: none;
+  border-radius: 10px;
+  background-color: #3B4754;
+  color: white;
+  font-size: 16px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.reset-password {
+  text-align: left;
+  padding-left: 40px;
+  margin-top: 10px;
+  font-size: 14px;
+  color: white;
+  width: 100%;
+  opacity: 80%;
+}
+
+.reset {
+  color: white;
+  text-align: left;
+  padding-left: 40px;
+  font-size: 14px;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.form-btn {
+  background-color: #3B5445;
+  color: white;
+  padding: 15px 30px;
+  border: none;
+  border-radius: 15px;
+  font-size: 16px;
+  font-weight: normal;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  transition: background-color 0.3s ease;
+  width: 30%;
+  max-width: 400px;
+  align-self: center;
+  margin: 20px auto 0;
+}
+
+.form-btn:hover {
+  background-color: #5470fe;
+}
+
+.error-message {
+  padding-left: 40px;
+  color: #ff4d4d;
+  font-size: 14px;
+  margin-top: 5px;
+  text-align: left;
+}
+

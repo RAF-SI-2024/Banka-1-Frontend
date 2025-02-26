@@ -6,8 +6,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { AuthGuard } from './guards/auth.guard';
 
 import { AppComponent } from './app.component';
-import { CreateEmployeeComponent } from './components/create-employee/create-employee.component';
-import { CreateCustomerComponent } from './components/create-customer/create-customer.component';
 import { SetPasswordComponent } from './set-password/set-password.component';
 import { LoginComponent } from './login/login.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
@@ -21,8 +19,6 @@ import { UserPortalComponent } from './user-portal/user-portal.component';
     ResetPasswordComponent,
     SetPasswordComponent,
     DeskComponent,
-    CreateEmployeeComponent,
-    CreateCustomerComponent,
     UserPortalComponent
   ],
   imports: [

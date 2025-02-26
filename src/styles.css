@@ -1,12 +1,5 @@
 
-.custom-dialog .mat-dialog-container {
-  background-color: transparent !important;
-  border: none !important; /* Uklanja sve ivice */
-  border-radius: 0 !important; /* Podesite po želji */
-  box-shadow: none !important; /* Uklanja senke */
-  overflow: hidden;
-
-*{
+{
   margin: 0;
   padding: 0;
   box-sizing: border-box;

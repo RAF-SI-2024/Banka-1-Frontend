@@ -1,38 +1,4 @@
-
-.modal {
-  transform: scale(0.8) translate(-50%, -50%);
-  position: fixed;
-  top: 20%;
-  left: 45%;
-  width: 600px;
-  height: 400px;
-  background: #222942;
-  border-radius: 16px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-  z-index: 1000;
-}
-
-.modal-header {
-  background: #1A1F36  ;
-  color: white;
-  padding: 10px;
-  display: flex;
-  border-top-right-radius: 16px;
-  border-top-left-radius: 16px;
-  justify-content: space-between;
-  align-items: center;
-}
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  border: 16px;
-  background: rgba(0, 0, 0, 0.5);
-  z-index: 999;
-
-*{
+{
   margin: 0;
   padding: 0;
   box-sizing: border-box;

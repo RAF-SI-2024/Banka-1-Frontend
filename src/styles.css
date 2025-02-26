@@ -1,3 +1,4 @@
+
 {
   margin: 0;
   padding: 0;
@@ -11,4 +12,5 @@ html, body {
   padding: 0;
   overflow-x: hidden;
   background: #121623;
+  font-family: 'Montserrat', sans-serif !important;
 }

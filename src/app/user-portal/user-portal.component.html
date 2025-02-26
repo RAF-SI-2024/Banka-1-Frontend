@@ -1,0 +1,87 @@
+<div class="user-portal">
+  <div class="top-container">
+    <img src="assets/banka1.png" alt="Bank Logo" class="bank-logo">
+  </div>
+
+  <div class="content">
+    <nav class="sidebar">
+      <ul>
+        <li><button class="sidebar-button" (click)="changeCategory('customers')">Klijenti</button></li>
+        <li><button class="sidebar-button" (click)="changeCategory('employees')">Zaposleni</button></li>
+      </ul>
+
+      <button class="logout-btn" (click)="logout()">Izloguj se</button>
+    </nav>
+
+    <div class="main-content">
+      <div class="filter-add-container">
+        <input type="text" class="filter-input" [(ngModel)]="searchQuery" (input)="filterData($event)" placeholder="Pretraga...">
+
+        <button class="add-employee-btn" (click)="addPerson()">Dodaj</button>
+      </div>
+
+      <div *ngIf="activeCategory === 'employees'" class="table-container">
+        <div class="table-overlay">
+          <table>
+            <thead>
+            <tr>
+              <th>Ime i Prezime</th>
+              <th>Email</th>
+              <th>Pozicija</th>
+              <th>Broj Telefona</th>
+              <th>Aktivan</th>
+              <th>Akcije</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let employee of displayedData" (click)="editPerson(employee)" style="cursor: pointer;">
+              <td>{{ employee.ime }} {{ employee.prezime }}</td>
+              <td>{{ employee.email }}</td>
+              <td>{{ employee.pozicija }}</td>
+              <td>{{ employee.brojTelefona }}</td>
+              <td>{{ employee.aktivan ? 'Da' : 'Ne' }}</td>
+              <td>
+                <img src="/assets/bin.jpg.png" class="delete-icon" (click)="deletePerson(employee); $event.stopPropagation()">
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+
+      <div *ngIf="activeCategory === 'customers'" class="table-container">
+        <div class="table-overlay">
+          <table>
+            <thead>
+            <tr>
+              <th>Ime i Prezime</th>
+              <th>Email</th>
+              <th>Broj Telefona</th>
+              <th>Akcije</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let customer of displayedData" (click)="editPerson(customer)" style="cursor: pointer;">
+              <td>{{ customer.ime }} {{ customer.prezime }}</td>
+              <td>{{ customer.email }}</td>
+              <td>{{ customer.brojTelefona }}</td>
+              <td>
+                <img src="/assets/bin.jpg.png" class="delete-icon" (click)="deletePerson(customer); $event.stopPropagation()">
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="pagination">
+        <button class="previous-button" (click)="previousPage()" *ngIf="currentPage > 1">Nazad</button>
+        <button class="next-button" (click)="nextPage()" *ngIf="currentPage < totalPages">Sledeće</button>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="bottom-container"></div>
+</div>

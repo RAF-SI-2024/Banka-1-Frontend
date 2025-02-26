@@ -1,0 +1,55 @@
+<div class="form-container">
+
+  <h2 class="form-title">KREIRAJ NOVI NALOG</h2>
+  <p class="form-subtitle">1. OSNOVNI PODACI</p>
+
+  <form (ngSubmit)="onSubmit(customerForm)" #customerForm="ngForm">
+    <div class="form-row">
+      <div class="form-column">
+        <div class="mb-3">
+          <label for="firstName" class="form-label">Ime</label>
+          <input type="text" id="firstName" name="firstName" [(ngModel)]="customer.firstName" required class="form-control" />
+        </div>
+
+        <div class="mb-3">
+          <label for="lastName" class="form-label">Prezime</label>
+          <input type="text" id="lastName" name="lastName" [(ngModel)]="customer.lastName" required class="form-control" />
+        </div>
+
+        <div class="mb-3">
+          <label for="birthDate" class="form-label">Datum rođenja</label>
+          <input type="date" id="birthDate" name="birthDate" [(ngModel)]="customer.birthDate" required class="form-control" />
+        </div>
+
+        <div class="mb-3">
+          <label for="gender" class="form-label">Pol</label>
+          <select id="gender" name="gender" [(ngModel)]="customer.gender" required class="form-control">
+            <option value="M">Muški</option>
+            <option value="F">Ženski</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-column">
+        <div class="mb-3">
+          <label for="email" class="form-label">Email</label>
+          <input type="email" id="email" name="email" [(ngModel)]="customer.email" required class="form-control" />
+        </div>
+
+        <div class="mb-3">
+          <label for="phone" class="form-label">Broj telefona</label>
+          <input type="text" id="phone" name="phone" [(ngModel)]="customer.phone" required class="form-control" pattern="^\+381\s?[0-9\s]{8,11}$" placeholder="+381 XX XXXXXXX"/>
+        </div>
+
+        <div class="mb-3">
+          <label for="address" class="form-label">Adresa</label>
+          <input type="text" id="address" name="address" [(ngModel)]="customer.address" required class="form-control" />
+        </div>
+      </div>
+    </div>
+
+    <div class="form-buttons">
+      <button type="submit" class="btn btn-primary" [disabled]="!customerForm.valid">Nastavi</button>
+    </div>
+  </form>
+</div>

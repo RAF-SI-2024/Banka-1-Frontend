@@ -9,6 +9,7 @@ import { SetPasswordComponent } from './set-password/set-password.component';
 import {EditCustomerComponent} from "./components/edit-customer/edit-customer.component";
 import {EditEmployeeComponent} from "./components/edit-employee/edit-employee.component";
 
+
 const routes: Routes = [
   { path: '', component: DeskComponent },
   { path: 'login', component: LoginComponent },

@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {Customer, Employee, UserService} from "../services/user.service";
 import {ModalService} from "../services/modal.service";
+import {AuthService} from "../services/auth.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-user-portal',
@@ -18,7 +20,7 @@ export class UserPortalComponent implements OnInit {
   totalItems: number = 0;
   totalPages: number = 0;
 
-  constructor(private userService: UserService,private modalService: ModalService) {
+  constructor(private userService: UserService, private authService: AuthService, private ruter:Router) {
     // this.initializeEmployees();
     // this.initializeCustomers();
     this.activeCategory = 'employees';
@@ -60,6 +62,110 @@ export class UserPortalComponent implements OnInit {
       },
     });
   }
+
+  // initializeEmployees() {
+  //   this.employees = [
+  //     {
+  //       id: 1,
+  //       ime: "Marko",
+  //       prezime: "Marković",
+  //       datumRodjenja: new Date(1990, 5, 15),
+  //       pol: "Muški",
+  //       email: "marko@example.com",
+  //       brojTelefona: "0601234567",
+  //       adresa: "Ulica 1, Beograd",
+  //       username: "markom",
+  //       password: "hashed_password",
+  //       saltPassword: "random_salt",
+  //       pozicija: "Software Developer",
+  //       departman: "IT",
+  //       aktivan: true
+  //     },
+  //     {
+  //       id: 2,
+  //       ime: "Ana",
+  //       prezime: "Anić",
+  //       datumRodjenja: new Date(1988, 10, 25),
+  //       pol: "Ženski",
+  //       email: "ana@example.com",
+  //       brojTelefona: "0659876543",
+  //       adresa: "Ulica 2, Novi Sad",
+  //       username: "anaa",
+  //       password: "hashed_password",
+  //       saltPassword: "random_salt",
+  //       pozicija: "Project Manager",
+  //       departman: "Business",
+  //       aktivan: true
+  //     },
+  //     {
+  //       id: 3,
+  //       ime: "Jovan",
+  //       prezime: "Jovanović",
+  //       datumRodjenja: new Date(1995, 2, 5),
+  //       pol: "Muški",
+  //       email: "jovan@example.com",
+  //       brojTelefona: "0609876543",
+  //       adresa: "Ulica 3, Beograd",
+  //       username: "jovanj",
+  //       password: "hashed_password",
+  //       saltPassword: "random_salt",
+  //       pozicija: "UI Designer",
+  //       departman: "Design",
+  //       aktivan: true
+  //     },
+  //
+  //   ];
+  // }
+  //
+  // initializeCustomers() {
+  //   this.customers = [
+  //     {
+  //       id: 101,
+  //       ime: "Petar",
+  //       prezime: "Petrović",
+  //       datumRodjenja: 482198400000,
+  //       pol: "Muški",
+  //       email: "petar@example.com",
+  //       brojTelefona: "0603335555",
+  //       adresa: "Klijentska ulica 10, Beograd",
+  //       password: "hashed_password",
+  //       saltPassword: "random_salt",
+  //       povezaniRacuni: [2001, 2002],
+  //       pozicija: null,
+  //       aktivan: null
+  //     },
+  //     {
+  //       id: 102,
+  //       ime: "Jelena",
+  //       prezime: "Jelić",
+  //       datumRodjenja: 715305600000,
+  //       pol: "Ženski",
+  //       email: "jelena@example.com",
+  //       brojTelefona: "0655554444",
+  //       adresa: "Biznis centar, Novi Sad",
+  //       password: "hashed_password",
+  //       saltPassword: "random_salt",
+  //       povezaniRacuni: [3005],
+  //       pozicija: null,
+  //       aktivan: null
+  //     },
+  //     {
+  //       id: 103,
+  //       ime: "Milan",
+  //       prezime: "Milić",
+  //       datumRodjenja: 614070400000,
+  //       pol: "Muški",
+  //       email: "milan@example.com",
+  //       brojTelefona: "0621234567",
+  //       adresa: "Novi Beograd, Beograd",
+  //       password: "hashed_password",
+  //       saltPassword: "random_salt",
+  //       povezaniRacuni: [4002],
+  //       pozicija: null,
+  //       aktivan: null
+  //     }
+  //   ];
+  // }
 
 
   // initializeEmployees() {
@@ -246,7 +352,13 @@ export class UserPortalComponent implements OnInit {
 
 
   logout() {
-    console.log('Logging out...');
+    this.authService.logout().subscribe({
+      next: () => {
+        localStorage.clear();
+        this.ruter.navigate(['/login']);
+      },
+      error: (error) => console.error('Greška prilikom odjave:', error)
+    });
   }
 
   nextPage() {

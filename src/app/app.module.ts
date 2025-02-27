@@ -13,6 +13,9 @@ import { DeskComponent } from './desk/desk.component';
 import { UserPortalComponent } from './user-portal/user-portal.component';
 import {EditEmployeeComponent} from "./components/edit-employee/edit-employee.component";
 import {EditCustomerComponent} from "./components/edit-customer/edit-customer.component";
+import { TableEmployesComponent } from './components/table-employes/table-employes.component';
+import {CreateEmployeeComponent} from "./components/create-employee/create-employee.component";
+import {CreateCustomerComponent} from "./components/create-customer/create-customer.component";
 
 @NgModule({
   declarations: [
@@ -23,7 +26,11 @@ import {EditCustomerComponent} from "./components/edit-customer/edit-customer.co
     DeskComponent,
     EditEmployeeComponent,
     EditCustomerComponent,
-    UserPortalComponent
+    UserPortalComponent,
+    UserPortalComponent,
+    TableEmployesComponent,
+    CreateEmployeeComponent,
+    CreateCustomerComponent
   ],
   imports: [
     BrowserModule,

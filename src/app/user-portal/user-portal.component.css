@@ -32,7 +32,8 @@
 }
 
 .content {
-  display: flex;
+  /*display: flex;*/
+
   width: 100%;
   height: calc(90vh - 120px);
 }

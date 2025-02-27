@@ -1,0 +1,81 @@
+<div class="modal-overlay" *ngIf="isOpen" (click)="closeModal()"></div>
+<div class="modal" #modal *ngIf="isOpen">
+  <div class="modal-header" >
+
+    <span class="close" (click)="closeModal()">✖</span>
+  </div>
+  <div class="modal-body">
+
+    <div class="edit-container">
+      <h1>Azuriraj podatke</h1>
+
+      <div class ="edit-form-container">
+
+
+
+        <form>
+          <label>Id</label>
+          <input type="text" class="edit-textbox" readonly [(ngModel)]="updatedClient.id" name="id" />
+          <label>Ime</label>
+          <input type="text"  class="edit-textbox" readonly [(ngModel)]="updatedClient.ime" name="Ime"/>
+          <label>Prezime</label>
+          <input type="text"  class="edit-textbox" [(ngModel)]="updatedClient.prezime" (ngModelChange)="trackCustomerChanges()" name="Prezime"/>
+          <label>Datum rodjenja</label>
+          <input type="text"  class="edit-textbox" readonly [(ngModel)]="updatedClient.datumRodjenja" name="Datum_rodjenja"/>
+          <label>Pol</label>
+          <input type="text"  class="edit-textbox" [(ngModel)]="updatedClient.pol" (ngModelChange)="trackCustomerChanges()" name="Pol"/>
+        </form>
+
+
+
+        <form>
+          <label>Email adresa</label>
+          <input type="email"  class="edit-textbox" readonly [(ngModel)]="updatedClient.email" name="Email_adresa"/>
+          <label>Broj telefona</label>
+          <input type="text"  class="edit-textbox" [(ngModel)]="updatedClient.brojTelefona" (ngModelChange)="trackCustomerChanges()" name="Broj_telefona"/>
+          <label>Adresa</label>
+          <input type="text"  class="edit-textbox" [(ngModel)]="updatedClient.adresa" (ngModelChange)="trackCustomerChanges()" name="Adresa"/>
+          <label>Password</label>
+          <input type="password"  class="edit-textbox" readonly [(ngModel)]="updatedClient.password" (ngModelChange)="trackCustomerChanges()" name="Password"/>
+          <label>Povezani racuni</label>
+          <div class="account-selector">
+            <select class="select-account" [(ngModel)]="selectedAccount" (ngModelChange)="trackCustomerChanges()"   name="accountSelect">
+              <option value="" disabled selected>Izaberite racun</option>
+              <option *ngFor="let account of updatedClient.povezaniRacuni"  [value]="account">
+                {{ account }}
+              </option>
+            </select>
+            <button class="account-add-button" (click)="openAccountModal()">+</button>
+            <button class="account-remove-button" (click)="removeAccount()">-</button>
+          </div>
+        </form>
+
+
+
+
+      </div>
+
+
+      <div class="modal-overlay" *ngIf="isAccountModalOpen" (click)="closeAccountModal()"></div>
+      <div class="account-modal" *ngIf="isAccountModalOpen">
+        <div class="modal-header">
+          <h2>Kreiranje racuna</h2>
+          <span class="close" (click)="closeAccountModal()">✖</span>
+        </div>
+        <label class="edit-account-label">Broj racuna</label>
+        <div class="modal-body">
+          <input class="edit-account-textbox" [(ngModel)]="newAccount"  type="text"  placeholder="Enter title..." />
+          <button class="edit-submit-button" style="left: 80%" (click)="addAccount()">Kreiraj</button>
+        </div>
+      </div>
+
+
+
+
+
+    </div>
+
+    <button type="submit" class="edit-submit-button" (click)="updateCustomer()">Nastavi</button>
+
+  </div>
+</div>

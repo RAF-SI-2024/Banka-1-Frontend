@@ -34,7 +34,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr *ngFor="let employee of displayedData" (click)="editPerson(employee)" style="cursor: pointer;">
+            <tr *ngFor="let employee of displayedData" (dblclick)="openModal(employee)" style="cursor: pointer;">
               <td>{{ employee.ime }} {{ employee.prezime }}</td>
               <td>{{ employee.email }}</td>
               <td>{{ employee.pozicija }}</td>
@@ -62,7 +62,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr *ngFor="let customer of displayedData" (click)="editPerson(customer)" style="cursor: pointer;">
+            <tr *ngFor="let customer of displayedData" (dblclick)="openModal(customer)" style="cursor: pointer;">
               <td>{{ customer.ime }} {{ customer.prezime }}</td>
               <td>{{ customer.email }}</td>
               <td>{{ customer.brojTelefona }}</td>
@@ -85,3 +85,7 @@
 
   <div class="bottom-container"></div>
 </div>
+
+
+<app-edit-customer></app-edit-customer>
+<app-edit-employee></app-edit-employee>

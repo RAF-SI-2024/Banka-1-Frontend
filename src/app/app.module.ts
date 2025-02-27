@@ -11,6 +11,8 @@ import { LoginComponent } from './login/login.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import { DeskComponent } from './desk/desk.component';
 import { UserPortalComponent } from './user-portal/user-portal.component';
+import {EditEmployeeComponent} from "./components/edit-employee/edit-employee.component";
+import {EditCustomerComponent} from "./components/edit-customer/edit-customer.component";
 
 @NgModule({
   declarations: [
@@ -19,6 +21,8 @@ import { UserPortalComponent } from './user-portal/user-portal.component';
     ResetPasswordComponent,
     SetPasswordComponent,
     DeskComponent,
+    EditEmployeeComponent,
+    EditCustomerComponent,
     UserPortalComponent
   ],
   imports: [

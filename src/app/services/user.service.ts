@@ -1,7 +1,7 @@
 
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
-import { Observable } from 'rxjs';
+import {map, Observable} from 'rxjs';
 import {environment} from "../environments/environment";
 //import { AuthService } from './auth.service';
 
@@ -36,78 +36,182 @@ export class UserService {
     return this.http.post(`${this.aiUrl}/customers`, customerData, { headers });
   }
 
-  fetchData(activeCategory: string, currentPage: number, itemsPerPage: number, totalItems: number, totalPages: number, displayedData: (Employee | Customer)[]) {
-    const apiUrl = activeCategory === 'employees'
-      ? 'http://localhost:8080/api/users/employees'
-      : 'http://localhost:8080/api/users/customers';
+  // fetchData(activeCategory: string, currentPage: number, itemsPerPage: number, totalItems: number, totalPages: number, displayedData: (Employee | Customer)[]) {
+  //   const apiUrl = activeCategory === 'employees'
+  //     ? 'http://localhost:8080/api/users/employees'
+  //     : 'http://localhost:8080/api/users/customers';
+  //
+  //   this.http.get<any>(`${apiUrl}?page=${currentPage}&limit=${itemsPerPage}`).subscribe({
+  //     next: (data) => {
+  //       totalItems = data.totalItems;
+  //       totalPages = Math.ceil(totalItems / itemsPerPage);
+  //       displayedData = data.items;
+  //     },
+  //     error: (err) => {
+  //       console.error('Error fetching data:', err);
+  //     }
+  //   });
+  // }
+  //
 
-    this.http.get<any>(`${apiUrl}?page=${currentPage}&limit=${itemsPerPage}`).subscribe({
-      next: (data) => {
-        totalItems = data.totalItems;
-        totalPages = Math.ceil(totalItems / itemsPerPage);
-        displayedData = data.items;
-      },
-      error: (err) => {
-        console.error('Error fetching data:', err);
-      }
+  fetchEmployees(): Observable<{ employees: Employee[]; total: number }> {
+    const token = ''; //this.authService.getToken(); //cekam auth
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
     });
+
+
+    return this.http.get<{ success: boolean; data: { rows: Employee[]; total: number } }>(`${this.aiUrl}/search/employees`, { headers }
+    ).pipe(
+      map(response => ({
+        employees: response.data.rows,
+        total: response.data.total
+      }))
+    );
   }
 
-  fetchEmployees(employees: Employee[], activeCategory: string, displayedData: (Employee | Customer)[]) {
-    this.http.get<Employee[]>('http://localhost:8080/api/users/employees').subscribe({
-      next: (data) => {
-        employees = data;
-        if (activeCategory === 'employees') {
-          displayedData = [...employees];
-        }
-      },
-      error: (err) => {
-        console.error('Error fetching employees:', err);
-      }
+  fetchCustomers(): Observable<{ customers: Customer[]; total: number }> {
+    const token = ''; //this.authService.getToken(); //cekam auth
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
     });
+
+
+    return this.http.get<{ success: boolean; data: { rows: Customer[]; total: number } }>(`${this.aiUrl}/search/customers`, { headers }
+    ).pipe(
+      map(response => ({
+        customers: response.data.rows,
+        total: response.data.total
+      }))
+    );
   }
 
-  fetchCustomers(customers: Customer[], activeCategory: string, displayedData: (Employee | Customer)[]) {
-    this.http.get<Customer[]>('http://localhost:8080/api/users/customers').subscribe({
-      next: (data) => {
-        customers = data;
-        if (activeCategory === 'customers') {
-          displayedData = [...customers];
-        }
-      },
-      error: (err) => {
-        console.error('Error fetching customers:', err);
-      }
+  deleteEmployee(id: number): Observable<void> {
+    const token = ''; //this.authService.getToken(); //cekam auth
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
     });
+
+
+    return this.http.delete<void>(`${this.aiUrl}/search/employee${id}`, { headers });
   }
 
-  deletePerson(person: Employee | Customer, displayedData: (Employee | Customer)[]) {
-    if (!person || !person.id) {
-      console.error('Invalid person object:', person);
-      return;
-    }
-
-    const id = person.id;
-
-    const isEmployee = 'pozicija' in person;
-    const apiUrl = isEmployee
-      ? `http://localhost:8080/api/users/employee/${id}`
-      : `http://localhost:8080/api/users/customer/${id}`;
-
-    this.http.delete(apiUrl).subscribe({
-      next: (response: any) => {
-        if (response.success) {
-          console.log(response.data.message);
-          displayedData = displayedData.filter(p => p.id !== id);
-        } else {
-          console.error('Error deleting person:', response);
-        }
-      },
-      error: (err) => {
-        console.error('API error:', err);
-      }
+  deleteCustumer(id: number): Observable<void> {
+    const token = ''; //this.authService.getToken(); //cekam auth
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
     });
+
+
+    return this.http.delete<void>(`${this.aiUrl}/search/customer${id}`, { headers });
   }
+
+
+  // fetchEmployees(employees: Employee[], activeCategory: string, displayedData: (Employee | Customer)[]) {
+  //   this.http.get<Employee[]>('http://localhost:8080/api/users/employees').subscribe({
+  //     next: (data) => {
+  //       employees = data;
+  //       if (activeCategory === 'employees') {
+  //         displayedData = [...employees];
+  //       }
+  //     },
+  //     error: (err) => {
+  //       console.error('Error fetching employees:', err);
+  //     }
+  //   });
+  // }
+  //
+  // fetchCustomers(customers: Customer[], activeCategory: string, displayedData: (Employee | Customer)[]) {
+  //   this.http.get<Customer[]>('http://localhost:8080/api/users/customers').subscribe({
+  //     next: (data) => {
+  //       customers = data;
+  //       if (activeCategory === 'customers') {
+  //         displayedData = [...customers];
+  //       }
+  //     },
+  //     error: (err) => {
+  //       console.error('Error fetching customers:', err);
+  //     }
+  //   });
+  // }
+
+  // deletePerson(person: Employee | Customer, displayedData: (Employee | Customer)[]) {
+  //   if (!person || !person.id) {
+  //     console.error('Invalid person object:', person);
+  //     return;
+  //   }
+  //
+  //   const id = person.id;
+  //
+  //   const isEmployee = 'pozicija' in person;
+  //   const apiUrl = isEmployee
+  //     ? `http://localhost:8080/api/users/employee/${id}`
+  //     : `http://localhost:8080/api/users/customer/${id}`;
+  //
+  //   this.http.delete(apiUrl).subscribe({
+  //     next: (response: any) => {
+  //       if (response.success) {
+  //         console.log(response.data.message);
+  //         displayedData = displayedData.filter(p => p.id !== id);
+  //       } else {
+  //         console.error('Error deleting person:', response);
+  //       }
+  //     },
+  //     error: (err) => {
+  //       console.error('API error:', err);
+  //     }
+  //   });
+  // }
+
+  updateEmployee(id: number, employeeData: Partial<Employee>): Observable<void> {
+    const token = ''; //this.authService.getToken(); //cekam auth
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    });
+
+
+    return this.http.put<void>(`${this.aiUrl}/search/employee/${id}`, employeeData, { headers });
+  }
+
+  updateCustomer(id: number, customerData: Partial<Customer>): Observable<void> {
+    const token = ''; //this.authService.getToken(); //cekam auth
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    });
+
+    return this.http.put<void>(`${this.aiUrl}/search/customer/${id}`, customerData, { headers });
+  }
+
+  updateEmployeePermissions(id: number, permissions: string[]): Observable<void> {
+    const body = { permissions };
+    const token = ''; //this.authService.getToken(); //cekam auth
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    });
+
+    return this.http.put<void>(`${this.aiUrl}/search/employee/${id}/permissions`, body, { headers });
+  }
+
+  updateCustomerPermissions(id: number, permissions: string[]): Observable<void> {
+    const body = { permissions };
+    const token = ''; //this.authService.getToken(); //cekam auth
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    });
+
+    return this.http.put<void>(`${this.aiUrl}/search/customer/${id}/permissions`, body, { headers });
+  }
+
+
+
 
 }
 
@@ -123,9 +227,10 @@ export interface Customer {
   adresa: string;
   password: string;
   saltPassword: string;
-  povezaniRacuni: number[];
+  povezaniRacuni: string[];
   pozicija: null;
   aktivan: null;
+  permissions: string[];
 }
 
 
@@ -133,7 +238,7 @@ export interface Employee {
   id: number;
   ime: string;
   prezime: string;
-  datumRodjenja: Date;
+  datumRodjenja: number;
   pol: string;
   email: string;
   brojTelefona: string;
@@ -144,4 +249,6 @@ export interface Employee {
   pozicija: string;
   departman: string;
   aktivan: boolean;
+  permissions: string[];
 }
+

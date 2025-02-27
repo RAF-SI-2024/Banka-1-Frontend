@@ -20,7 +20,7 @@ export class UserPortalComponent implements OnInit {
   totalItems: number = 0;
   totalPages: number = 0;
 
-  constructor(private userService: UserService, private authService: AuthService, private ruter:Router) {
+  constructor(private userService: UserService, private authService: AuthService, private modalService: ModalService, private ruter:Router) {
     // this.initializeEmployees();
     // this.initializeCustomers();
     this.activeCategory = 'employees';

@@ -61,9 +61,45 @@ export class TableEmployesComponent {
   }
 
 
+  // deletePerson(person: Employee | Customer) {
+  //   this.userService.deletePerson(person, this.displayedData);
+  // }
+
   deletePerson(person: Employee | Customer) {
-    this.userService.deletePerson(person, this.displayedData);
+    if (this.isEmployee(person)) {
+
+      this.userService.deleteEmployee(person.id).subscribe({
+        next: (data) => {
+          this.displayedData = this.displayedData.filter(p => p.id !== person.id);
+        },
+        error: (error) => {
+          console.error('Error fetching employees:', error);
+        },
+      });
+
+    } else if (this.isCustomer(person)) {
+
+      this.userService.deleteCustumer(person.id).subscribe({
+        next: (data) => {
+          this.displayedData = this.displayedData.filter(p => p.id !== person.id);
+        },
+        error: (error) => {
+          console.error('Error fetching employees:', error);
+        },
+      });
+
+    } else {
+      console.error('Unknown type:', person);
+    }
   }
+
+  private isEmployee(person: Employee | Customer): person is Employee {
+      return (person as Employee).username !== undefined;
+    }
+  
+    private isCustomer(person: Employee | Customer): person is Customer {
+      return (person as Customer).povezaniRacuni !== undefined;
+    }
 
 
   nextPage() {

@@ -4,15 +4,19 @@
   </div>
 
   <div class="content">
-    <nav class="sidebar">
-      <ul>
-        <li><button class="sidebar-button" (click)="changeCategory('customers')">Klijenti</button></li>
-        <li><button class="sidebar-button" (click)="changeCategory('employees')">Zaposleni</button></li>
-      </ul>
 
-      <button class="logout-btn" (click)="logout()">Izloguj se</button>
-    </nav>
+    <!-- Sidebar komponenta -->
+    <app-sidebar (categoryChanged)="setActiveCategory($event)"></app-sidebar>
 
+    <!-- Prikaz odgovarajuće komponente u zavisnosti od activeCategory -->
+    <app-employees *ngIf="activeCategory === 'employees'"></app-employees>
+    <app-customers *ngIf="activeCategory === 'customers'"></app-customers>
+
+
+    <!-- Stari main-content zakomentarisan.-->
+    <!-- Sve sto je bilo ovde sada treba da se odvoji u dve komponente: employees i customers -->
+
+    <!--
     <div class="main-content">
       <div class="filter-add-container">
         <input type="text" class="filter-input" [(ngModel)]="searchQuery" (input)="filterData($event)" placeholder="Pretraga...">
@@ -81,7 +85,11 @@
       </div>
 
     </div>
+      -->
+
+
   </div>
+
 
   <div class="bottom-container"></div>
 </div>

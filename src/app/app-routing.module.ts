@@ -12,7 +12,9 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'reset-password', component: ResetPasswordComponent, canActivate: [AuthGuard] },
   { path: 'set-password', component: SetPasswordComponent, canActivate: [AuthGuard] },
-  { path: 'user-portal', component: UserPortalComponent, canActivate: [AuthGuard] },
+  //{ path: 'user-portal', component: UserPortalComponent, canActivate: [AuthGuard] },
+  { path: 'user-portal', component: UserPortalComponent },
+
 ];
 
 @NgModule({

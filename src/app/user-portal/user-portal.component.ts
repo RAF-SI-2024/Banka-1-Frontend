@@ -11,16 +11,17 @@ export class UserPortalComponent implements OnInit {
   customers: Customer[] = [];
   displayedData: (Employee | Customer)[] = [];
   searchQuery: string = '';
-  activeCategory: 'employees' | 'customers' = 'employees';
+  activeCategory: string = '';
   currentPage: number = 1;
   itemsPerPage: number = 8;
   totalItems: number = 0;
   totalPages: number = 0;
 
+
   constructor(private userService: UserService) {
     // this.initializeEmployees();
     // this.initializeCustomers();
-    this.activeCategory = 'employees';
+    this.activeCategory = '';
     this.displayedData = this.employees;
     this.calculatePagination();
 
@@ -136,7 +137,7 @@ export class UserPortalComponent implements OnInit {
     ];
   }
 
-  changeCategory(category: 'employees' | 'customers') {
+  changeCategory(category: string) {
     this.activeCategory = category;
     this.calculatePagination();
   }
@@ -205,4 +206,9 @@ export class UserPortalComponent implements OnInit {
     }
   }
 
+
+// Metoda za menjanje aktivne kategorije
+  setActiveCategory(category: string): void {
+    this.activeCategory = category;
+    this.currentPage = 1;  }
 }

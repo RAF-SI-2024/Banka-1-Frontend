@@ -11,6 +11,7 @@ import {EditEmployeeComponent} from "./components/edit-employee/edit-employee.co
 
 
 
+
 const routes: Routes = [
   { path: '', component: DeskComponent },
   { path: 'login', component: LoginComponent },
@@ -19,6 +20,7 @@ const routes: Routes = [
   { path: 'user-portal', component: UserPortalComponent, canActivate: [AuthGuard] },
   { path: 'user-portal',component:EditCustomerComponent, canActivate: [AuthGuard]},
   { path: 'user-portal',component:EditEmployeeComponent, canActivate: [AuthGuard]}
+
 ];
 
 @NgModule({

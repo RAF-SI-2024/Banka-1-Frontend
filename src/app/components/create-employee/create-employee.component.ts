@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Output} from '@angular/core';
+import {ChangeDetectorRef, Component, EventEmitter, Input, Output} from '@angular/core';
 import { UserService } from '../../services/user.service';
 import { formatDate } from '@angular/common';
 
@@ -22,10 +22,12 @@ export class CreateEmployeeComponent {
     active: true
   };
   @Output() employeeCreated: EventEmitter<void> = new EventEmitter<void>();
+  @Input() isModalOpen: boolean = false;
+  @Output() modalClosed: EventEmitter<boolean> = new EventEmitter<boolean>();
+  constructor(private userService: UserService) {
 
-  constructor(
-    private userService: UserService
-  ) {}
+  }
+
 
   onSubmit(employeeForm: any): void {
     if (employeeForm.valid) {
@@ -63,6 +65,10 @@ export class CreateEmployeeComponent {
     } else {
       alert('Molimo vas da popunite sva obavezna polja!');
     }
+  }
+
+  onCancel(): void {
+    this.modalClosed.emit(false);
   }
 
 }

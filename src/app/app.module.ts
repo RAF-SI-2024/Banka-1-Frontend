@@ -14,6 +14,11 @@ import { UserPortalComponent } from './user-portal/user-portal.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { CustomersComponent } from './components/customers/customers.component';
 import { EmployeesComponent } from './components/employees/employees.component';
+import {EditEmployeeComponent} from "./components/edit-employee/edit-employee.component";
+import {EditCustomerComponent} from "./components/edit-customer/edit-customer.component";
+import { TableEmployesComponent } from './components/table-employes/table-employes.component';
+import {CreateEmployeeComponent} from "./components/create-employee/create-employee.component";
+import {CreateCustomerComponent} from "./components/create-customer/create-customer.component";
 
 @NgModule({
   declarations: [
@@ -25,7 +30,12 @@ import { EmployeesComponent } from './components/employees/employees.component';
     UserPortalComponent,
     SidebarComponent,
     CustomersComponent,
-    EmployeesComponent
+    EmployeesComponent,
+    EditEmployeeComponent,
+    EditCustomerComponent,
+    TableEmployesComponent,
+    CreateEmployeeComponent,
+    CreateCustomerComponent
   ],
   imports: [
     BrowserModule,

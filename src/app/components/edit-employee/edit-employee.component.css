@@ -1,0 +1,302 @@
+:host {
+  font-family: 'Montserrat', sans-serif;
+}
+
+h1{
+  text-align: center;
+  padding-bottom: 20px;
+  color: #ECD487;
+}
+
+label{
+  color: #FFFF;
+  font-size: 15px;
+  padding-bottom: 0px;
+  margin-bottom: 2px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.edit-form-container {
+  margin-top: 40px;
+  display: flex;
+  justify-content: space-between;
+  gap: 50px;
+}
+
+body {
+  position: absolute;
+  top: 50px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  height: 700px;
+  background-color: #222942;
+
+}
+
+.edit-container {
+  background-color: #222942;
+  padding: 25px;
+  padding-top: 10px;
+  border-radius: 8px;
+  width: 650px;
+}
+
+.edit-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.edit-textbox {
+  width: 100%;
+  height: 25px;
+  padding: 10px;
+  margin-bottom: 20px;
+  color: #FFFF;
+  border: 1px solid transparent !important;
+  border-radius: 12px;
+  background-color: #3B4754;
+  outline: none;
+  box-sizing: content-box !important;
+
+
+}
+
+.edit-account-textbox{
+  width: 35%;
+  height: 25px;
+  padding: 10px;
+  margin-bottom: 20px;
+  margin-top: 35px;
+  position: absolute;
+  left: 30%;
+
+  transform: translateX(-50%);
+  color: #FFFF;
+  border: 1px solid transparent !important;
+  border-radius: 12px;
+  background-color: #3B4754;
+  outline: none;
+}
+
+.edit-account-label{
+  position: absolute;
+  left: 18%;
+  margin-top: 28px;
+  transform: translateX(-50%);
+}
+
+.edit-checkbox{
+  width: 20px;
+  height: 15px;
+  margin-top: 15px;
+}
+
+
+
+.edit-submit-button {
+
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 20px auto 0;
+  width: 30%;
+  padding: 10px;
+  border: none;
+  border-radius: 12px;
+  background-color: #3B5445;
+  color: white;
+  cursor: pointer;
+  text-align: center;
+}
+
+
+.edit-submit-button:hover {
+  background-color: #4C6B58;
+}
+
+.modal {
+  transform: scale(0.9) translate(-50%, -50%);
+  position: fixed;
+  top: 45%;
+  left: 50%;
+  width: 750px;
+  height: 1000px;
+  background: #222942;
+  border-radius: 16px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+}
+
+.modal-header {
+  background: #1A1F36  ;
+  color: white;
+  padding: 10px;
+  display: flex;
+  border-top-right-radius: 16px;
+  border-top-left-radius: 16px;
+  justify-content: space-between;
+  align-items: center;
+}
+
+
+.close {
+  cursor: pointer;
+  font-size: 20px;
+}
+
+.modal-body {
+  padding: 15px;
+}
+
+body {
+  position: relative;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border: 16px;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+}
+.account-modal{
+  position: fixed;
+  width: 665px;
+  height: 280px;
+  background: #222942;
+  border-radius: 16px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+}
+
+
+
+
+
+.permission-selector {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+
+}
+
+.edit-textbox {
+  width: 100%;
+  height: 25px;
+  padding: 10px;
+  margin-bottom: 20px;
+  color: #FFFF;
+  border: 1px solid transparent !important;
+  border-radius: 12px;
+  background-color: #3B4754;
+  outline: none;
+
+}
+
+
+.select-permission {
+  height: 47px;
+  color: #fff;
+  background-color: #3B4754;
+  margin-right: 1px;
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid transparent !important;
+  border-radius: 12px;
+  outline: none;
+
+}
+
+
+
+.add-button {
+  background-color: #3B5445;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-left: 1px;
+
+}
+
+.add-button:hover {
+  background-color: #4C6B58;
+}
+
+.select-account {
+  height: 47px;
+  width: 80%;
+  color: #fff;
+  background-color: #3B4754;
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid transparent !important;
+  border-top-left-radius: 12px;
+  border-bottom-left-radius: 12px;
+  outline: none;
+
+}
+
+
+.account-add-button {
+  height: 47px;
+  width: 10%;
+  background-color: #3B5445;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+.account-remove-button {
+  height: 47px;
+  width: 10%;
+  background-color: #3B5445;
+  color: white;
+  border: none;
+  border-top-right-radius: 12px;
+  border-bottom-right-radius: 12px;
+  cursor: pointer;
+
+}
+
+.account-add-button:hover{
+  background-color: #4C6B58;
+}
+.account-remove-button:hover{
+  background-color: #4C6B58;
+}
+
+.permission-list {
+  margin-top: 10px;
+}
+
+.permission-badge {
+  display: inline-block;
+  background-color: #3B5445;
+  color: white;
+  padding: 5px 10px;
+  margin: 5px;
+  border-radius: 16px;
+  font-size: 14px;
+  text-align: center;
+}
+
+.remove-btn {
+  margin-left: 8px;
+  cursor: pointer;
+  color: white;
+  font-weight: bold;
+}
+

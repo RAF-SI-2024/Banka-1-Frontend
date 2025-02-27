@@ -1,0 +1,75 @@
+<div class="modal-overlay" *ngIf="isOpen" (click)="closeModal()"></div>
+<div class="modal" #modal *ngIf="isOpen">
+  <div class="modal-header" >
+
+    <span class="close" (click)="closeModal()">✖</span>
+  </div>
+  <div class="modal-body">
+
+    <div class="edit-container">
+      <h1>Azuriraj podatke</h1>
+
+      <div class ="edit-form-container">
+
+
+        <form>
+          <label>Id</label>
+          <input type="text" class="edit-textbox" readonly [(ngModel)]="updatedEmployee.id"  name="id"/>
+          <label>Ime</label>
+          <input type="text" class="edit-textbox" readonly [(ngModel)]="updatedEmployee.ime" name="ime"/>
+          <label>Prezime</label>
+          <input type="text" class="edit-textbox" [(ngModel)]="updatedEmployee.prezime" (ngModelChange)="trackEmployeeChanges()" name="Prezime"/>
+          <label>Datum rodjenja</label>
+          <input type="text" class="edit-textbox" readonly [(ngModel)]="updatedEmployee.datumRodjenja" name="Datum_rodjenja"/>
+          <label>Pol</label>
+          <input type="text" class="edit-textbox" [(ngModel)]="updatedEmployee.pol" (ngModelChange)="trackEmployeeChanges()" name="Pol"/>
+          <label>Email adresa</label>
+          <input type="text" class="edit-textbox" readonly [(ngModel)]="updatedEmployee.email" name="Email_adresa"/>
+          <label>Permissions</label>
+
+          <div class="permission-selector">
+            <select class="select-permission" [(ngModel)]="newPermission" name="permissionSelect">
+              <option value="" disabled selected>Izaberite permisiju</option>
+              <option *ngFor="let permission of availablePermissions" [value]="permission">
+                {{ permission }}
+              </option>
+            </select>
+            <button class="add-button" (click)="addPermission()">Add</button>
+          </div>
+        </form>
+
+        <form>
+          <label>Broj telefona</label>
+          <input type="text" class="edit-textbox" [(ngModel)]="updatedEmployee.brojTelefona" (ngModelChange)="trackEmployeeChanges()" name="Broj_telefona"/>
+          <label>Adresa</label>
+          <input type="text" class="edit-textbox" [(ngModel)]="updatedEmployee.adresa" (ngModelChange)="trackEmployeeChanges()" name="Adresa"/>
+          <label>Username</label>
+          <input type="text" class="edit-textbox" readonly [(ngModel)]="updatedEmployee.username" name="Username"/>
+          <label>Password</label>
+          <input type="password" class="edit-textbox" [(ngModel)]="updatedEmployee.password" (ngModelChange)="trackEmployeeChanges()" name="Password"/>
+          <label>Pozicija</label>
+          <input type="text" class="edit-textbox" [(ngModel)]="updatedEmployee.pozicija" (ngModelChange)="trackEmployeeChanges()" name="Pozicija"/>
+          <label>Departman</label>
+          <input type="text" class="edit-textbox" [(ngModel)]="updatedEmployee.departman" (ngModelChange)="trackEmployeeChanges()" name="Departman"/>
+          <label>Aktivan </label>
+          <input type="checkbox" class = "edit-checkbox" [(ngModel)]="updatedEmployee.aktivan" (ngModelChange)="trackEmployeeChanges()" name="Aktivan">
+
+        </form>
+
+
+      </div>
+
+      <div class="permission-list">
+            <span *ngFor="let permission of selectedPermissions" class="permission-badge">
+              {{ permission }}
+              <span class="remove-btn" (click)="removePermission(permission)">✖</span>
+            </span>
+      </div>
+
+
+    </div>
+
+    <button type="submit" class="edit-submit-button" (click)="updateEmployee()">Nastavi</button>
+
+  </div>
+</div>

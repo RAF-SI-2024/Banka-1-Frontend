@@ -97,6 +97,20 @@ body {
   background-color: #34493d;
 }
 
+.btn-danger {
+  background-color: #401a1a;
+  color: #FFFFFF;
+  border: none;
+  width: 150px;
+  padding: 10px;
+  font-weight: bold;
+  border-radius: 10px;
+}
+
+.btn-danger:hover {
+  background-color: #532222;
+}
+
 .btn-primary:disabled {
   background-color: #34493d;
   cursor: not-allowed;

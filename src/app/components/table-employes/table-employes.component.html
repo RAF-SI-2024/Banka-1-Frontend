@@ -1,0 +1,56 @@
+<<div class="modal-overlay" *ngIf="isEmployeeModalOpen" (click)="closeEmployeeModal()"></div>
+<div class="modal employee-modal" #employeeModal *ngIf="isEmployeeModalOpen">
+  <div class="modal-body">
+    <app-create-employee
+      [isModalOpen]="isEmployeeModalOpen"
+      (modalClosed)="closeEmployeeModal()"
+    ></app-create-employee>
+  </div>
+</div>
+
+<div *ngIf="!isEmployeeModalOpen" class="main-content">
+  <div class="filter-add-container">
+    <input type="text" class="filter-input" [(ngModel)]="searchQuery" (input)="filterData($event)" placeholder="Pretraga...">
+
+    <!-- Dugme za otvaranje modala za kreiranje zaposlenog -->
+    <button class="add-employee-btn" *ngIf="hasCreateEmployeePermission" (click)="openEmployeeModal()">Dodaj zaposlenog</button>
+
+    <!-- Modal za kreiranje zaposlenog -->
+
+  </div>
+
+  <div   class="table-container">
+    <div class="table-overlay">
+      <table>
+        <thead>
+        <tr>
+          <th>Ime i Prezime</th>
+          <th>Email</th>
+          <th>Pozicija</th>
+          <th>Broj Telefona</th>
+          <th>Aktivan</th>
+          <th>Akcije</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let employee of displayedData" (click)="editPerson(employee)" style="cursor: pointer;">
+          <td>{{ employee.ime }} {{ employee.prezime }}</td>
+          <td>{{ employee.email }}</td>
+          <td>{{ employee.pozicija }}</td>
+          <td>{{ employee.brojTelefona }}</td>
+          <td>{{ employee.aktivan ? 'Da' : 'Ne' }}</td>
+          <td>
+            <img src="/assets/bin.jpg.png" class="delete-icon" (click)="deletePerson(employee); $event.stopPropagation()">
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="pagination">
+    <button class="previous-button" (click)="previousPage()" *ngIf="currentPage > 1">Nazad</button>
+    <button class="next-button" (click)="nextPage()" *ngIf="currentPage < totalPages">Sledeće</button>
+  </div>
+
+</div>

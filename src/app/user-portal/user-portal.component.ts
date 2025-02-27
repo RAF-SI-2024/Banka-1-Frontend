@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {Customer, Employee, UserService} from "../services/user.service";
+import {ModalService} from "../services/modal.service";
+import {AuthService} from "../services/auth.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-user-portal',
@@ -17,125 +20,49 @@ export class UserPortalComponent implements OnInit {
   totalItems: number = 0;
   totalPages: number = 0;
 
-
-  constructor(private userService: UserService) {
+  constructor(private userService: UserService, private authService: AuthService, private modalService: ModalService, private ruter:Router) {
     // this.initializeEmployees();
     // this.initializeCustomers();
     this.activeCategory = '';
     this.displayedData = this.employees;
-    this.calculatePagination();
+    // this.calculatePagination();
 
   }
 
   ngOnInit() {
-    this.userService.fetchData(this.activeCategory, this.currentPage, this.itemsPerPage, this.totalItems, this.totalPages, this.displayedData);
-    // this.userService.fetchEmployees();
-    // this.userService.fetchCustomers();
+    this.loadEmployees();
+    this.loadCustomers();
+    this.calculatePagination();
   }
 
-  initializeEmployees() {
-    this.employees = [
-      {
-        id: 1,
-        ime: "Marko",
-        prezime: "Marković",
-        datumRodjenja: new Date(1990, 5, 15),
-        pol: "Muški",
-        email: "marko@example.com",
-        brojTelefona: "0601234567",
-        adresa: "Ulica 1, Beograd",
-        username: "markom",
-        password: "hashed_password",
-        saltPassword: "random_salt",
-        pozicija: "Software Developer",
-        departman: "IT",
-        aktivan: true
+  loadEmployees() {
+    this.userService.fetchEmployees().subscribe({
+      next: (data) => {
+        this.employees = data.employees;
+        this.totalItems = data.total;
+        this.totalPages = Math.ceil(this.totalItems / this.itemsPerPage);
+        this.displayedData = this.employees;
       },
-      {
-        id: 2,
-        ime: "Ana",
-        prezime: "Anić",
-        datumRodjenja: new Date(1988, 10, 25),
-        pol: "Ženski",
-        email: "ana@example.com",
-        brojTelefona: "0659876543",
-        adresa: "Ulica 2, Novi Sad",
-        username: "anaa",
-        password: "hashed_password",
-        saltPassword: "random_salt",
-        pozicija: "Project Manager",
-        departman: "Business",
-        aktivan: true
+      error: (error) => {
+        console.error('Error fetching employees:', error);
       },
-      {
-        id: 3,
-        ime: "Jovan",
-        prezime: "Jovanović",
-        datumRodjenja: new Date(1995, 2, 5),
-        pol: "Muški",
-        email: "jovan@example.com",
-        brojTelefona: "0609876543",
-        adresa: "Ulica 3, Beograd",
-        username: "jovanj",
-        password: "hashed_password",
-        saltPassword: "random_salt",
-        pozicija: "UI Designer",
-        departman: "Design",
-        aktivan: true
-      },
-
-    ];
+    });
   }
 
-  initializeCustomers() {
-    this.customers = [
-      {
-        id: 101,
-        ime: "Petar",
-        prezime: "Petrović",
-        datumRodjenja: 482198400000,
-        pol: "Muški",
-        email: "petar@example.com",
-        brojTelefona: "0603335555",
-        adresa: "Klijentska ulica 10, Beograd",
-        password: "hashed_password",
-        saltPassword: "random_salt",
-        povezaniRacuni: [2001, 2002],
-        pozicija: null,
-        aktivan: null
+  loadCustomers() {
+    this.userService.fetchCustomers().subscribe({
+      next: (data) => {
+        this.customers = data.customers;
+        this.totalItems = data.total;
+        this.totalPages = Math.ceil(this.totalItems / this.itemsPerPage);
+        this.displayedData = this.customers;
       },
-      {
-        id: 102,
-        ime: "Jelena",
-        prezime: "Jelić",
-        datumRodjenja: 715305600000,
-        pol: "Ženski",
-        email: "jelena@example.com",
-        brojTelefona: "0655554444",
-        adresa: "Biznis centar, Novi Sad",
-        password: "hashed_password",
-        saltPassword: "random_salt",
-        povezaniRacuni: [3005],
-        pozicija: null,
-        aktivan: null
+      error: (error) => {
+        console.error('Error fetching customers:', error);
       },
-      {
-        id: 103,
-        ime: "Milan",
-        prezime: "Milić",
-        datumRodjenja: 614070400000,
-        pol: "Muški",
-        email: "milan@example.com",
-        brojTelefona: "0621234567",
-        adresa: "Novi Beograd, Beograd",
-        password: "hashed_password",
-        saltPassword: "random_salt",
-        povezaniRacuni: [4002],
-        pozicija: null,
-        aktivan: null
-      }
-    ];
+    });
   }
+
 
   changeCategory(category: string) {
     this.activeCategory = category;
@@ -175,21 +102,48 @@ export class UserPortalComponent implements OnInit {
     }
   }
 
-  editPerson(person: Employee | Customer) {
-    console.log('Editing employee:', person);
-  }
 
   addPerson() {
     console.log('Adding person');
   }
 
   deletePerson(person: Employee | Customer) {
-    this.userService.deletePerson(person, this.displayedData);
+    if (this.isEmployee(person)) {
+
+      this.userService.deleteEmployee(person.id).subscribe({
+        next: (data) => {
+          this.displayedData = this.displayedData.filter(p => p.id !== person.id);
+        },
+        error: (error) => {
+          console.error('Error fetching employees:', error);
+        },
+      });
+
+    } else if (this.isCustomer(person)) {
+
+      this.userService.deleteCustumer(person.id).subscribe({
+        next: (data) => {
+          this.displayedData = this.displayedData.filter(p => p.id !== person.id);
+        },
+        error: (error) => {
+          console.error('Error fetching employees:', error);
+        },
+      });
+
+    } else {
+      console.error('Unknown type:', person);
+    }
   }
 
 
   logout() {
-    console.log('Logging out...');
+    this.authService.logout().subscribe({
+      next: () => {
+        localStorage.clear();
+        this.ruter.navigate(['/login']);
+      },
+      error: (error) => console.error('Greška prilikom odjave:', error)
+    });
   }
 
   nextPage() {
@@ -210,5 +164,25 @@ export class UserPortalComponent implements OnInit {
 // Metoda za menjanje aktivne kategorije
   setActiveCategory(category: string): void {
     this.activeCategory = category;
-    this.currentPage = 1;  }
+    this.currentPage = 1;  
+  }
+    
+  openModal(person: Employee | Customer) {
+    if (this.isEmployee(person)) {
+      this.modalService.openModal('employee', person);
+    } else if (this.isCustomer(person)) {
+      this.modalService.openModal('customer', person);
+    } else {
+      console.error('Unknown type:', person);
+    }
+  }
+
+  private isEmployee(person: Employee | Customer): person is Employee {
+    return (person as Employee).username !== undefined;
+  }
+
+  private isCustomer(person: Employee | Customer): person is Customer {
+    return (person as Customer).povezaniRacuni !== undefined;
+  }
+
 }

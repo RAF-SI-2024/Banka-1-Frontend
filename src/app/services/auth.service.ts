@@ -52,9 +52,15 @@ export class AuthService {
 
 
   logout(): Observable<any> {
-    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+
+    const token = this.getToken(); //cekam auth
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    });
     return this.http.post(`${this.apiUrl}/logout`, {}, { headers }).pipe(
         tap(() => {
+          console.log("Aa")
           localStorage.removeItem('token');
           this.loginStatus.next(false);
         }),
@@ -118,7 +124,7 @@ export class AuthService {
     return true;
   }
 
-  
+
   refreshToken(): Observable<any> {
     return this.http.get(`${this.apiUrl}/refresh-token`).pipe(
         tap((response: any) => {

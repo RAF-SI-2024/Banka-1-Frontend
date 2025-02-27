@@ -10,14 +10,15 @@ import {EditCustomerComponent} from "./components/edit-customer/edit-customer.co
 import {EditEmployeeComponent} from "./components/edit-employee/edit-employee.component";
 
 
+
 const routes: Routes = [
   { path: '', component: DeskComponent },
   { path: 'login', component: LoginComponent },
   { path: 'reset-password', component: ResetPasswordComponent, canActivate: [AuthGuard] },
   { path: 'set-password', component: SetPasswordComponent, canActivate: [AuthGuard] },
   { path: 'user-portal', component: UserPortalComponent, canActivate: [AuthGuard] },
-  {path: 'user-portal',component:EditCustomerComponent, canActivate: [AuthGuard]},
-  {path: 'user-portal',component:EditEmployeeComponent, canActivate: [AuthGuard]}
+  { path: 'user-portal',component:EditCustomerComponent, canActivate: [AuthGuard]},
+  { path: 'user-portal',component:EditEmployeeComponent, canActivate: [AuthGuard]}
 ];
 
 @NgModule({

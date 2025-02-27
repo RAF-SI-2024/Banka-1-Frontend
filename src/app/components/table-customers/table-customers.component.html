@@ -1,0 +1,45 @@
+<div class="modal-overlay" *ngIf="isCustomerModalOpen" (click)="closeCustomerModal()"></div>
+<div class="modal customer-modal" *ngIf="isCustomerModalOpen">
+  <div class="modal-body">
+    <app-create-customer
+      [isModalOpen]="isCustomerModalOpen"
+      (modalClosed)="closeCustomerModal()"
+    ></app-create-customer>
+  </div>
+</div>
+
+<div *ngIf="!isCustomerModalOpen" class="main-content">
+  <div class="filter-add-container">
+    <input type="text" class="filter-input" [(ngModel)]="searchQuery" (input)="filterData($event)" placeholder="Pretraga...">
+
+    <button class="add-customer-btn" *ngIf="hasCreateCustomerPermission" (click)="openCustomerModal()">Dodaj mušteriju</button>
+  </div>
+
+  <div class="table-container">
+    <table>
+      <thead>
+      <tr>
+        <th>Ime i Prezime</th>
+        <th>Email</th>
+        <th>Broj Telefona</th>
+        <th>Akcije</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let customer of displayedData" (click)="editPerson(customer)" style="cursor: pointer;">
+        <td>{{ customer.ime }} {{ customer.prezime }}</td>
+        <td>{{ customer.email }}</td>
+        <td>{{ customer.brojTelefona }}</td>
+        <td>
+          <img src="/assets/bin.jpg.png" class="delete-icon" (click)="deletePerson(customer); $event.stopPropagation()">
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="pagination">
+    <button class="previous-button" (click)="previousPage()" *ngIf="currentPage > 1">Nazad</button>
+    <button class="next-button" (click)="nextPage()" *ngIf="currentPage < totalPages">Sledeće</button>
+  </div>
+</div>

@@ -9,6 +9,7 @@ import CustomerPortal from './pages/CustomerPortal';
 import EmployeePortal from './pages/EmployeePortal';
 import PasswordReset from './pages/PasswordReset';
 import HomePage from './pages/HomePage';
+import PasswordReset from './pages/PasswordReset'; // Import the new component
 
 function App() {
   return (
@@ -22,6 +23,8 @@ function App() {
           <Route path="/customer-portal" element={<CustomerPortal />} />
           <Route path="/employee-portal" element={<EmployeePortal />} />
           <Route path="/reset-password" element={<PasswordReset />} /> 
+          <Route path="/reset-password" element={<PasswordReset />} /> 
+          {/* Add more routes as needed */}
         </Routes>
         <ThemeToggle />
       </BrowserRouter>

@@ -1,40 +1,62 @@
 import React, { createContext, useState, useContext, useMemo } from 'react';
 import { createTheme, ThemeProvider as MuiThemeProvider } from '@mui/material/styles';
+import materialTheme from '../styles/theme/vujas-theme.json';
 
 // Create context for theme
-// This context will be used to provide the theme to all components in the app
-// It will also provide a function to toggle the theme
 export const ThemeContext = createContext();
 
 // Create hook for using the theme context
 export const useTheme = () => useContext(ThemeContext);
 
 export const ThemeProvider = ({ children }) => {
-  const [mode, setMode] = useState('light');
+  // Change the initial state to 'dark'
+  const [mode, setMode] = useState('dark');
 
   const toggleTheme = () => {
     setMode(prevMode => prevMode === 'light' ? 'dark' : 'light');
   };
 
-  // Create theme based on current mode from toggleTheme function
-  // The theme will have primary and secondary colors, background color, and typography settings
-  const theme = useMemo(
-    () => createTheme({
+  // Rest of the code remains the same...
+  const theme = useMemo(() => {
+    // Get the color scheme based on current mode
+    const colors = materialTheme.schemes[mode];
+    
+    return createTheme({
       palette: {
         mode,
         primary: {
-          main: '#1976d2',
-          light: '#42a5f5',
-          dark: '#1565c0',
+          main: colors.primary,
+          light: colors.primaryContainer,
+          dark: mode === 'light' ? colors.onPrimaryContainer : colors.onPrimary,
+          contrastText: colors.onPrimary,
         },
         secondary: {
-          main: '#9c27b0',
-          light: '#ba68c8',
-          dark: '#7b1fa2',
+          main: colors.secondary,
+          light: colors.secondaryContainer,
+          dark: colors.onSecondaryContainer,
+          contrastText: colors.onSecondary,
+        },
+        tertiary: { 
+          main: colors.tertiary,
+          light: colors.tertiaryContainer,
+          dark: colors.onTertiaryContainer,
+          contrastText: colors.onTertiary,
+        },
+        error: {
+          main: colors.error,
+          light: colors.errorContainer,
+          dark: colors.onErrorContainer,
+          contrastText: colors.onError,
         },
         background: {
-          default: mode === 'light' ? '#f5f5f5' : '#121212',
+          default: colors.background,
+          paper: colors.surfaceContainer,
         },
+        text: {
+          primary: colors.onSurface,
+          secondary: colors.onSurfaceVariant,
+        },
+        divider: colors.outlineVariant,
       },
       typography: {
         fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
@@ -60,9 +82,8 @@ export const ThemeProvider = ({ children }) => {
           },
         },
       },
-    }),
-    [mode],
-  );
+    });
+  }, [mode]);
 
   return (
     <ThemeContext.Provider value={{ mode, toggleTheme }}>

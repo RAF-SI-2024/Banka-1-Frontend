@@ -1,21 +1,19 @@
 import React from 'react';
-import { Button } from '@mui/material';
+import { Button, useTheme } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 
 const AddButton = ({ onClick, label = "Add New" }) => {
+  const theme = useTheme();
+  
   return (
     <Button
       variant="contained"
-      color="primary"
+      color="tertiary" 
       startIcon={<AddIcon />}
       onClick={onClick}
       sx={{
         height: '42px',
-        marginLeft: '10px',
-        backgroundColor: '#1976d2',
-        '&:hover': {
-          backgroundColor: '#115293'
-        }
+        marginLeft: '10px'
       }}
     >
       {label}

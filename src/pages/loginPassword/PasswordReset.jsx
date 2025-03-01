@@ -9,7 +9,7 @@ import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Link from '@mui/material/Link';
 import { useNavigate } from 'react-router-dom';
-import AuthCard from '../components/common/AuthCard';
+import AuthCard from '../../components/loginComponents/AuthCard';
 
 const PasswordReset = () => {
     const navigate = useNavigate();

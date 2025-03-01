@@ -9,9 +9,9 @@ import { Link as MuiLink } from '@mui/material'; // Renamed to avoid conflict
 import { useNavigate, Link as RouterLink } from 'react-router-dom'; // Added RouterLink
 
 // Import our custom components
-import AuthCard from '../components/common/AuthCard';
-import PasswordField from '../components/common/Password';
-import { loginUser } from '../Axios'; // Updated import
+import AuthCard from '../../components/loginComponents/AuthCard';
+import PasswordField from '../../components/loginComponents/Password';
+import { loginUser } from '../../services/Axios'; // Updated import
 
 const Login = () => {
     const navigate = useNavigate();

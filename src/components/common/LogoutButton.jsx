@@ -2,7 +2,7 @@ import * as React from 'react';
 import { AlertDialog } from '@base-ui-components/react/alert-dialog';
 import styles from "./../../styles/logout.module.css"
 import { useNavigate } from 'react-router-dom';
-import { logoutUser } from '../../Axios';
+import { logoutUser } from '../../services/Axios';
 
 const LogoutButton = () => {
 

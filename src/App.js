@@ -1,16 +1,16 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import CssBaseline from '@mui/material/CssBaseline';
-import Login from './pages/Login';
-import Landing from './pages/Landing';  
+import Login from './pages/loginPassword/Login';
+import Landing from './pages/common/Landing';  
 import { ThemeProvider } from './context/ThemeContext';
-import ThemeToggle from './components/common/ThemeToggle';
-import CustomerPortal from './pages/CustomerPortal';
-import EmployeePortal from './pages/EmployeePortal';
-import PasswordReset from './pages/PasswordReset';
-import PasswordResetConfirmation from './pages/PasswordResetConfirmation';
-import HomePage from './pages/HomePage';
-import PasswordSetConfirmation from './pages/PasswordSetConfirmation';
+import ThemeToggle from './components/mainComponents/ThemeToggle';
+import CustomerPortal from './pages/portals/CustomerPortal';
+import EmployeePortal from './pages/portals/EmployeePortal';
+import PasswordReset from './pages/loginPassword/PasswordReset';
+import PasswordResetConfirmation from './pages/loginPassword/PasswordResetConfirmation';
+import HomePage from './pages/common/HomePage';
+import PasswordSetConfirmation from './pages/loginPassword/PasswordSetConfirmation';
 
 function App() {
   return (

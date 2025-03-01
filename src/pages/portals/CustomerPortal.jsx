@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from "react";
-import Navbar from "../components/common/Navbar";
-import Sidebar from "../components/common/Sidebar";
-import SearchDataTable from "../components/common/SearchDataTable";
-import EditModal from "../components/common/EditModal";
+import Navbar from "../../components/mainComponents/Navbar";
+import Sidebar from "../../components/mainComponents/Sidebar";
+import SearchDataTable from "../../components/tables/SearchDataTable";
+import EditModal from "../../components/common/EditModal";
 import {
     fetchCustomers,
     fetchCustomerById,
     updateCustomer,
     createCustomer
-} from "../Axios";
+} from "../../services/Axios";
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import AddButton from "../components/common/AddButton";
+import AddButton from "../../components/common/AddButton";
 
 const CustomerPortal = () => {
     const [rows, setRows] = useState([]);

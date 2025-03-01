@@ -19,7 +19,7 @@ import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
 import HomeIcon from '@mui/icons-material/Home'; // Added Home icon
 import { useNavigate } from 'react-router-dom';
-import LogoutButton from './LogoutButton';
+import LogoutButton from '../common/LogoutButton';
 import { jwtDecode } from 'jwt-decode';
 import { useEffect } from 'react';
 

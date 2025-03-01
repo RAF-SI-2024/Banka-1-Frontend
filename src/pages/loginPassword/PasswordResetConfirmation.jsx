@@ -5,11 +5,11 @@ import Typography from '@mui/material/Typography';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Container from '@mui/material/Container';
 import { useNavigate, useLocation } from 'react-router-dom';
-import AuthCard from '../components/common/AuthCard';
-import PasswordField from '../components/common/Password';
+import AuthCard from '../../components/loginComponents/AuthCard';
+import PasswordField from '../../components/loginComponents/Password';
 import Alert from '@mui/material/Alert';
 import CircularProgress from '@mui/material/CircularProgress';
-import { resetPassword } from '../Axios'; 
+import { resetPassword } from '../../services/Axios'; 
 
 const PasswordResetConfirmation = () => {
     const navigate = useNavigate();

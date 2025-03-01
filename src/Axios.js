@@ -91,7 +91,7 @@ export const fetchCustomerById = async (id) => {
 
 export const updateCustomer = async (id, customerData) => {
   try {
-    const response = await api.put(`/api/customers/${id}`, customerData);
+    const response = await api.put(`/api/customer/${id}`, customerData);
     return response.data;
   } catch (error) {
     console.error(`Error updating customer ${id}:`, error);
@@ -119,7 +119,6 @@ export const updateEmployee = async (id, employeeData) => {
   }
 };
 
-
 export const resetPassword = async (token, password) => {
   try {
     const response = await api.post("/api/users/reset-password/", {
@@ -134,24 +133,24 @@ export const resetPassword = async (token, password) => {
 };
 
 export const setPassword = async (token, password) => {
-    try {
-      const response = await api.post("/api/users/set-password", {
-        token,
-        password,
-      });
-      return response.data;
-    } catch (error) {
-      console.error("Error setting password:", error);
-      throw error;
-    }
-  };
+  try {
+    const response = await api.post("/api/users/set-password", {
+      token,
+      password,
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error setting password:", error);
+    throw error;
+  }
+};
 
 export const createEmployee = async (employeeData) => {
-    return await api.post('/api/users/employees/', employeeData);
+  return await api.post("/api/users/employees/", employeeData);
 };
-  
+
 export const createCustomer = async (customerData) => {
-    return await api.post('/api/customer', customerData);
+  return await api.post("/api/customer", customerData);
 };
 
 export default api;

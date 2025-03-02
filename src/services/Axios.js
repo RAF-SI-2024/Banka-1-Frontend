@@ -131,10 +131,10 @@ export const resetPassword = async (token, password) => {
   }
 };
 
-export const setPassword = async (token, password) => {
+export const setupPassword = async (token, password) => {
   try {
-    const response = await api.post("/api/users/set-password", {
-      token,
+    const response = await api.post("/api/set-password", {
+      code: token,
       password,
     });
     return response.data;

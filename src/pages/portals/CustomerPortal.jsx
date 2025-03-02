@@ -182,11 +182,26 @@ const CustomerPortal = () => {
 
             await createCustomer(customerPayload);
             setIsCreateModalOpen(false);
+            resetCustomerForm();
             toast.success('Customer created successfully');
             loadCustomers();
         } catch (error) {
             toast.error(`Failed to create customer: ${error.message}`);
         }
+    };
+
+    const resetCustomerForm = () => {
+        setNewCustomer({
+            firstName: "",
+            lastName: "",
+            username: "",
+            email: "",
+            phoneNumber: "",
+            address: "",
+            birthDate: "",
+            gender: "MALE",
+            password: ""
+        });
     };
 
 
@@ -248,7 +263,10 @@ const CustomerPortal = () => {
                 {/* Create Modal */}
                 <EditModal
                     open={isCreateModalOpen}
-                    onClose={() => setIsCreateModalOpen(false)}
+                    onClose={() => {
+                        setIsCreateModalOpen(false);
+                        resetCustomerForm();
+                    }}
                     data={newCustomer}
                     formFields={createCustomerFormFields}
                     onSave={handleCreateCustomer}

@@ -24,9 +24,6 @@ public                <- Static files served directly
 │   ├── index.html    <- Main HTML file for React app
 │   └── manifest.json <- PWA settings and metadata
 src
-├── assets              <- Static assets (images, fonts, icons)
-│   ├── images
-│   └── fonts
 │
 ├── components          <- Reusable UI components
 │   └── Common           <- Shared components used across multiple pages

@@ -7,6 +7,8 @@ import { ThemeProvider } from './context/ThemeContext';
 import ThemeToggle from './components/mainComponents/ThemeToggle';
 import CustomerPortal from './pages/portals/CustomerPortal';
 import EmployeePortal from './pages/portals/EmployeePortal';
+import EmployeeBankAccountsPortal from './pages/portals/EmployeeBankAccountsPortal';
+import EmployeeCardsPortal from './pages/portals/EmployeeCardsPortal';
 import PasswordReset from './pages/loginPassword/PasswordReset';
 import PasswordResetConfirmation from './pages/loginPassword/PasswordResetConfirmation';
 import HomePage from './pages/common/HomePage';
@@ -24,6 +26,8 @@ function App() {
           <Route path="/home" element={<HomePage />} />
           <Route path="/customer-portal" element={<CustomerPortal />} />
           <Route path="/employee-portal" element={<EmployeePortal />} />
+          <Route path="/employee-bank-accounts-portal" element={<EmployeeBankAccountsPortal />} />
+          <Route path="/employee-cards-portal" element={<EmployeeCardsPortal />} />
           <Route path="/reset-password-email" element={<PasswordReset />} />
           <Route path="/reset-password" element={<PasswordResetConfirmation />} />
           <Route path="/set-password" element={<PasswordSetConfirmation />} />

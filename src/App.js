@@ -15,6 +15,8 @@ import PasswordReset from './pages/loginPassword/PasswordReset';
 import PasswordResetConfirmation from './pages/loginPassword/PasswordResetConfirmation';
 import HomePage from './pages/common/HomePage';
 import PasswordSetConfirmation from './pages/loginPassword/PasswordSetConfirmation';
+import TransactionsPage from './pages/transactions/TransactionsPage';
+import TransactionDetailsPage from './pages/transactions/TransactionDetailsPage';
 import InternalTransferPortal from './pages/portals/InternalTransferPortal';
 
 function App() {
@@ -33,9 +35,11 @@ function App() {
             <Route path="/employee-bank-accounts-portal" element={<EmployeeBankAccountsPortal />} />
           <Route path="/employee-cards-portal" element={<EmployeeCardsPortal />} />
           <Route path="/reset-password-email" element={<PasswordReset />} />
-            <Route path="/reset-password" element={<PasswordResetConfirmation />} />
-            <Route path="/set-password" element={<PasswordSetConfirmation />} />
-            <Route path="/internal-transfer-portal" element={< InternalTransferPortal />} />
+          <Route path="/reset-password" element={<PasswordResetConfirmation />} />
+          <Route path="/set-password" element={<PasswordSetConfirmation />} />
+          <Route path="/transactions" element={<TransactionsPage />} />
+          <Route path="/transactions/:id" element={<TransactionDetailsPage />} />
+          <Route path="/internal-transfer-portal" element={< InternalTransferPortal />} />
         </Routes>
           <ThemeToggle />
         </BrowserRouter>

@@ -1,22 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Typography } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 import Sidebar from '../../components/mainComponents/Sidebar';
 import SearchDataTable from '../../components/tables/SearchDataTable';
 import AddButton from '../../components/common/AddButton';
+import { fetchAccounts } from '../../services/Axios';
+import { toast } from 'react-toastify';
 
 const EmployeeBankAccountsPortal = () => {
-  // Mock data - replace with actual data from your backend
-  const accounts = [
-    {
-      id: 1,
-      accountNumber: '123456789',
-      firstName: 'John',
-      lastName: 'Doe',
-      accountType: 'Personal',
-      currencyType: 'Current'
-    },
-    // Add more mock data as needed
-  ];
+  const navigate = useNavigate();
+  const [accounts, setAccounts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   const columns = [
     { field: 'accountNumber', headerName: 'Account Number', width: 150 },
@@ -25,6 +20,28 @@ const EmployeeBankAccountsPortal = () => {
     { field: 'accountType', headerName: 'Personal/Business', width: 150 },
     { field: 'currencyType', headerName: 'Current/Foreign', width: 150 },
   ];
+
+  useEffect(() => {
+    loadAccounts();
+  }, []);
+
+  const loadAccounts = async () => {
+    try {
+      setLoading(true);
+      const response = await fetchAccounts();
+      setAccounts(response);
+    } catch (err) {
+      console.error('Error loading accounts:', err);
+      setError('Failed to load accounts data');
+      toast.error('Failed to load accounts data');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleRowClick = (row) => {
+    navigate('/employee-cards-portal', { state: { selectedAccount: row } });
+  };
 
   const handleAddClick = () => {
     // Implement add functionality
@@ -44,6 +61,9 @@ const EmployeeBankAccountsPortal = () => {
           columns={columns}
           checkboxSelection={false}
           actionButton={<AddButton onClick={handleAddClick} label="Add" />}
+          loading={loading}
+          error={error}
+          onRowClick={handleRowClick}
         />
       </div>
     </div>

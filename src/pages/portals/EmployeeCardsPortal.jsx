@@ -1,41 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Typography, 
   Paper,
   Grid
 } from '@mui/material';
+import { useLocation, useNavigate } from 'react-router-dom';
 import Sidebar from '../../components/mainComponents/Sidebar';
 import DataTable from '../../components/tables/DataTable';
+import { fetchCardsByAccountId } from '../../services/Axios';
+import { toast } from 'react-toastify';
 
 const EmployeeCardsPortal = () => {
-  // Mock data for the selected account - replace with actual data from your backend
-  const selectedAccount = {
-    accountNumber: '123456789',
-    firstName: 'John',
-    lastName: 'Doe',
-    accountType: 'Personal',
-    currencyType: 'Current'
-  };
-
-  // Mock data for cards - replace with actual data from your backend
-  const cards = [
-    {
-      id: 1,
-      cardNumber: '**** **** **** 1234',
-      firstName: 'John',
-      lastName: 'Doe',
-      email: 'john.doe@example.com',
-      status: 'Active'
-    },
-    {
-      id: 2,
-      cardNumber: '**** **** **** 5678',
-      firstName: 'John',
-      lastName: 'Doe',
-      email: 'john.doe@example.com',
-      status: 'Inactive'
-    }
-  ];
+  const location = useLocation();
+  const navigate = useNavigate();
+  const selectedAccount = location.state?.selectedAccount;
+  const [cards, setCards] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   const columns = [
     { field: 'cardNumber', headerName: 'Card Number', width: 200 },
@@ -44,6 +25,32 @@ const EmployeeCardsPortal = () => {
     { field: 'email', headerName: 'Email', width: 200 },
     { field: 'status', headerName: 'Card Status', width: 120 },
   ];
+
+  useEffect(() => {
+    if (!selectedAccount) {
+      navigate('/employee-bank-accounts-portal');
+      return;
+    }
+    loadCards();
+  }, [selectedAccount]);
+
+  const loadCards = async () => {
+    try {
+      setLoading(true);
+      const response = await fetchCardsByAccountId(selectedAccount.id);
+      setCards(response);
+    } catch (err) {
+      console.error('Error loading cards:', err);
+      setError('Failed to load cards data');
+      toast.error('Failed to load cards data');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (!selectedAccount) {
+    return null;
+  }
 
   return (
     <div>
@@ -97,6 +104,8 @@ const EmployeeCardsPortal = () => {
           checkboxSelection={false}
           hideSearch={true}
           hideActionButton={true}
+          loading={loading}
+          error={error}
         />
       </div>
     </div>

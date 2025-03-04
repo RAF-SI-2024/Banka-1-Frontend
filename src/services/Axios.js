@@ -152,4 +152,24 @@ export const createCustomer = async (customerData) => {
   return await api.post("/api/customer", customerData);
 };
 
+export const fetchAccounts = async () => {
+  try {
+    const response = await api.get("/api/accounts");
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching accounts:', error);
+    throw error;
+  }
+};
+
+export const fetchCardsByAccountId = async (accountId) => {
+  try {
+    const response = await api.get(`/api/cards/admin/${accountId}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching cards:', error);
+    throw error;
+  }
+};
+
 export default api;

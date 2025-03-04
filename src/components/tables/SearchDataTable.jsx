@@ -8,7 +8,15 @@ const SearchableDataTable = ({ columns, rows, checkboxSelection = false, onRowCl
 
   // Filter rows based on search term across all fields
   const filteredRows = useMemo(() => {
-    // ...existing code...
+    if (!searchTerm.trim()) return rows;
+    
+    return rows.filter(row => {
+      return columns.some(column => {
+        const cellValue = row[column.field];
+        if (cellValue == null) return false;
+        return String(cellValue).toLowerCase().includes(searchTerm.toLowerCase());
+      });
+    });
   }, [rows, columns, searchTerm]);
 
   return (

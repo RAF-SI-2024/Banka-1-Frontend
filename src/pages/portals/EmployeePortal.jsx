@@ -178,11 +178,28 @@ const EmployeePortal = () => {
             
             await createEmployee(employeePayload);
             setIsCreateModalOpen(false);
+            resetEmployeeForm();
             toast.success('Employee created successfully');
             loadEmployees(); // Reload the data to reflect changes
         } catch (error) {
             toast.error(`Failed to create employee: ${error.message}`);
         }
+    };
+
+    const resetEmployeeForm = () => {
+        setNewEmployee({
+            firstName: "",
+            lastName: "",
+            username: "",
+            email: "",
+            phoneNumber: "",
+            address: "",
+            birthDate: "",
+            gender: "MALE",
+            department: "ACCOUNTING",
+            active: true,
+            isAdmin: false
+        });
     };
     
     const handleRowClick = async (row) => {
@@ -309,7 +326,10 @@ const EmployeePortal = () => {
                 {/* Create Modal */}
                 <EditModal
                     open={isCreateModalOpen}
-                    onClose={() => setIsCreateModalOpen(false)}
+                    onClose={() => 
+                        {setIsCreateModalOpen(false);
+                        resetEmployeeForm();
+                    }}
                     data={newEmployee}
                     formFields={employeeFormFields}
                     onSave={handleCreateEmployee}

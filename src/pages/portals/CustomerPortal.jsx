@@ -30,7 +30,7 @@ const CustomerPortal = () => {
         address: "",
         birthDate: "",
         gender: "MALE",
-        password: ""
+        // password: ""
     });
 
     const columns = [
@@ -129,7 +129,7 @@ const CustomerPortal = () => {
                 broj_telefona: updatedCustomerData.phoneNumber,
                 adresa: updatedCustomerData.address,
                 // Only include password if it's provided in the form
-                ...(updatedCustomerData.password && { password: updatedCustomerData.password })
+                // ...(updatedCustomerData.password && { password: updatedCustomerData.password })
             };
 
             // Update the customer data and show a success message
@@ -177,16 +177,31 @@ const CustomerPortal = () => {
                 email: customerData.email,
                 broj_telefona: customerData.phoneNumber,
                 adresa: customerData.address,
-                password: customerData.password || "defaultPassword123"
+                // password: customerData.password || "defaultPassword123"
             };
 
             await createCustomer(customerPayload);
             setIsCreateModalOpen(false);
+            resetCustomerForm();
             toast.success('Customer created successfully');
             loadCustomers();
         } catch (error) {
             toast.error(`Failed to create customer: ${error.message}`);
         }
+    };
+
+    const resetCustomerForm = () => {
+        setNewCustomer({
+            firstName: "",
+            lastName: "",
+            username: "",
+            email: "",
+            phoneNumber: "",
+            address: "",
+            birthDate: "",
+            gender: "MALE",
+            // password: ""
+        });
     };
 
 
@@ -209,7 +224,7 @@ const CustomerPortal = () => {
     // Add password field for customer creation
     const createCustomerFormFields = [
         ...customerFormFields,
-        { name: 'password', label: 'Password', type: 'password', required: true }
+        // { name: 'password', label: 'Password', type: 'password', required: true }
     ];
     
     return (
@@ -248,7 +263,10 @@ const CustomerPortal = () => {
                 {/* Create Modal */}
                 <EditModal
                     open={isCreateModalOpen}
-                    onClose={() => setIsCreateModalOpen(false)}
+                    onClose={() => {
+                        setIsCreateModalOpen(false);
+                        resetCustomerForm();
+                    }}
                     data={newCustomer}
                     formFields={createCustomerFormFields}
                     onSave={handleCreateCustomer}

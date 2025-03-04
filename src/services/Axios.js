@@ -1,4 +1,6 @@
 import axios from "axios";
+import { jwtDecode } from "jwt-decode";
+
 
 const api = axios.create({
   baseURL: "http://localhost:8080",
@@ -38,6 +40,7 @@ export const loginUser = async (email, password) => {
     throw error;
   }
 };
+
 export const fetchCustomers = async () => {
   try {
     const response = await api.get("/api/users/search/customers");
@@ -151,5 +154,62 @@ export const createEmployee = async (employeeData) => {
 export const createCustomer = async (customerData) => {
   return await api.post("/api/customer", customerData);
 };
+
+
+// API BASE URL - promeni ako backend ima drugi endpoint
+const API_BASE_URL = "http://localhost:8080/api/accounts";
+
+//token za korisnika
+const getUserIdFromToken = () => {
+  const token = localStorage.getItem("token");
+  if (!token) return null;
+  try {
+    const decoded = jwtDecode(token);
+    return decoded.id;
+  } catch (error) {
+    console.error("Invalid token", error);
+    return null;
+  }
+};
+
+
+export const fetchAccountsId = async (id) => {
+  try {
+    const response = await axios.get(`${API_BASE_URL}/${id}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`
+      }
+    });
+
+    return response.data.map((account) => ({
+      id: account.id,
+      name: account.name,
+      number: account.number,
+      balance: account.balance,
+    }));
+  } catch (error) {
+    console.error(`Error fetching account with ID ${id}:`, error);
+    return null;
+  }
+};
+
+// primer DTO-a
+/**]\[
+ {
+ "id": 1,
+ "name": "Osoba1",
+ "number": "XXX-XXXXXXXXXXXXX-XX",
+ "balance": "XXXXXXXX,XX RSD"
+ },
+ {
+ "id": 2,
+ "name": "Osoba2",
+ "number": "YYY-YYYYYYYYYYYYY-YY",
+ "balance": "YYYYYYYY,YY RSD"
+ }
+ ]
+ */
+
+
 
 export default api;

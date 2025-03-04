@@ -172,7 +172,7 @@ export const fetchCardsByAccountId = async (accountId) => {
   }
 };
 
-export const createCurrentAccount = async (accountData) => {
+export const createAccount = async (accountData) => {
   try {
     const response = await api.post("/api/accounts", accountData);
     return response.data;

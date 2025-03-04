@@ -8,6 +8,7 @@ import { fetchAccounts } from '../../services/Axios';
 import { toast } from 'react-toastify';
 import NewAccountModal from "../../components/common/NewAccountModal";
 import NewCurrentAccountModal from "../../components/common/NewCurrentAccountModal";
+import NewForeignCurrencyAccountModal from "../../components/common/NewForeignCurrencyAccountModal";
 
 
 const EmployeeBankAccountsPortal = () => {
@@ -15,9 +16,10 @@ const EmployeeBankAccountsPortal = () => {
   const [accounts, setAccounts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [openModal, setOpenModal] = useState(false);
-  const [openCurrentModal, setOpenCurrentModal] = useState(false);
-  const [selectedAccountType, setSelectedAccountType] = useState(''); 
+  const [openNewAccountModal, setOpenNewAccountModal] = useState(false);
+  const [openNewCurrentAccountModal, setOpenNewCurrentAccountModal] = useState(false);
+  const [openNewForeignCurrencyAccountModal, setOpenNewForeignCurrencyAccountModal] = useState(false);
+  const [selectedAccountType, setSelectedAccountType] = useState('');
 
 
   const columns = [
@@ -55,11 +57,14 @@ const EmployeeBankAccountsPortal = () => {
 
     if (account === "current") {
       setSelectedAccountType(accountType);
-      setOpenModal(false);
-      setOpenCurrentModal(true);
+      setOpenNewAccountModal(false);
+      setOpenNewCurrentAccountModal(true);
+    } else if (account === "foreign"){
+      setSelectedAccountType(accountType);
+      setOpenNewAccountModal(false);
+      setOpenNewForeignCurrencyAccountModal(true);
     } else {
-      console.log("Foreign currency account selected:", accountType);
-      setOpenModal(false);
+      setOpenNewAccountModal(false);
     }
   };
 
@@ -76,22 +81,27 @@ const EmployeeBankAccountsPortal = () => {
           rows={accounts}
           columns={columns}
           checkboxSelection={false}
-          actionButton={<AddButton onClick={() => setOpenModal(true)} label="Add" />}
+          actionButton={<AddButton onClick={() => setOpenNewAccountModal(true)} label="Add" />}
           loading={loading}
           error={error}
           onRowClick={handleRowClick}
         />
 
         <NewAccountModal
-            open={openModal}
-            onClose={() => setOpenModal(false)}
+            open={openNewAccountModal}
+            onClose={() => setOpenNewAccountModal(false)}
             onContinue={(account, accountType) => {
               handleContinue(account, accountType)
             }}
         />
         <NewCurrentAccountModal
-            open={openCurrentModal}
-            onClose={() => setOpenCurrentModal(false)}
+            open={openNewCurrentAccountModal}
+            onClose={() => setOpenNewCurrentAccountModal(false)}
+            accountType={selectedAccountType}
+        />
+        <NewForeignCurrencyAccountModal
+            open={openNewForeignCurrencyAccountModal}
+            onClose={() => setOpenNewForeignCurrencyAccountModal(false)}
             accountType={selectedAccountType}
         />
       </div>

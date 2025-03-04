@@ -11,17 +11,22 @@ import MenuItem from '@mui/material/MenuItem';
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import TextField from '@mui/material/TextField';
-import {createAccount, createCurrentAccount, createCustomer, fetchCustomers} from '../../services/Axios';
+import {createAccount, createCustomer, fetchCustomers} from '../../services/Axios';
 import EditModal from '../common/EditModal';
-import {toast} from "react-toastify"; // Assuming this is the create form component
+import {toast} from "react-toastify";
+import {Radio, RadioGroup, Typography} from "@mui/material"; // Assuming this is the create form component
 
-
-const NewCurrentAccountModal = ({ open, onClose, accountType }) => {
+const NewForeignCurrencyAccountModal = ({ open, onClose, accountType }) => {
     const [customers, setCustomers] = useState([]);
+    const [selectedCustomer, setSelectedCustomer] = useState('');
     const [makeCard, setMakeCard] = useState(false);
     const [startingBalance, setStartingBalance] = useState('');
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
     const [selectedOwnerId, setSelectedOwnerId] = useState(''); // Track the selected ownerId
+    const [selectedCurrency, setSelectedCurrency] = useState('');
+
+
+    const currencies = ['EUR', 'CHF', 'USD', 'GBP', 'JPY', 'CAD', 'AUD'];
 
     const [newCustomer, setNewCustomer] = useState({
         firstName: '',
@@ -59,8 +64,8 @@ const NewCurrentAccountModal = ({ open, onClose, accountType }) => {
 
         const accountData = {
             ownerID: selectedOwnerId,
-            currency: "RSD",
-            type: 'CURRENT',
+            currency: selectedCurrency,
+            type: 'FOREIGN_CURRENCY',
             subtype: accountType.toLocaleUpperCase(),
             dailyLimit: 0,
             monthlyLimit: 0,
@@ -98,7 +103,16 @@ const NewCurrentAccountModal = ({ open, onClose, accountType }) => {
             resetCustomerForm();
             toast.success('Customer created successfully');
 
-            await loadCustomers();
+            await loadCustomers();  // Reload customer list
+
+            // Select the newly created customer
+            setSelectedCustomer({
+                id: createdCustomer.id,
+                firstName: createdCustomer.firstName,
+                lastName: createdCustomer.lastName,
+                email: createdCustomer.email,
+                phoneNumber: createdCustomer.phoneNumber
+            });
 
         } catch (error) {
             toast.error(`Failed to create customer: ${error.message}`);
@@ -164,7 +178,7 @@ const NewCurrentAccountModal = ({ open, onClose, accountType }) => {
 
     return (
         <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
-            <DialogTitle>Creating a {accountType} current account</DialogTitle>
+            <DialogTitle>Creating a {accountType} foreign currency account</DialogTitle>
 
             <DialogContent sx={{ mt: 2 }}>
                 <FormControl fullWidth sx={{ mt: 2 }}>
@@ -196,6 +210,25 @@ const NewCurrentAccountModal = ({ open, onClose, accountType }) => {
                 >
                     Create New Customer
                 </Button>
+
+                {/* Currency Options as Radio Buttons */}
+                <Typography variant="subtitle1" sx={{ mt: 2 }}>
+                    Choose Currency
+                </Typography>
+                <RadioGroup
+                    value={selectedCurrency}
+                    onChange={(e) => setSelectedCurrency(e.target.value)}
+                    sx={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', gap: 2 }}
+                >
+                    {currencies.map((currency) => (
+                        <FormControlLabel
+                            key={currency}
+                            value={currency}
+                            control={<Radio />}
+                            label={currency}
+                        />
+                    ))}
+                </RadioGroup>
 
                 <FormControlLabel
                     control={
@@ -245,4 +278,4 @@ const NewCurrentAccountModal = ({ open, onClose, accountType }) => {
     );
 };
 
-export default NewCurrentAccountModal;
+export default NewForeignCurrencyAccountModal;

@@ -172,4 +172,15 @@ export const fetchCardsByAccountId = async (accountId) => {
   }
 };
 
+export const createCurrentAccount = async (accountData) => {
+  try {
+    const response = await api.post("/api/accounts", accountData);
+    return response.data;
+  } catch (error) {
+    console.error("Error creating account:", error);
+    throw error;
+  }
+};
+
+
 export default api;

@@ -11,9 +11,9 @@ import MenuItem from '@mui/material/MenuItem';
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import TextField from '@mui/material/TextField';
-import {createAccount, createCurrentAccount, createCustomer, fetchCustomers} from '../../services/Axios';
+import {createAccount, createCustomer, fetchCustomers} from '../../services/Axios';
 import EditModal from '../common/EditModal';
-import {toast} from "react-toastify"; // Assuming this is the create form component
+import {toast} from "react-toastify";
 
 
 const NewCurrentAccountModal = ({ open, onClose, accountType }) => {
@@ -21,8 +21,9 @@ const NewCurrentAccountModal = ({ open, onClose, accountType }) => {
     const [makeCard, setMakeCard] = useState(false);
     const [startingBalance, setStartingBalance] = useState('');
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-    const [selectedOwnerId, setSelectedOwnerId] = useState(''); // Track the selected ownerId
+    const [selectedOwnerId, setSelectedOwnerId] = useState('');
 
+    // Logic is the same as creating a user in CustomerPortal
     const [newCustomer, setNewCustomer] = useState({
         firstName: '',
         lastName: '',
@@ -34,14 +35,15 @@ const NewCurrentAccountModal = ({ open, onClose, accountType }) => {
         address: ''
     });
 
+    // Loading customer is the same as in CustomerPortal
     useEffect(() => {
         loadCustomers();
     }, []);
 
     const loadCustomers = async () => {
         try {
-            const data = await fetchCustomers(); // Fetch customer data
-            const rowData = data?.data?.rows || []; // Ensure `rows` exists to prevent errors
+            const data = await fetchCustomers();
+            const rowData = data?.data?.rows || [];
 
             const formattedCustomers = rowData.map((row) => ({
                 id: row.id,
@@ -55,8 +57,10 @@ const NewCurrentAccountModal = ({ open, onClose, accountType }) => {
         }
     };
 
+    // Handling the Confirm button on the NewCurrentAccountModal screen
     const handleConfirm = async () => {
 
+        // This is what is sent to the backend
         const accountData = {
             ownerID: selectedOwnerId,
             currency: "RSD",
@@ -68,16 +72,18 @@ const NewCurrentAccountModal = ({ open, onClose, accountType }) => {
             balance: parseFloat(startingBalance)
         };
 
-        console.log("Account Data:", accountData);
 
         try {
-            await createAccount(accountData); // Call the API function
-            onClose(); // Close modal on success
+            // Calls the POST createAccount in Axios
+            await createAccount(accountData);
+            onClose();
         } catch (error) {
             console.error('Error creating account:', error);
         }
     };
 
+
+    // Creating the customer is the same as in CustomerPortal-u
     const handleCreateCustomer = async (customerData) => {
         try {
             const customerPayload = {
@@ -92,7 +98,7 @@ const NewCurrentAccountModal = ({ open, onClose, accountType }) => {
             };
 
             const response = await createCustomer(customerPayload);
-            const createdCustomer = response.data;  // Assuming API returns created customer
+            const createdCustomer = response.data;
 
             setIsCreateModalOpen(false);
             resetCustomerForm();
@@ -119,6 +125,7 @@ const NewCurrentAccountModal = ({ open, onClose, accountType }) => {
         });
     };
 
+    // Used from CustomerPortal
     const transformDateForApi = (dateString) => {
         // Skip if empty
         if (!dateString) return null;
@@ -173,22 +180,21 @@ const NewCurrentAccountModal = ({ open, onClose, accountType }) => {
                     </InputLabel>
                     <Select
                         labelId="customer-label"
-                        value={selectedOwnerId} // Use selectedOwnerId for storing the customer ID
-                        onChange={(e) => setSelectedOwnerId(e.target.value)} // Save the customer ID here
+                        value={selectedOwnerId} // Using selectedOwnerId for storing the customer ID
+                        onChange={(e) => setSelectedOwnerId(e.target.value)} // Saving the customer ID here
                         displayEmpty
                         label="Choose a customer"
                     >
                         <MenuItem value="" disabled>Choose a customer</MenuItem>
                         {customers.map((customer) => (
                             <MenuItem key={customer.id} value={customer.id}>
-                                {customer.firstName} {customer.lastName} {/* Display customer name */}
+                                {customer.firstName} {customer.lastName}
                             </MenuItem>
                         ))}
                     </Select>
 
                 </FormControl>
 
-                {/* Create New Customer Button */}
                 <Button
                     variant="outlined"
                     sx={{ mt: 2, width: '100%' }}
@@ -229,7 +235,6 @@ const NewCurrentAccountModal = ({ open, onClose, accountType }) => {
                 </Button>
             </DialogActions>
 
-            {/* Create Modal */}
             <EditModal
                 open={isCreateModalOpen}
                 onClose={() => {

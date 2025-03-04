@@ -53,8 +53,6 @@ const EmployeeBankAccountsPortal = () => {
   };
 
   const handleContinue = (account, accountType) => {
-    console.log("Selected Account:", account, "Account Type:", accountType);
-
     if (account === "current") {
       setSelectedAccountType(accountType);
       setOpenNewAccountModal(false);
@@ -87,6 +85,7 @@ const EmployeeBankAccountsPortal = () => {
           onRowClick={handleRowClick}
         />
 
+        {/*First screen to add an account*/}
         <NewAccountModal
             open={openNewAccountModal}
             onClose={() => setOpenNewAccountModal(false)}
@@ -94,11 +93,13 @@ const EmployeeBankAccountsPortal = () => {
               handleContinue(account, accountType)
             }}
         />
+        {/*Adding Current Account*/}
         <NewCurrentAccountModal
             open={openNewCurrentAccountModal}
             onClose={() => setOpenNewCurrentAccountModal(false)}
             accountType={selectedAccountType}
         />
+        {/*Adding Foreign Currency Account*/}
         <NewForeignCurrencyAccountModal
             open={openNewForeignCurrencyAccountModal}
             onClose={() => setOpenNewForeignCurrencyAccountModal(false)}

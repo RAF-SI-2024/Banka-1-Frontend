@@ -45,8 +45,8 @@ const NewForeignCurrencyAccountModal = ({ open, onClose, accountType }) => {
 
     const loadCustomers = async () => {
         try {
-            const data = await fetchCustomers(); // Fetch customer data
-            const rowData = data?.data?.rows || []; // Ensure `rows` exists to prevent errors
+            const data = await fetchCustomers();
+            const rowData = data?.data?.rows || [];
 
             const formattedCustomers = rowData.map((row) => ({
                 id: row.id,
@@ -76,8 +76,8 @@ const NewForeignCurrencyAccountModal = ({ open, onClose, accountType }) => {
         console.log("Account Data:", accountData);
 
         try {
-            await createAccount(accountData); // Call the API function
-            onClose(); // Close modal on success
+            await createAccount(accountData);
+            onClose();
         } catch (error) {
             console.error('Error creating account:', error);
         }
@@ -97,15 +97,14 @@ const NewForeignCurrencyAccountModal = ({ open, onClose, accountType }) => {
             };
 
             const response = await createCustomer(customerPayload);
-            const createdCustomer = response.data;  // Assuming API returns created customer
+            const createdCustomer = response.data;
 
             setIsCreateModalOpen(false);
             resetCustomerForm();
             toast.success('Customer created successfully');
 
-            await loadCustomers();  // Reload customer list
+            await loadCustomers();
 
-            // Select the newly created customer
             setSelectedCustomer({
                 id: createdCustomer.id,
                 firstName: createdCustomer.firstName,
@@ -187,22 +186,21 @@ const NewForeignCurrencyAccountModal = ({ open, onClose, accountType }) => {
                     </InputLabel>
                     <Select
                         labelId="customer-label"
-                        value={selectedOwnerId} // Use selectedOwnerId for storing the customer ID
-                        onChange={(e) => setSelectedOwnerId(e.target.value)} // Save the customer ID here
+                        value={selectedOwnerId}
+                        onChange={(e) => setSelectedOwnerId(e.target.value)}
                         displayEmpty
                         label="Choose a customer"
                     >
                         <MenuItem value="" disabled>Choose a customer</MenuItem>
                         {customers.map((customer) => (
                             <MenuItem key={customer.id} value={customer.id}>
-                                {customer.firstName} {customer.lastName} {/* Display customer name */}
+                                {customer.firstName} {customer.lastName}
                             </MenuItem>
                         ))}
                     </Select>
 
                 </FormControl>
 
-                {/* Create New Customer Button */}
                 <Button
                     variant="outlined"
                     sx={{ mt: 2, width: '100%' }}
@@ -211,7 +209,6 @@ const NewForeignCurrencyAccountModal = ({ open, onClose, accountType }) => {
                     Create New Customer
                 </Button>
 
-                {/* Currency Options as Radio Buttons */}
                 <Typography variant="subtitle1" sx={{ mt: 2 }}>
                     Choose Currency
                 </Typography>
@@ -262,7 +259,6 @@ const NewForeignCurrencyAccountModal = ({ open, onClose, accountType }) => {
                 </Button>
             </DialogActions>
 
-            {/* Create Modal */}
             <EditModal
                 open={isCreateModalOpen}
                 onClose={() => {

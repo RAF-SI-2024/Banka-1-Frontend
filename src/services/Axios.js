@@ -370,6 +370,16 @@ export const fetchCardsByAccountId = async (accountId) => {
 };
 
 
+export const createAccount = async (accountData) => {
+  try {
+    const response = await api.post("/api/accounts", accountData);
+    return response.data;
+  } catch (error) {
+    console.error("Error creating account:", error);
+    throw error;
+  }
+};
+
 
 export const verifyOTP  = async (otpData) => {
   return await api.post("/otp/verification", otpData);

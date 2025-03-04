@@ -4,6 +4,8 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Login from './pages/loginPassword/Login';
 import Landing from './pages/common/Landing';  
 import { ThemeProvider } from './context/ThemeContext';
+import { CardProvider } from './context/CardContext';  // Imporovan glavni context za kartice
+import CardsPage  from './pages/portals/CardsPortal'; // Importovana stranica za kartice
 import ThemeToggle from './components/mainComponents/ThemeToggle';
 import CustomerPortal from './pages/portals/CustomerPortal';
 import EmployeePortal from './pages/portals/EmployeePortal';
@@ -20,16 +22,17 @@ import InternalTransferPortal from './pages/portals/InternalTransferPortal';
 function App() {
   return (
     <ThemeProvider>
-      <CssBaseline />
-      <BrowserRouter>
-        <Routes>
-          {/** Define the routes for the application */}
-          <Route path="/" element={<Landing />} /> 
-          <Route path="/login" element={<Login />} />
-          <Route path="/home" element={<HomePage />} />
-          <Route path="/customer-portal" element={<CustomerPortal />} />
-          <Route path="/employee-portal" element={<EmployeePortal />} />
-          <Route path="/employee-bank-accounts-portal" element={<EmployeeBankAccountsPortal />} />
+      <CardProvider>  {/* Dodala globalni CardProvider */}
+        <CssBaseline />
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Landing />} /> 
+            <Route path="/login" element={<Login />} />
+            <Route path="/home" element={<HomePage />} />
+            <Route path="/cards" element={<CardsPage/>} />
+            <Route path="/customer-portal" element={<CustomerPortal />} />
+            <Route path="/employee-portal" element={<EmployeePortal />} />
+            <Route path="/employee-bank-accounts-portal" element={<EmployeeBankAccountsPortal />} />
           <Route path="/employee-cards-portal" element={<EmployeeCardsPortal />} />
           <Route path="/reset-password-email" element={<PasswordReset />} />
           <Route path="/reset-password" element={<PasswordResetConfirmation />} />
@@ -38,8 +41,9 @@ function App() {
           <Route path="/transactions/:id" element={<TransactionDetailsPage />} />
           <Route path="/internal-transfer-portal" element={< InternalTransferPortal />} />
         </Routes>
-        <ThemeToggle />
-      </BrowserRouter>
+          <ThemeToggle />
+        </BrowserRouter>
+      </CardProvider>
     </ThemeProvider>
   );
 }

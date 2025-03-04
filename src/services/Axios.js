@@ -152,4 +152,96 @@ export const createCustomer = async (customerData) => {
   return await api.post("/api/customer", customerData);
 };
 
+
+
+// Fetch cards linked to an account
+export const fetchUserCards = async (accountId) => {
+  try {
+    const response = await api.get(`/cards?account_id=${accountId}`);
+    return response.data;
+  } catch (error) {
+    console.error(`Error fetching cards for account ${accountId}:`, error);
+    throw error;
+  }
+};
+//Create a card
+export const createCard = async (accountId, cardType, authorizedPerson = null) => {
+  try {
+    const requestBody = {
+      racun_id: accountId,
+      tip: cardType,
+    };
+
+    if (authorizedPerson) {
+      requestBody.ovlasceno_lice = authorizedPerson;
+    }
+
+    const response = await api.post("/cards", requestBody);
+    return response.data;
+  } catch (error) {
+    console.error("Error creating a new card:", error);
+    throw error;
+  }
+};
+
+
+// Change card name
+export const changeCardName = async (cardId, newName) => {
+  try {
+    const response = await api.patch(`/cards/${cardId}`, {
+      name: newName,
+    });
+    return response.data;
+  } catch (error) {
+    console.error(`Error changing name for card ${cardId}:`, error);
+    throw error;
+  }
+};
+
+// Change card limit
+export const changeCardLimit = async (cardId, newLimit) => {
+  try {
+    const response = await api.patch(`/cards/${cardId}`, {
+      limit: newLimit,
+    });
+    return response.data;
+  } catch (error) {
+    console.error(`Error changing limit for card ${cardId}:`, error);
+    throw error;
+  }
+};
+
+// Block or unblock a card
+export const updateCardStatus = async (cardId, status) => {
+  try {
+    const response = await api.patch(`/cards/${cardId}`, { status });
+    return response.data;
+  } catch (error) {
+    console.error(`Error updating status for card ${cardId}:`, error);
+    throw error;
+  }
+};
+//Admins only - see users cards and update status
+export const fetchAdminUserCards = async (accountId) => {
+  try {
+    const response = await api.get(`/cards/admin/${accountId}`);
+    return response.data;
+  } catch (error) {
+    console.error(`Error fetching cards for account ${accountId}:`, error);
+    throw error;
+  }
+};
+
+export const updateCardStatusAdmin = async (accountId, cardId, status) => {
+  try {
+    const response = await api.patch(`/cards/admin/${accountId}?card_id=${cardId}`, { status });
+    return response.data;
+  } catch (error) {
+    console.error(`Error updating card status for card ${cardId}:`, error);
+    throw error;
+  }
+};
+
+
+
 export default api;

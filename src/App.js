@@ -4,6 +4,8 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Login from './pages/loginPassword/Login';
 import Landing from './pages/common/Landing';  
 import { ThemeProvider } from './context/ThemeContext';
+import { CardProvider } from './context/CardContext';  // Imporovan glavni context za kartice
+import CardsPage  from './pages/portals/CardsPortal'; // Importovana stranica za kartice
 import ThemeToggle from './components/mainComponents/ThemeToggle';
 import CustomerPortal from './pages/portals/CustomerPortal';
 import EmployeePortal from './pages/portals/EmployeePortal';
@@ -15,21 +17,23 @@ import PasswordSetConfirmation from './pages/loginPassword/PasswordSetConfirmati
 function App() {
   return (
     <ThemeProvider>
-      <CssBaseline />
-      <BrowserRouter>
-        <Routes>
-          {/** Define the routes for the application */}
-          <Route path="/" element={<Landing />} /> 
-          <Route path="/login" element={<Login />} />
-          <Route path="/home" element={<HomePage />} />
-          <Route path="/customer-portal" element={<CustomerPortal />} />
-          <Route path="/employee-portal" element={<EmployeePortal />} />
-          <Route path="/reset-password-email" element={<PasswordReset />} />
-          <Route path="/reset-password" element={<PasswordResetConfirmation />} />
-          <Route path="/set-password" element={<PasswordSetConfirmation />} />
-        </Routes>
-        <ThemeToggle />
-      </BrowserRouter>
+      <CardProvider>  {/* Dodala globalni CardProvider */}
+        <CssBaseline />
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Landing />} /> 
+            <Route path="/login" element={<Login />} />
+            <Route path="/home" element={<HomePage />} />
+            <Route path="/cards" element={<CardsPage/>} />
+            <Route path="/customer-portal" element={<CustomerPortal />} />
+            <Route path="/employee-portal" element={<EmployeePortal />} />
+            <Route path="/reset-password-email" element={<PasswordReset />} />
+            <Route path="/reset-password" element={<PasswordResetConfirmation />} />
+            <Route path="/set-password" element={<PasswordSetConfirmation />} />
+          </Routes>
+          <ThemeToggle />
+        </BrowserRouter>
+      </CardProvider>
     </ThemeProvider>
   );
 }

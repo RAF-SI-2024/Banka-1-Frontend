@@ -11,7 +11,8 @@ import PasswordReset from './pages/loginPassword/PasswordReset';
 import PasswordResetConfirmation from './pages/loginPassword/PasswordResetConfirmation';
 import HomePage from './pages/common/HomePage';
 import PasswordSetConfirmation from './pages/loginPassword/PasswordSetConfirmation';
-
+import TransactionsPage from './pages/transactions/TransactionsPage';
+import TransactionDetailsPage from './pages/transactions/TransactionDetailsPage';
 function App() {
   return (
     <ThemeProvider>
@@ -27,6 +28,8 @@ function App() {
           <Route path="/reset-password-email" element={<PasswordReset />} />
           <Route path="/reset-password" element={<PasswordResetConfirmation />} />
           <Route path="/set-password" element={<PasswordSetConfirmation />} />
+          <Route path="/transactions" element={<TransactionsPage />} />
+          <Route path="/transactions/:id" element={<TransactionDetailsPage />} />
         </Routes>
         <ThemeToggle />
       </BrowserRouter>

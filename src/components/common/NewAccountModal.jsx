@@ -13,6 +13,7 @@ import Typography from '@mui/material/Typography';
 const NewAccountModal = ({ open, onClose, onContinue }) => {
     const [account, setAccount] = useState('');
     const [accountType, setAccountType] = useState('');
+    const [balance, setBalance] = useState('');
     const [isFocused, setIsFocused] = useState(false);
     const [isTypeFocused, setIsTypeFocused] = useState(false);
 

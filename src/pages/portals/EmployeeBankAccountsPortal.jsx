@@ -17,7 +17,8 @@ const EmployeeBankAccountsPortal = () => {
   const [error, setError] = useState(null);
   const [openModal, setOpenModal] = useState(false);
   const [openCurrentModal, setOpenCurrentModal] = useState(false);
-  const [selectedAccountType, setSelectedAccountType] = useState('');
+  const [selectedAccountType, setSelectedAccountType] = useState(''); 
+
 
   const columns = [
     { field: 'accountNumber', headerName: 'Account Number', width: 150 },
@@ -61,7 +62,6 @@ const EmployeeBankAccountsPortal = () => {
       setOpenModal(false);
     }
   };
-
 
 
   return (

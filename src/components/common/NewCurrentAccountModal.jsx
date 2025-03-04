@@ -11,7 +11,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import TextField from '@mui/material/TextField';
-import {createCustomer, fetchCustomers} from '../../services/Axios';
+import {createCurrentAccount, createCustomer, fetchCustomers} from '../../services/Axios';
 import EditModal from '../common/EditModal';
 import {toast} from "react-toastify"; // Assuming this is the create form component
 
@@ -22,6 +22,8 @@ const NewCurrentAccountModal = ({ open, onClose, accountType }) => {
     const [makeCard, setMakeCard] = useState(false);
     const [startingBalance, setStartingBalance] = useState('');
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+    const [selectedOwnerId, setSelectedOwnerId] = useState(''); // Track the selected ownerId
+
     const [newCustomer, setNewCustomer] = useState({
         firstName: '',
         lastName: '',
@@ -51,6 +53,28 @@ const NewCurrentAccountModal = ({ open, onClose, accountType }) => {
             setCustomers(formattedCustomers);
         } catch (error) {
             console.error("Failed to load customers data:", error);
+        }
+    };
+
+    const handleConfirm = async () => {
+
+        const accountData = {
+            ownerID: selectedOwnerId,
+            balance: parseFloat(startingBalance), // Ensure balance is a number
+            type: 'CURRENT',
+            subtype: accountType.toLocaleUpperCase(),
+            dailyLimit: 0,
+            monthlyLimit: 0,
+            status: "ACTIVE"
+        };
+
+        console.log("Account Data:", accountData);
+
+        try {
+            await createCurrentAccount(accountData); // Call the API function
+            onClose(); // Close modal on success
+        } catch (error) {
+            console.error('Error creating account:', error);
         }
     };
 
@@ -158,18 +182,19 @@ const NewCurrentAccountModal = ({ open, onClose, accountType }) => {
                     </InputLabel>
                     <Select
                         labelId="customer-label"
-                        value={selectedCustomer}
-                        onChange={(e) => setSelectedCustomer(e.target.value)}
+                        value={selectedOwnerId} // Use selectedOwnerId for storing the customer ID
+                        onChange={(e) => setSelectedOwnerId(e.target.value)} // Save the customer ID here
                         displayEmpty
-                        label="Choose a customer"  // Add this line
+                        label="Choose a customer"
                     >
                         <MenuItem value="" disabled>Choose a customer</MenuItem>
                         {customers.map((customer) => (
                             <MenuItem key={customer.id} value={customer.id}>
-                                {customer.firstName} {customer.lastName}
+                                {customer.firstName} {customer.lastName} {/* Display customer name */}
                             </MenuItem>
                         ))}
                     </Select>
+
                 </FormControl>
 
                 {/* Create New Customer Button */}
@@ -206,16 +231,8 @@ const NewCurrentAccountModal = ({ open, onClose, accountType }) => {
                 <Button onClick={onClose}>Cancel</Button>
                 <Button
                     variant="contained"
-                    onClick={() => {
-                        console.log("New account details:", {
-                            accountType,
-                            selectedCustomer,
-                            makeCard,
-                            startingBalance,
-                        });
-                        onClose();
-                    }}
-                    disabled={!selectedCustomer || !startingBalance}
+                    onClick={() => {handleConfirm()}}
+                    disabled={!selectedOwnerId || !startingBalance}
                 >
                     Confirm
                 </Button>

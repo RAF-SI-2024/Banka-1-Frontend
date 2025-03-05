@@ -11,10 +11,11 @@ import MenuItem from '@mui/material/MenuItem';
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import TextField from '@mui/material/TextField';
-import {createAccount, createCustomer, fetchCustomers} from '../../services/Axios';
+import {createCustomer, fetchCustomers} from '../../services/AxiosUser';
 import EditModal from '../common/EditModal';
 import {toast} from "react-toastify";
-import {Radio, RadioGroup, Typography} from "@mui/material"; // Assuming this is the create form component
+import {Radio, RadioGroup, Typography} from "@mui/material";
+import {createAccount} from "../../services/AxiosBanking"; // Assuming this is the create form component
 
 const NewForeignCurrencyAccountModal = ({ open, onClose, accountType }) => {
     const [customers, setCustomers] = useState([]);
@@ -76,6 +77,7 @@ const NewForeignCurrencyAccountModal = ({ open, onClose, accountType }) => {
         console.log("Account Data:", accountData);
 
         try {
+            // da se vrati u createCustomer accountData kako bi se kreirao i korisnik
             await createAccount(accountData);
             onClose();
         } catch (error) {

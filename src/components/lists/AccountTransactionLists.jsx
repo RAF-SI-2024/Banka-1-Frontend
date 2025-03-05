@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import Paper from "@mui/material/Paper";
 import {
-    fetchTransactions
-} from "../../services/Axios";
+    fetchAccountsTransactions
+} from "../../services/AxiosBanking";
 
 const AccountTransactionsList = ({ accountId }) => {
   const [transactions, setTransactions] = useState([]);
@@ -42,7 +42,7 @@ const AccountTransactionsList = ({ accountId }) => {
       setLoading(true);
       try {
 
-        const response = await fetchTransactions(accountId);
+        const response = await fetchAccountsTransactions(accountId);
         const data = response.data; 
         const formattedTransactions = data.map((transaction) => ({
           id: transaction.id,

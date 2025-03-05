@@ -4,7 +4,7 @@ import DataTable from "../../components/tables/DataTable";
 import AccountTransactionsList from "../../components/lists/AccountTransactionLists";
 import {
     fetchAccounts,
-} from "../../services/Axios";
+} from "../../services/AxiosBanking";
 import AccountButton from "../../components/common/AccountButton";
 import { jwtDecode } from "jwt-decode";
 

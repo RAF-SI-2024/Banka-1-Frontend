@@ -57,47 +57,42 @@ const AccountsPortal = () => {
     //Hook za ucitavanje svih racuna i njihovo filtriranje
     useEffect(() => {
         const loadAccounts = async () => {
-
-        try{
-            const data = await fetchAccounts();
-            const rowData = data.data.rows;
-
-            const filteredAccounts = rowData.filter(row => row.ownerID === userId);
-
-            const formattedRows = filteredAccounts.map((row) => ({
-                //mapiranje na account
-
-                id: row.id,
-                ownerID: row.ownerID,
-                accountNumber: row.accountNumber,
-                balance: row.balance,
-                reservedBalance: row.reservedBalance,
-                type: row.type,
-                currency: row.currency,
-                subtype: row.subtype,
-                createdDate: new Date(row.createdDate).toLocaleDateString(),
-                expirationDate: new Date(row.expirationDate).toLocaleDateString(),
-                dailyLimit: row.dailyLimit,
-                monthlyLimit: row.monthlyLimit,
-                dailySpent: row.dailySpent,
-                monthlySpent: row.monthlySpent,
-                status: row.status,
-                employeeID: row.employeeID,
-                monthlyMaintenanceFee: row.monthlyMaintenanceFee,
-                company: row.company ? row.company.name : "N/A"
-            }));
-
-          setRows(formattedRows);
-
-        } catch (err) {
-            console.error(err);
-            setError("Failed to load customers data");
-        } finally {
-            setLoading(false);
-        }
-    };
+            try {
+                const response = await fetchAccounts();
+                const filteredAccounts = response.filter(row => row.ownerID === userId);
+    
+                const formattedRows = filteredAccounts.map(row => ({
+                    id: row.id,
+                    ownerID: row.ownerID,
+                    accountNumber: row.accountNumber,
+                    balance: row.balance,
+                    reservedBalance: row.reservedBalance,
+                    type: row.type,
+                    currency: row.currency,
+                    subtype: row.subtype,
+                    createdDate: new Date(row.createdDate).toLocaleDateString(),
+                    expirationDate: new Date(row.expirationDate).toLocaleDateString(),
+                    dailyLimit: row.dailyLimit,
+                    monthlyLimit: row.monthlyLimit,
+                    dailySpent: row.dailySpent,
+                    monthlySpent: row.monthlySpent,
+                    status: row.status,
+                    employeeID: row.employeeID,
+                    monthlyMaintenanceFee: row.monthlyMaintenanceFee,
+                    company: row.company ? row.company.name : "N/A"
+                }));
+    
+                setRows(formattedRows);
+            } catch (err) {
+                console.error(err);
+                setError("Failed to load customers data");
+            } finally {
+                setLoading(false);
+            }
+        };
+    
         loadAccounts();
-    },);
+    }, [userId]);
 
     /*Extracting user id */
     useEffect(() => {

@@ -40,7 +40,11 @@ export const createAccount = async (accountData) => {
 export const fetchAccounts = async () => {
     try {
         const response = await apiBanking.get("/accounts/");
-        return response.data.accounts; // vraca niz racuna
+        if(response === null){
+            console.log("null vrednost")
+        }
+        return response.data.data.accounts; // vraca niz racuna
+
     } catch (error) {
         console.error("Error fetching accounts:", error);
         throw error;

@@ -75,7 +75,7 @@ src
 - **All of the variables** should use ```camelCase```.
     - Examples: ```userData, isLoading, handleClick```
 - **Constants** should use ```UPPER_SNAKE_CASE``` (All letters uppercase wit _ inbetween the words instead of spaces).
-    - Examples: ```API_URL, MAX_RETRIES```
+    - Examples: ```API_URL, MAX_Rgit remote -vETRIES```
 - **Functions** should use ```camelCase``` (ofc followed by ```()```)
 - **Events** should use ```handle``` keyword followed by the name in ```PascalCase```
     - Examples: ```handleClick(), handleSubmit(), handleChange()```

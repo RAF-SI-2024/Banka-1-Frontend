@@ -6,12 +6,21 @@ import SearchDataTable from '../../components/tables/SearchDataTable';
 import AddButton from '../../components/common/AddButton';
 import { fetchAccounts } from '../../services/Axios';
 import { toast } from 'react-toastify';
+import NewAccountModal from "../../components/common/NewAccountModal";
+import NewCurrentAccountModal from "../../components/common/NewCurrentAccountModal";
+import NewForeignCurrencyAccountModal from "../../components/common/NewForeignCurrencyAccountModal";
+
 
 const EmployeeBankAccountsPortal = () => {
   const navigate = useNavigate();
   const [accounts, setAccounts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [openNewAccountModal, setOpenNewAccountModal] = useState(false);
+  const [openNewCurrentAccountModal, setOpenNewCurrentAccountModal] = useState(false);
+  const [openNewForeignCurrencyAccountModal, setOpenNewForeignCurrencyAccountModal] = useState(false);
+  const [selectedAccountType, setSelectedAccountType] = useState('');
+
 
   const columns = [
     { field: 'accountNumber', headerName: 'Account Number', width: 150 },
@@ -43,10 +52,20 @@ const EmployeeBankAccountsPortal = () => {
     navigate('/employee-cards-portal', { state: { selectedAccount: row } });
   };
 
-  const handleAddClick = () => {
-    // Implement add functionality
-    console.log('Add button clicked');
+  const handleContinue = (account, accountType) => {
+    if (account === "current") {
+      setSelectedAccountType(accountType);
+      setOpenNewAccountModal(false);
+      setOpenNewCurrentAccountModal(true);
+    } else if (account === "foreign"){
+      setSelectedAccountType(accountType);
+      setOpenNewAccountModal(false);
+      setOpenNewForeignCurrencyAccountModal(true);
+    } else {
+      setOpenNewAccountModal(false);
+    }
   };
+
 
   return (
     <div>
@@ -55,19 +74,40 @@ const EmployeeBankAccountsPortal = () => {
         <Typography variant="h4" component="h1" gutterBottom>
           Bank Accounts Management
         </Typography>
-        
+
         <SearchDataTable
           rows={accounts}
           columns={columns}
           checkboxSelection={false}
-          actionButton={<AddButton onClick={handleAddClick} label="Add" />}
+          actionButton={<AddButton onClick={() => setOpenNewAccountModal(true)} label="Add" />}
           loading={loading}
           error={error}
           onRowClick={handleRowClick}
+        />
+
+        {/*First screen to add an account*/}
+        <NewAccountModal
+            open={openNewAccountModal}
+            onClose={() => setOpenNewAccountModal(false)}
+            onContinue={(account, accountType) => {
+              handleContinue(account, accountType)
+            }}
+        />
+        {/*Adding Current Account*/}
+        <NewCurrentAccountModal
+            open={openNewCurrentAccountModal}
+            onClose={() => setOpenNewCurrentAccountModal(false)}
+            accountType={selectedAccountType}
+        />
+        {/*Adding Foreign Currency Account*/}
+        <NewForeignCurrencyAccountModal
+            open={openNewForeignCurrencyAccountModal}
+            onClose={() => setOpenNewForeignCurrencyAccountModal(false)}
+            accountType={selectedAccountType}
         />
       </div>
     </div>
   );
 };
 
-export default EmployeeBankAccountsPortal; 
+export default EmployeeBankAccountsPortal;

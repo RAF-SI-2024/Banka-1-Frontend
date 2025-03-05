@@ -1,0 +1,79 @@
+.card-modal {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 350px;
+    background-color: #1c1f2b;
+    color: white;
+    padding: 24px; 
+    border-radius: 8px;
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.2);
+  }
+  
+  .card-modal-title {
+    margin-bottom: 16px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 16px; 
+  }
+  
+  .card-modal-label {
+    font-style: italic;
+    font-size: 13px;
+    margin-top: 8px;
+    display: block;
+  }
+  
+  .card-modal-input {
+    width: 100%;
+    margin-bottom: 12px;
+    background-color: #2b2f3a;
+    color: white;
+    border-radius: 5px;
+    font-size: 14px;
+    padding: 8px;
+    border: 1px solid #4a4d5e;
+  }
+  
+  .card-modal-grid {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .card-modal-grid-item {
+    width: 48%; 
+  }
+  
+  .card-modal-links {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 12px;
+  }
+  
+  .card-modal-link {
+    font-size: 12px;
+    color: #89CFF0;
+    cursor: pointer;
+  }
+  
+  .card-modal-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+  }
+  
+  .button-save {
+    background-color: #2E7D32;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 6px;
+  }
+  
+  .button-cancel {
+    background-color: #F4C430;
+    color: black;
+    padding: 8px 16px;
+    border-radius: 6px;
+  }
+  

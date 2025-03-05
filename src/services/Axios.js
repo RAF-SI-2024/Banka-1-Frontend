@@ -152,4 +152,34 @@ export const createCustomer = async (customerData) => {
   return await api.post("/api/customer", customerData);
 };
 
+export const fetchAccounts = async () => {
+  try {
+    const response = await api.get("/api/accounts");
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching accounts:", error);
+    throw error;
+  }
+};
+
+export const fetchTransactions = async (accountId) => {
+  try {
+    const response = await api.get(`/api/accounts/${accountId}/transactions`);
+    return response.data;
+  } catch (error) {
+    console.error(`Error fetching transactions for account ${accountId}:`, error);
+    throw error;
+  }
+};
+
+//ovaj poziv vrv nije dobar
+export const updateAccount = async (account) => {
+  try {
+    const response = await axios.put(`/api/accounts/${account.ownerID}`, account);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export default api;

@@ -164,32 +164,34 @@ const handleNavigation = (text) => {
           </IconButton>
         </DrawerHeader>
         <Divider />
-        <List>
-          {/* Home button */}
-          <ListItem key="home" disablePadding>
-            <ListItemButton onClick={() => handleNavigation('Home')}>
-              <ListItemIcon>
-                <HomeIcon />
-              </ListItemIcon>
-              <ListItemText primary="Home" />
-            </ListItemButton>
-          </ListItem>
+            <List>
+              {/* Home button */}
+              <ListItem key="home" disablePadding>
+                <ListItemButton onClick={() => handleNavigation('Home')}>
+                  <ListItemIcon>
+                    <HomeIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Home" />
+                </ListItemButton>
+              </ListItem>
 
-          {canRead && (
-            <>
-              {['Customer', 'Employees'].map((text, index) => (
-                <ListItem key={text} disablePadding>
-                  <ListItemButton onClick={() => handleNavigation(text)}>
-                    <ListItemIcon>
-                      {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                    </ListItemIcon>
-                    <ListItemText primary={text} />
-                  </ListItemButton>
-                </ListItem>
-              ))}
-            </>
-          )}
-        </List>
+              {canRead && (
+                <>
+                  {['Customer', 'Employees'].map((text, index) => (
+                    <ListItem key={text} disablePadding>
+                      <ListItemButton onClick={() => handleNavigation(text)}>
+                        
+                        <ListItemIcon>
+                          {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                        </ListItemIcon>
+            
+                        <ListItemText primary={text} />
+                      </ListItemButton>
+                    </ListItem>
+                  ))}
+                </>
+              )}
+            </List>
         <Divider />
       </Drawer>
     </Box>

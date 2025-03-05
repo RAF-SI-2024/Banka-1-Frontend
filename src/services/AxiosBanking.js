@@ -40,7 +40,19 @@ export const createAccount = async (accountData) => {
 export const fetchAccounts = async () => {
     try {
         const response = await apiBanking.get("/accounts/");
-        return response.data.accounts; // vraca niz racuna
+        console.log(response);
+        // if (!response.data) {
+        //     return [];
+        // }
+
+        const accounts = response.data.data.accounts;
+        
+        if (!Array.isArray(accounts)) {
+            console.error('Accounts is not an array, type:', typeof accounts);
+            return [];
+        }
+
+        return accounts;
     } catch (error) {
         console.error("Error fetching accounts:", error);
         throw error;
@@ -235,6 +247,7 @@ export const fetchAccountsTransactions = async (accountId) => {
 export const fetchCardsByAccountId = async (accountId) => {
     try {
         const response = await apiBanking.get(`/cards/admin/${accountId}`);
+        console.log(response);
         return response.data;
     } catch (error) {
         console.error("Error fetching cards:", error);

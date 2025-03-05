@@ -1,4 +1,6 @@
 import axios from "axios";
+import { jwtDecode } from "jwt-decode";
+
 
 const api = axios.create({
   baseURL: "http://localhost:8080",
@@ -39,6 +41,7 @@ export const loginUser = async (email, password) => {
     throw error;
   }
 };
+
 export const fetchCustomers = async () => {
   try {
     const response = await api.get("/api/users/search/customers");
@@ -154,6 +157,34 @@ export const createCustomer = async (customerData) => {
 };
 
 
+// API BASE URL - promeni ako backend ima drugi endpoint
+const API_BASE_URL = "http://localhost:8080/api/accounts";
+
+//token za korisnika
+const getUserIdFromToken = () => {
+  const token = localStorage.getItem("token");
+  if (!token) return null;
+  try {
+    const decoded = jwtDecode(token);
+    return decoded.id;
+  } catch (error) {
+    console.error("Invalid token", error);
+    return null;
+  }
+};
+
+
+export const fetchUserCards = async (accountId) => {
+  try {
+      const response = await api.get(`/accounts/user/${userId}`);
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching recipients:", error);
+      throw error;
+    }
+};
+
+// Fetch cards linked to an account
 // export const createPayment = async (paymentData) => {
 //   try {
 //     const response = await axios.post(`/api/payments/new-payment`, paymentData);
@@ -188,6 +219,70 @@ export const fetchAccountsTransactions = async (accountId) => {
     return response.data;
   } catch (error) {
     console.error('Error fetching accounts:', error);
+    throw error;
+
+  }
+};
+
+export const fetchAccountsId = async (id) => {
+  try {
+    const response = await axios.get(`${API_BASE_URL}/${id}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`
+      }
+    });
+
+    return response.data.map((account) => ({
+      id: account.id,
+      name: account.name,
+      number: account.number,
+      balance: account.balance,
+    }));
+  } catch (error) {
+    console.error(`Error fetching account with ID ${id}:`, error);
+    return null;
+  }
+};
+
+
+
+// primer DTO-a
+/**]\[
+ {
+ "id": 1,
+ "name": "Osoba1",
+ "number": "XXX-XXXXXXXXXXXXX-XX",
+ "balance": "XXXXXXXX,XX RSD"
+ },
+ {
+ "id": 2,
+ "name": "Osoba2",
+ "number": "YYY-YYYYYYYYYYYYY-YY",
+ "balance": "YYYYYYYY,YY RSD"
+ }
+ ]
+ */
+
+// Change card name
+export const changeCardName = async (cardId, newName) => {
+  try {
+    const response = await api.patch(`/cards/${cardId}`, {
+      name: newName,
+    });
+    return response.data;
+  } catch (error) {
+    console.error(`Error changing name for card ${cardId}:`, error);
+    throw error;
+  }
+};
+
+// Change card limit
+export const changeCardLimit = async (cardId, newLimit) => {
+ try {
+    const response = await api.get("/accounts");
+    return response.data.accounts;  // vraca niz racuna
+  } catch (error) {
+    console.error("Error fetching accounts:", error);
     throw error;
   }
 };
@@ -494,10 +589,26 @@ export const createRecipient = async (accountId, recipientData) => {
     return await api.post("/otp/verification", otpData);
   };
 
-  export default api;
+
+export const createInternalTransfer = async (transferData) => {
+  try {
+    const response = await api.post("/internal-transfer", transferData);
+    return response;  // trebalo bi da sadrzi id transakcije : transferId
+  } catch (error) {
+    console.error("API Error during internal transfer: ", error);
+    throw error;
+  }
+};
 
 export const deleteRecipient = async (id) => {
   try {
+    const response = await api.get(`/api/cards/admin/${accountId}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching cards:', error);
+    throw error;
+  }
+};
 
     const response = await api.delete(`/receiver/${id}`);
     return response.data;
@@ -506,3 +617,11 @@ export const deleteRecipient = async (id) => {
     throw error;
   }
 };
+
+export const verifyOTP  = async (otpData) => {
+  return await api.post("/otp/verification", otpData);
+};
+
+
+
+export default api;

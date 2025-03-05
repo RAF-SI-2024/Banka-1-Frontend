@@ -43,7 +43,7 @@ const AccountTransactionsList = ({ accountId }) => {
       try {
 
         const response = await fetchAccountsTransactions(accountId);
-        const data = response.data; 
+        const data = response.data.transactions; 
         const formattedTransactions = data.map((transaction) => ({
           id: transaction.id,
           date: new Date(transaction.date).toLocaleString(),

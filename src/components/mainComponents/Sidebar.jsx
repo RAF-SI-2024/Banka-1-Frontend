@@ -166,26 +166,16 @@ const handleNavigation = (text) => {
           </IconButton>
         </DrawerHeader>
         <Divider />
-        <List>
-          {/* Home button */}
-          <ListItem key="home" disablePadding>
-            <ListItemButton onClick={() => handleNavigation('Home')}>
-              <ListItemIcon>
-                <HomeIcon />
-              </ListItemIcon>
-              <ListItemText primary="Home" />
-            </ListItemButton>
-          </ListItem>
-
-          {/*Cards button */}
-          <ListItem key="cards" disablePadding>
-          <ListItemButton onClick={() => handleNavigation('Cards')}>
-              <ListItemIcon>
-                <InboxIcon /> 
-              </ListItemIcon>
-              <ListItemText primary="Cards" />
-            </ListItemButton>
-            </ListItem>
+            <List>
+              {/* Home button */}
+              <ListItem key="home" disablePadding>
+                <ListItemButton onClick={() => handleNavigation('Home')}>
+                  <ListItemIcon>
+                    <HomeIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Home" />
+                </ListItemButton>
+              </ListItem>
 
           {canRead && (
             <>

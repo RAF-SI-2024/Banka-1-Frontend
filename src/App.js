@@ -15,6 +15,7 @@ import PasswordReset from './pages/loginPassword/PasswordReset';
 import PasswordResetConfirmation from './pages/loginPassword/PasswordResetConfirmation';
 import HomePage from './pages/common/HomePage';
 import PasswordSetConfirmation from './pages/loginPassword/PasswordSetConfirmation';
+import AccountsPortal from './pages/portals/AccountsPortal';
 import ReceiversPortal from "./pages/portals/ReceiversPortal";
 import TransactionsPage from './pages/transactions/TransactionsPage';
 import TransactionDetailsPage from './pages/transactions/TransactionDetailsPage';

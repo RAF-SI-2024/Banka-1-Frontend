@@ -117,6 +117,8 @@ const handleNavigation = (text) => {
     navigate('/customer-portal');
   } else if (text === 'Employees') {
     navigate('/employee-portal');
+  } else if (text == 'Cards') {
+    navigate('/cards');
   }
   setOpen(false);
 };
@@ -175,23 +177,31 @@ const handleNavigation = (text) => {
                 </ListItemButton>
               </ListItem>
 
-              {canRead && (
-                <>
-                  {['Customer', 'Employees'].map((text, index) => (
-                    <ListItem key={text} disablePadding>
-                      <ListItemButton onClick={() => handleNavigation(text)}>
-                        
-                        <ListItemIcon>
-                          {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                        </ListItemIcon>
-            
-                        <ListItemText primary={text} />
-                      </ListItemButton>
-                    </ListItem>
-                  ))}
-                </>
-              )}
-            </List>
+          {/*Cards button */}
+          <ListItem key="cards" disablePadding>
+          <ListItemButton onClick={() => handleNavigation('Cards')}>
+              <ListItemIcon>
+                <InboxIcon /> 
+              </ListItemIcon>
+              <ListItemText primary="Cards" />
+            </ListItemButton>
+            </ListItem>
+
+          {canRead && (
+            <>
+              {['Customer', 'Employees'].map((text, index) => (
+                <ListItem key={text} disablePadding>
+                  <ListItemButton onClick={() => handleNavigation(text)}>
+                    <ListItemIcon>
+                      {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                    </ListItemIcon>
+                    <ListItemText primary={text} />
+                  </ListItemButton>
+                </ListItem>
+              ))}
+            </>
+          )}
+        </List>
         <Divider />
       </Drawer>
     </Box>

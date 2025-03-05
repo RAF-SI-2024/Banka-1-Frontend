@@ -152,34 +152,86 @@ export const createCustomer = async (customerData) => {
   return await api.post("/api/customer", customerData);
 };
 
+
+
+// Fetch cards linked to an account
+export const fetchUserCards = async (accountId) => {
+  try {
+    const response = await api.get(`/cards?account_id=${accountId}`);
+    return response.data;
+  } catch (error) {
+    console.error(`Error fetching cards for account ${accountId}:`, error);
+    throw error;
+  }
+};
+//Create a card
+export const createCard = async (accountId, cardType, authorizedPerson = null) => {
+  try {
+    const requestBody = {
+      racun_id: accountId,
+      tip: cardType,
+    };
+
+    if (authorizedPerson) {
+      requestBody.ovlasceno_lice = authorizedPerson;
+    }
+
+    const response = await api.post("/cards", requestBody);
+    return response.data;
+  } catch (error) {
+    console.error("Error creating a new card:", error);
+    throw error;
+  }
+};
+
+
 export const fetchAccounts = async () => {
   try {
-    const response = await api.get("/api/accounts");
-    return response.data;
+    const response = await api.get("/accounts");
+    return response.data.accounts;  // vraca niz racuna
   } catch (error) {
     console.error("Error fetching accounts:", error);
     throw error;
   }
 };
 
-export const fetchTransactions = async (accountId) => {
+
+export const createInternalTransfer = async (transferData) => {
   try {
-    const response = await api.get(`/api/accounts/${accountId}/transactions`);
-    return response.data;
+    const response = await api.post("/internal-transfer", transferData);
+    return response;  // trebalo bi da sadrzi id transakcije : transferId
   } catch (error) {
-    console.error(`Error fetching transactions for account ${accountId}:`, error);
+    console.error("API Error during internal transfer: ", error);
     throw error;
   }
 };
 
-//ovaj poziv vrv nije dobar
-export const updateAccount = async (account) => {
+export const fetchCardsByAccountId = async (accountId) => {
   try {
-    const response = await axios.put(`/api/accounts/${account.ownerID}`, account);
+    const response = await api.get(`/api/cards/admin/${accountId}`);
     return response.data;
   } catch (error) {
+    console.error('Error fetching cards:', error);
+
     throw error;
   }
 };
+
+
+export const createAccount = async (accountData) => {
+  try {
+    const response = await api.post("/api/accounts", accountData);
+    return response.data;
+  } catch (error) {
+    console.error("Error creating account:", error);
+    throw error;
+  }
+};
+
+
+export const verifyOTP  = async (otpData) => {
+  return await api.post("/otp/verification", otpData);
+};
+
 
 export default api;

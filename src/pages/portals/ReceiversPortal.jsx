@@ -4,7 +4,13 @@ import React, {useEffect, useState} from "react";
 import { jwtDecode } from "jwt-decode";
 
 import RecipientModal from "../../components/common/RecipientModal";
-import {createRecipient, deleteRecipient, fetchAccounts, fetchRecipients, updateRecipient} from "../../services/Axios";
+import {
+    createRecipient,
+    deleteRecipient,
+    fetchAccount,
+    fetchRecipients,
+    updateRecipient
+} from "../../services/Axios";
 
 
 
@@ -53,7 +59,7 @@ function ReceiversPortal() {
 
     const loadAccounts = async () => {  //ucitavanje racuna
         try {
-            const data = await fetchAccounts(userId);
+            const data = await fetchAccount(userId);
             setAccounts(data);
         } catch (err) {
             console.error("Failed to fetch accounts:", err);

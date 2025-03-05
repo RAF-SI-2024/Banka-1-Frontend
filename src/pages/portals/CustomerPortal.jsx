@@ -118,22 +118,11 @@ const CustomerPortal = () => {
     // Handle the save event when the user clicks the save button in the edit modal formm
     const handleSaveCustomer = async (updatedCustomerData) => {
         try {
-            // Map to the expected API format and update the customer data
-            const customerPayload = {
-                ime: updatedCustomerData.firstName,
-                prezime: updatedCustomerData.lastName,
-                username: updatedCustomerData.username,
-                datum_rodjenja: transformDateForApi(updatedCustomerData.birthDate),
-                pol: updatedCustomerData.gender,
-                email: updatedCustomerData.email,
-                broj_telefona: updatedCustomerData.phoneNumber,
-                adresa: updatedCustomerData.address,
-                // Only include password if it's provided in the form
-                // ...(updatedCustomerData.password && { password: updatedCustomerData.password })
-            };
+
+            updatedCustomerData.birthDate = transformDateForApi(updatedCustomerData.birthDate);
 
             // Update the customer data and show a success message
-            await updateCustomer(updatedCustomerData.id, customerPayload);
+            await updateCustomer(updatedCustomerData.id, updatedCustomerData);
             setIsEditModalOpen(false);
             toast.success('Customer updated successfully');
             loadCustomers(); // Reload the data to reflect changes
@@ -168,19 +157,9 @@ const CustomerPortal = () => {
     // Add create customer handler
     const handleCreateCustomer = async (customerData) => {
         try {
-            const customerPayload = {
-                ime: customerData.firstName,
-                prezime: customerData.lastName,
-                username: customerData.username,
-                datum_rodjenja: transformDateForApi(customerData.birthDate),
-                pol: customerData.gender,
-                email: customerData.email,
-                broj_telefona: customerData.phoneNumber,
-                adresa: customerData.address,
-                // password: customerData.password || "defaultPassword123"
-            };
-
-            await createCustomer(customerPayload);
+            customerData.birthDate = transformDateForApi(customerData.birthDate);
+            console.log(customerData);
+            await createCustomer(customerData);
             setIsCreateModalOpen(false);
             resetCustomerForm();
             toast.success('Customer created successfully');

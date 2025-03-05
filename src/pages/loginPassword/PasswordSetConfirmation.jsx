@@ -49,6 +49,7 @@ const PasswordSetConfirmation = () => {
         return null; // No validation errors
     };
 
+    // Handle form submission to set the password
     const handleSubmit = async (event) => {
         event.preventDefault();
         

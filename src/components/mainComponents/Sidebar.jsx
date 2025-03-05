@@ -84,7 +84,7 @@ export default function Sidebar() {
     setOpen(false);
   };
 
-
+  // Function to check if the user has read permission and set the state accordingly
   const handleReadPermission = () =>{
     const token = localStorage.getItem("token");
     if (token) {

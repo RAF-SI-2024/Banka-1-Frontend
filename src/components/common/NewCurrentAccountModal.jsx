@@ -11,9 +11,10 @@ import MenuItem from '@mui/material/MenuItem';
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import TextField from '@mui/material/TextField';
-import {createAccount, createCustomer, fetchCustomers} from '../../services/Axios';
+import {createCustomer, fetchCustomers} from '../../services/AxiosUser';
 import EditModal from '../common/EditModal';
 import {toast} from "react-toastify";
+import {createAccount} from "../../services/AxiosBanking";
 
 
 const NewCurrentAccountModal = ({ open, onClose, accountType }) => {

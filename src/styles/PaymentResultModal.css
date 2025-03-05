@@ -1,0 +1,67 @@
+.payment-modal {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.payment-modal-content {
+    background-color: rgba(52, 52, 52, 0.3);
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    width: 350px;
+}
+
+.payment-modal h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.payment-modal p {
+    font-size: 16px;
+    margin-bottom: 20px;
+}
+
+
+.payment-modal .modal-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+}
+
+.payment-modal button {
+    width: 250px;
+    height: 50px;
+    font-size: 16px;
+    font-weight: bold;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s ease-in-out;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.payment-modal .confirm-button {
+    background-color: #3A5F3A;
+}
+
+.payment-modal .confirm-button:hover {
+    background-color: #4A7F4A;
+}
+
+.payment-modal .cancel-button {
+    background-color: #111;
+}
+
+.payment-modal .cancel-button:hover {
+    background-color: #333;
+}

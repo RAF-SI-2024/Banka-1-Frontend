@@ -15,6 +15,7 @@ import PasswordReset from './pages/loginPassword/PasswordReset';
 import PasswordResetConfirmation from './pages/loginPassword/PasswordResetConfirmation';
 import HomePage from './pages/common/HomePage';
 import PasswordSetConfirmation from './pages/loginPassword/PasswordSetConfirmation';
+import NewPaymentPortal from "./pages/portals/NewPaymentPortal";
 import AccountsPortal from './pages/portals/AccountsPortal';
 import ReceiversPortal from "./pages/portals/ReceiversPortal";
 import TransactionsPage from './pages/transactions/TransactionsPage';
@@ -42,7 +43,8 @@ function App() {
             <Route path="/receivers" element={<ReceiversPortal />} />
             <Route path="/transactions" element={<TransactionsPage />} />
             <Route path="/transactions/:id" element={<TransactionDetailsPage />} />
-            <Route path="/internal-transfer-portal" element={< InternalTransferPortal />} />
+            <Route path="/internal-transfer-portal" element={< InternalTransferPortal />} />  
+            <Route path="/new-payment-portal" element={<NewPaymentPortal />} />
           </Routes>
           <ThemeToggle />
         </BrowserRouter>

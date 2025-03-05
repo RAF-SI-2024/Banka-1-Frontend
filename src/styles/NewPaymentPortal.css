@@ -1,0 +1,160 @@
+.payment-container {
+    padding: 20px;
+    margin: 64px auto;
+    max-width: 700px;
+}
+
+.payment-form {
+    background-color: #0000004C;
+    padding: 20px;
+    border-radius: 10px;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.payer-account {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 50%;
+    margin: 0 auto;
+}
+
+.payer-account select,
+.payment-code select,
+.recipient-account input,
+.payment-purpose input,
+.amount input,
+.reference-number input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: none;
+    background-color: #282c34;
+    color: white;
+    cursor: pointer;
+    height: 44px;
+}
+
+.recipient-name .MuiInputBase-root {
+    height: 44px !important;
+    padding: 0 10px !important;
+    display: flex;
+    align-items: center;
+    border-radius: 5px;
+    background-color: #282c34;
+    color: white;
+}
+
+.recipient-name .MuiInputBase-input {
+    color: white !important;
+}
+
+.recipient-name .MuiAutocomplete-paper {
+    background-color: #282c34 !important;
+    color: white;
+}
+
+.recipient-name .MuiAutocomplete-option:hover {
+    background-color: #3A5F3A !important;
+}
+
+.form-row {
+    display: flex;
+    gap: 20px;
+    width: 100%;
+}
+
+.recipient-name,
+.payment-code,
+.recipient-account,
+.payment-purpose {
+    flex: 1;
+}
+
+.amount-row {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    gap: 20px;
+}
+
+.amount {
+    width: 48%;
+    display: flex;
+    flex-direction: column;
+}
+
+.empty-space {
+    width: 45%;
+}
+
+.amount-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.amount-wrapper input {
+    flex: 1;
+    padding-right: 10px;
+}
+
+.info-icon {
+    position: relative;
+    font-size: 18px;
+    color: gray;
+    cursor: pointer;
+}
+
+.info-icon::after {
+    content: "Više informacija";
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 12px;
+    white-space: nowrap;
+    left: 30px;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease-in-out;
+}
+
+.info-icon:hover::after {
+    opacity: 1;
+    visibility: visible;
+}
+
+.reference-row {
+    display: flex;
+    gap: 20px;
+    width: 100%;
+}
+
+.reference-number {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.submit-button {
+    background-color: #3A5F3A;
+    color: white;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    width: 48.5%;
+    height: 44px;
+    margin-top: 24px;
+}
+
+.submit-button:hover {
+    background-color: #4A7F4A;
+}

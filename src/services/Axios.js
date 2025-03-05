@@ -447,6 +447,17 @@ export const fetchAccounts = async () => {
     throw error;
   }
 };
+  
+export const fetchAccounts = async () => {
+  try {
+    const response = await api.get(`/api/accounts/${accountId}/transactions`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching accounts:', error);
+    throw error;
+  }
+};
+
 
 export const fetchTransactions = async (accountId) => {
   try {
@@ -456,7 +467,8 @@ export const fetchTransactions = async (accountId) => {
     console.error(`Error fetching transactions for account ${accountId}:`, error);
     throw error;
   }
-};  
+}; 
+
 
 export const createInternalTransfer = async (transferData) => {
   try {
@@ -467,6 +479,7 @@ export const createInternalTransfer = async (transferData) => {
     throw error;
   }
 };
+
 
 export const fetchCardsByAccountId = async (accountId) => {
   try {

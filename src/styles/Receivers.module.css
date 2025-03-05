@@ -1,0 +1,138 @@
+.page {
+    background-color: #121623;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    margin-left: -240px;
+}
+
+.container {
+    background-color: #222942;
+    padding: 20px;
+    border-radius: 12px;
+    width: 50%;
+    height: 600px;
+    text-align: center;
+    position: relative;
+}
+
+.title {
+    color: white;
+    position: absolute;
+    top: -40px;
+    left: 0;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.table {
+
+    width: 95%;
+    border-collapse: collapse;
+    margin-top: 40px;
+    margin-left: 15px;
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 2px solid #808080;
+    color: white;
+}
+
+th:nth-child(1), td:nth-child(1) {
+    width: 20%;
+
+}
+
+th:nth-child(2), td:nth-child(2) {
+    width: 50%;
+    text-align: center;
+}
+
+th:nth-child(3), td:nth-child(3) {
+    width: 15%;
+    text-align: end;
+}
+
+th:nth-child(4), td:nth-child(4) {
+    width: 15%;
+    text-align: end;
+}
+
+th {
+
+}
+
+.headerRow {
+    display: flex;
+    justify-content: space-between;
+}
+
+th .addButtonWrapper {
+    display: flex;
+    justify-content: flex-end;
+    /*padding-top: 10px;*/
+}
+
+.editButton, .deleteButton {
+    padding: 6px 12px;
+    border: none;
+    width: 80px;
+    border-radius: 12px;
+    cursor: pointer;
+}
+
+
+.editButton {
+    background-color: #3B4754;
+    color: white;
+}
+
+.deleteButton {
+    background-color: #3B4754;
+    color: white;
+}
+
+.addButton {
+    background-color:#ECD48760;
+    color: #000000;
+    font-weight: bold;
+    width: 115px;
+    height: 30px;
+    padding: 6px 12px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.addButton:hover {
+    background-color: #007bb5;
+}
+
+.editButton:hover {
+    background-color: #45a049;
+}
+
+.deleteButton:hover {
+    background-color: #c9302c;
+}
+
+.dropdown {
+    width: 150px;
+    height: 30px;
+    font-size: 14px;
+    border-radius: 12px;
+    background-color: #3B4754;
+    border: none;
+    color: white;
+    padding: 5px;
+    outline: none;
+    position: absolute;
+    left: 35px;
+    cursor: pointer;
+
+
+}

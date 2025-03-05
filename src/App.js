@@ -11,6 +11,7 @@ import PasswordReset from './pages/loginPassword/PasswordReset';
 import PasswordResetConfirmation from './pages/loginPassword/PasswordResetConfirmation';
 import HomePage from './pages/common/HomePage';
 import PasswordSetConfirmation from './pages/loginPassword/PasswordSetConfirmation';
+import ReceiversPortal from "./pages/portals/ReceiversPortal";
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
           <Route path="/reset-password-email" element={<PasswordReset />} />
           <Route path="/reset-password" element={<PasswordResetConfirmation />} />
           <Route path="/set-password" element={<PasswordSetConfirmation />} />
+          <Route path="/receivers" element={<ReceiversPortal />} />
         </Routes>
         <ThemeToggle />
       </BrowserRouter>

@@ -7,6 +7,7 @@ const api = axios.create({
   },
 });
 
+
 // Add auth token to requests
 api.interceptors.request.use(
   (config) => {
@@ -150,6 +151,74 @@ export const createEmployee = async (employeeData) => {
 
 export const createCustomer = async (customerData) => {
   return await api.post("/api/customer", customerData);
+};
+
+
+
+export const fetchRecipients = async (accountId) => {
+  try {
+    console.log("AccountId = " + accountId)
+    const response = await api.get(`/receiver/${accountId}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching recipients:", error);
+    throw error;
+  }
+};
+
+export const updateRecipient = async (accountId, recipientId,recipientData) => {
+  try {
+    const newRecipientData ={
+      ownerAccountId : accountId,
+      accountNumber : recipientData.accountNumber,
+      fullName: recipientData.fullName
+    }
+    const response = await api.put(`/receiver/${recipientId}`, newRecipientData);
+    return response.data;
+  } catch (error) {
+    console.error(`Error updating recipient ${recipientId}:`, error);
+    throw error;
+  }
+};
+export const deleteRecipient = async (id) => {
+  try {
+
+    const response = await api.delete(`/receiver/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching recipients:", error);
+    throw error;
+  }
+}
+
+export const createRecipient = async (accountId, recipientData) => {
+  try {
+
+
+    const newReceiverData ={
+      ownerAccountId: accountId,
+      accountNumber: recipientData.accountNumber,
+      fullName: recipientData.fullName
+    }
+
+    const response = await api.post(`/receiver`, newReceiverData);
+    return response.data;
+  } catch (error) {
+    console.error("Error creating receivers:", error);
+    throw error;
+  }
+
+};
+
+export const fetchAccounts = async (userId) => {
+  try {
+    const response = await api.get(`/accounts/user/${userId}`);
+    return response.data;
+
+  } catch (error) {
+    console.error("Error fetching recipients:", error);
+    throw error;
+  }
 };
 
 export default api;

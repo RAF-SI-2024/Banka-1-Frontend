@@ -1,4 +1,5 @@
 import axios from "axios";
+import {jwtDecode} from "jwt-decode";
 
 const apiBanking = axios.create({
     baseURL: "http://localhost:8082",
@@ -26,6 +27,19 @@ apiBanking.interceptors.request.use(
         return Promise.reject(error);
     }
 );
+const getUserIdFromToken = () => {
+    const token = localStorage.getItem('token');
+    if(!token) return null;
+    try{
+        const decoded = jwtDecode(token);
+        return decoded.id;
+    }catch (error){
+        console.error("Invalid token", error);
+        return null;
+    }
+
+}
+
 
 export const createAccount = async (accountData) => {
     try {
@@ -51,7 +65,8 @@ export const fetchAccounts = async () => {
     }
 };
 
-export const fetchAccountsForUser = async (userId) => {
+export const fetchAccountsForUser = async () => {
+    const userId = getUserIdFromToken();
     try {
         const response = await apiBanking.get(`/accounts/user/${userId}`);
         return response.data;

@@ -15,6 +15,7 @@ import PasswordReset from './pages/loginPassword/PasswordReset';
 import PasswordResetConfirmation from './pages/loginPassword/PasswordResetConfirmation';
 import HomePage from './pages/common/HomePage';
 import PasswordSetConfirmation from './pages/loginPassword/PasswordSetConfirmation';
+import ReceiversPortal from "./pages/portals/ReceiversPortal";
 import TransactionsPage from './pages/transactions/TransactionsPage';
 import TransactionDetailsPage from './pages/transactions/TransactionDetailsPage';
 import InternalTransferPortal from './pages/portals/InternalTransferPortal';
@@ -33,14 +34,15 @@ function App() {
             <Route path="/customer-portal" element={<CustomerPortal />} />
             <Route path="/employee-portal" element={<EmployeePortal />} />
             <Route path="/employee-bank-accounts-portal" element={<EmployeeBankAccountsPortal />} />
-          <Route path="/employee-cards-portal" element={<EmployeeCardsPortal />} />
-          <Route path="/reset-password-email" element={<PasswordReset />} />
-          <Route path="/reset-password" element={<PasswordResetConfirmation />} />
-          <Route path="/set-password" element={<PasswordSetConfirmation />} />
-          <Route path="/transactions" element={<TransactionsPage />} />
-          <Route path="/transactions/:id" element={<TransactionDetailsPage />} />
-          <Route path="/internal-transfer-portal" element={< InternalTransferPortal />} />
-        </Routes>
+            <Route path="/employee-cards-portal" element={<EmployeeCardsPortal />} />
+            <Route path="/reset-password-email" element={<PasswordReset />} />
+            <Route path="/reset-password" element={<PasswordResetConfirmation />} />
+            <Route path="/set-password" element={<PasswordSetConfirmation />} />
+            <Route path="/receivers" element={<ReceiversPortal />} />
+            <Route path="/transactions" element={<TransactionsPage />} />
+            <Route path="/transactions/:id" element={<TransactionDetailsPage />} />
+            <Route path="/internal-transfer-portal" element={< InternalTransferPortal />} />
+          </Routes>
           <ThemeToggle />
         </BrowserRouter>
       </CardProvider>

@@ -7,6 +7,7 @@ const api = axios.create({
   },
 });
 
+
 // Add auth token to requests
 api.interceptors.request.use(
   (config) => {
@@ -154,6 +155,73 @@ export const createCustomer = async (customerData) => {
 
 
 
+
+export const fetchRecipients = async (accountId) => {
+  try {
+    console.log("AccountId = " + accountId)
+    const response = await api.get(`/receiver/${accountId}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching recipients:", error);
+    throw error;
+  }
+};
+
+export const updateRecipient = async (accountId, recipientId,recipientData) => {
+  try {
+    const newRecipientData ={
+      ownerAccountId : accountId,
+      accountNumber : recipientData.accountNumber,
+      fullName: recipientData.fullName
+    }
+    const response = await api.put(`/receiver/${recipientId}`, newRecipientData);
+    return response.data;
+  } catch (error) {
+    console.error(`Error updating recipient ${recipientId}:`, error);
+    throw error;
+  }
+};
+export const deleteRecipient = async (id) => {
+  try {
+
+    const response = await api.delete(`/receiver/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching recipients:", error);
+    throw error;
+  }
+}
+
+export const createRecipient = async (accountId, recipientData) => {
+  try {
+
+
+    const newReceiverData ={
+      ownerAccountId: accountId,
+      accountNumber: recipientData.accountNumber,
+      fullName: recipientData.fullName
+    }
+
+    const response = await api.post(`/receiver`, newReceiverData);
+    return response.data;
+  } catch (error) {
+    console.error("Error creating receivers:", error);
+    throw error;
+  }
+
+};
+
+export const fetchAccounts = async (userId) => {
+  try {
+    const response = await api.get(`/accounts/user/${userId}`);
+    return response.data;
+
+  } catch (error) {
+    console.error("Error fetching recipients:", error);
+    throw error;
+  }
+};
+
 // Fetch cards linked to an account
 export const fetchUserCards = async (accountId) => {
   try {
@@ -246,95 +314,93 @@ export const updateCardStatusAdmin = async (accountId, cardId, status) => {
 
 
 
-// Fetch cards linked to an account
-export const fetchUserCards = async (accountId) => {
-  try {
-    const response = await api.get(`/cards?account_id=${accountId}`);
-    return response.data;
-  } catch (error) {
-    console.error(`Error fetching cards for account ${accountId}:`, error);
-    throw error;
-  }
-};
-//Create a card
-export const createCard = async (accountId, cardType, authorizedPerson = null) => {
-  try {
-    const requestBody = {
-      racun_id: accountId,
-      tip: cardType,
-    };
+// // Fetch cards linked to an account
+// export const fetchUserCards = async (accountId) => {
+//   try {
+//     const response = await api.get(`/cards?account_id=${accountId}`);
+//     return response.data;
+//   } catch (error) {
+//     console.error(`Error fetching cards for account ${accountId}:`, error);
+//     throw error;
+//   }
+// };
+// //Create a card
+// export const createCard = async (accountId, cardType, authorizedPerson = null) => {
+//   try {
+//     const requestBody = {
+//       racun_id: accountId,
+//       tip: cardType,
+//     };
 
-    if (authorizedPerson) {
-      requestBody.ovlasceno_lice = authorizedPerson;
-    }
+//     if (authorizedPerson) {
+//       requestBody.ovlasceno_lice = authorizedPerson;
+//     }
 
-    const response = await api.post("/cards", requestBody);
-    return response.data;
-  } catch (error) {
-    console.error("Error creating a new card:", error);
-    throw error;
-  }
-};
-
-
-// Change card name
-export const changeCardName = async (cardId, newName) => {
-  try {
-    const response = await api.patch(`/cards/${cardId}`, {
-      name: newName,
-    });
-    return response.data;
-  } catch (error) {
-    console.error(`Error changing name for card ${cardId}:`, error);
-    throw error;
-  }
-};
-
-// Change card limit
-export const changeCardLimit = async (cardId, newLimit) => {
-  try {
-    const response = await api.patch(`/cards/${cardId}`, {
-      limit: newLimit,
-    });
-    return response.data;
-  } catch (error) {
-    console.error(`Error changing limit for card ${cardId}:`, error);
-    throw error;
-  }
-};
-
-// Block or unblock a card
-export const updateCardStatus = async (cardId, status) => {
-  try {
-    const response = await api.patch(`/cards/${cardId}`, { status });
-    return response.data;
-  } catch (error) {
-    console.error(`Error updating status for card ${cardId}:`, error);
-    throw error;
-  }
-};
-//Admins only - see users cards and update status
-export const fetchAdminUserCards = async (accountId) => {
-  try {
-    const response = await api.get(`/cards/admin/${accountId}`);
-    return response.data;
-  } catch (error) {
-    console.error(`Error fetching cards for account ${accountId}:`, error);
-    throw error;
-  }
-};
-
-export const updateCardStatusAdmin = async (accountId, cardId, status) => {
-  try {
-    const response = await api.patch(`/cards/admin/${accountId}?card_id=${cardId}`, { status });
-    return response.data;
-  } catch (error) {
-    console.error(`Error updating card status for card ${cardId}:`, error);
-    throw error;
-  }
-};
+//     const response = await api.post("/cards", requestBody);
+//     return response.data;
+//   } catch (error) {
+//     console.error("Error creating a new card:", error);
+//     throw error;
+//   }
+// };
 
 
+// // Change card name
+// export const changeCardName = async (cardId, newName) => {
+//   try {
+//     const response = await api.patch(`/cards/${cardId}`, {
+//       name: newName,
+//     });
+//     return response.data;
+//   } catch (error) {
+//     console.error(`Error changing name for card ${cardId}:`, error);
+//     throw error;
+//   }
+// };
+
+// // Change card limit
+// export const changeCardLimit = async (cardId, newLimit) => {
+//   try {
+//     const response = await api.patch(`/cards/${cardId}`, {
+//       limit: newLimit,
+//     });
+//     return response.data;
+//   } catch (error) {
+//     console.error(`Error changing limit for card ${cardId}:`, error);
+//     throw error;
+//   }
+// };
+
+// // Block or unblock a card
+// export const updateCardStatus = async (cardId, status) => {
+//   try {
+//     const response = await api.patch(`/cards/${cardId}`, { status });
+//     return response.data;
+//   } catch (error) {
+//     console.error(`Error updating status for card ${cardId}:`, error);
+//     throw error;
+//   }
+// };
+// //Admins only - see users cards and update status
+// export const fetchAdminUserCards = async (accountId) => {
+//   try {
+//     const response = await api.get(`/cards/admin/${accountId}`);
+//     return response.data;
+//   } catch (error) {
+//     console.error(`Error fetching cards for account ${accountId}:`, error);
+//     throw error;
+//   }
+// };
+
+// export const updateCardStatusAdmin = async (accountId, cardId, status) => {
+//   try {
+//     const response = await api.patch(`/cards/admin/${accountId}?card_id=${cardId}`, { status });
+//     return response.data;
+//   } catch (error) {
+//     console.error(`Error updating card status for card ${cardId}:`, error);
+//     throw error;
+//   }
+// };
 
 
 export const fetchAccounts = async () => {

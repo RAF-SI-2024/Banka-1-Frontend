@@ -13,6 +13,7 @@ import PasswordReset from './pages/loginPassword/PasswordReset';
 import PasswordResetConfirmation from './pages/loginPassword/PasswordResetConfirmation';
 import HomePage from './pages/common/HomePage';
 import PasswordSetConfirmation from './pages/loginPassword/PasswordSetConfirmation';
+import InternalTransferPortal from './pages/portals/InternalTransferPortal';
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
           <Route path="/reset-password-email" element={<PasswordReset />} />
           <Route path="/reset-password" element={<PasswordResetConfirmation />} />
           <Route path="/set-password" element={<PasswordSetConfirmation />} />
+          <Route path="/internal-transfer-portal" element={< InternalTransferPortal />} />
         </Routes>
         <ThemeToggle />
       </BrowserRouter>

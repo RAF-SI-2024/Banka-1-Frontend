@@ -152,6 +152,18 @@ export const createCustomer = async (customerData) => {
   return await api.post("/api/customer", customerData);
 };
 
+
+
+export const fetchAccounts = async () => {
+  try {
+    const response = await api.get("/accounts");
+    return response.data.accounts;  // vraca niz racuna
+  } catch (error) {
+    console.error("Error fetching accounts:", error);
+    throw error;
+  }
+};
+
 export const fetchAccounts = async () => {
   try {
     const response = await api.get("/api/accounts");
@@ -162,14 +174,34 @@ export const fetchAccounts = async () => {
   }
 };
 
-export const fetchCardsByAccountId = async (accountId) => {
+
+
+export const createInternalTransfer = async (transferData) => {
+  try {
+    const response = await api.post("/internal-transfer", transferData);
+    return response;  // trebalo bi da sadrzi id transakcije : transferId
+  } catch (error) {
+    console.error("API Error during internal transfer: ", error);
+    throw error;
+  }
+};
+
+
+    export const fetchCardsByAccountId = async (accountId) => {
   try {
     const response = await api.get(`/api/cards/admin/${accountId}`);
     return response.data;
   } catch (error) {
     console.error('Error fetching cards:', error);
+
     throw error;
   }
 };
+
+
+export const verifyOTP  = async (otpData) => {
+  return await api.post("/otp/verification", otpData);
+};
+
 
 export default api;

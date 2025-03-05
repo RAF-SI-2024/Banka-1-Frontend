@@ -152,4 +152,37 @@ export const createCustomer = async (customerData) => {
   return await api.post("/api/customer", customerData);
 };
 
+// export const createPayment = async (paymentData) => {
+//   try {
+//     const response = await axios.post(`/api/payments/new-payment`, paymentData);
+//     return response.data;
+//   } catch (error) {
+//     console.error("Error creating payment:", error);
+//     throw error;
+//   }
+// };
+
+export const fetchAccounts = async (userId) => {
+  try {
+    console.log("userId = " + userId)
+    const response = await api.get('/accounts/user/${userId}');
+    return response.data;
+
+  } catch (error) {
+    console.error("Error fetching recipients:", error);
+    throw error;
+  }
+};
+
+export const fetchRecipients = async (accountId) => {
+  try {
+    console.log("AccountId = " + accountId)
+    const response = await api.get(`/receiver/${accountId}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching recipients:", error);
+    throw error;
+  }
+};
+
 export default api;

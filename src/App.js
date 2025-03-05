@@ -11,6 +11,7 @@ import PasswordReset from './pages/loginPassword/PasswordReset';
 import PasswordResetConfirmation from './pages/loginPassword/PasswordResetConfirmation';
 import HomePage from './pages/common/HomePage';
 import PasswordSetConfirmation from './pages/loginPassword/PasswordSetConfirmation';
+import NewPaymentPortal from "./pages/portals/NewPaymentPortal";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
           <Route path="/home" element={<HomePage />} />
           <Route path="/customer-portal" element={<CustomerPortal />} />
           <Route path="/employee-portal" element={<EmployeePortal />} />
+          <Route path="/new-payment-portal" element={<NewPaymentPortal />} />
           <Route path="/reset-password-email" element={<PasswordReset />} />
           <Route path="/reset-password" element={<PasswordResetConfirmation />} />
           <Route path="/set-password" element={<PasswordSetConfirmation />} />

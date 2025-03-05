@@ -117,6 +117,8 @@ const handleNavigation = (text) => {
     navigate('/customer-portal');
   } else if (text === 'Employees') {
     navigate('/employee-portal');
+  } else if (text == 'Cards') {
+    navigate('/cards');
   }
   setOpen(false);
 };
@@ -164,16 +166,16 @@ const handleNavigation = (text) => {
           </IconButton>
         </DrawerHeader>
         <Divider />
-        <List>
-          {/* Home button */}
-          <ListItem key="home" disablePadding>
-            <ListItemButton onClick={() => handleNavigation('Home')}>
-              <ListItemIcon>
-                <HomeIcon />
-              </ListItemIcon>
-              <ListItemText primary="Home" />
-            </ListItemButton>
-          </ListItem>
+            <List>
+              {/* Home button */}
+              <ListItem key="home" disablePadding>
+                <ListItemButton onClick={() => handleNavigation('Home')}>
+                  <ListItemIcon>
+                    <HomeIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Home" />
+                </ListItemButton>
+              </ListItem>
 
           {canRead && (
             <>

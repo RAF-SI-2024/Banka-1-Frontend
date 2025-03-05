@@ -193,7 +193,7 @@ export const fetchAccountsTransactions = async (accountId) => {
 };
 export const fetchAccounts = async () => {
   try {
-    const response = await api.get("/accounts");
+    const response = await api.get("/api/accounts");
     return response.data.accounts;  // vraca niz racuna
   } catch (error) {
     console.error("Error fetching accounts:", error);

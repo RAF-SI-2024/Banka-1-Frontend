@@ -38,7 +38,22 @@ const EmployeeBankAccountsPortal = () => {
     try {
       setLoading(true);
       const response = await fetchAccounts();
-      setAccounts(response);
+      
+      if (response.success && Array.isArray(response.data)) {
+        const transformedAccounts = response.data.map(account => ({
+          id: account.id,
+          accountNumber: account.accountNumber,
+          firstName: "N/A",  // placeholder for now
+          lastName: "N/A",   // placeholder for now
+          accountType: account.subtype === "STANDARD" ? "Personal" : "Business",
+          currencyType: account.type // This should show "CURRENT" or "FOREIGN"
+        }));
+        
+        console.log('Transformed accounts:', transformedAccounts); // for debugging
+        setAccounts(transformedAccounts);
+      } else {
+        throw new Error('Invalid data format received from server');
+      }
     } catch (err) {
       console.error('Error loading accounts:', err);
       setError('Failed to load accounts data');

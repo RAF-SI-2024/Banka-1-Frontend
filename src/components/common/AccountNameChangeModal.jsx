@@ -6,7 +6,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
-import { updateAccount } from "../../services/Axios";
+import { updateAccount } from "../../services/AxiosBanking";
 
 const AccountNameChangeModal = ({ open, onClose, account, onSave }) => {
   const [name, setName] = useState("");

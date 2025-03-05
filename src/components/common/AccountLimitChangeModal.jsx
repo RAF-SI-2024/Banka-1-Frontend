@@ -6,7 +6,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
-import { updateAccount } from "../../services/Axios"; // Pretpostavljamo da imate ovu funkciju
+import { updateAccount } from "../../services/AxiosBanking"; // Pretpostavljamo da imate ovu funkciju
 
 const AccountLimitChangeModal = ({ open, onClose, account, onSave }) => {
   const [limit, setLimit] = useState("");

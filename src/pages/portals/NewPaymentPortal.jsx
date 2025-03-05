@@ -4,7 +4,9 @@ import Sidebar from "../../components/mainComponents/Sidebar";
 import { toast, ToastContainer } from "react-toastify";
 import "../../styles/NewPaymentPortal.css";
 import PaymentResultModal from "../../components/common/PaymentResultModal";
-import {fetchAccount, fetchCustomers, fetchRecipients} from "../../services/Axios";
+import {fetchCustomers} from "../../services/AxiosUser";
+import {fetchAccountsForUser, fetchRecipients} from "../../services/AxiosBanking";
+
 import { Autocomplete, TextField } from "@mui/material";
 import {jwtDecode} from "jwt-decode";
 
@@ -27,7 +29,7 @@ const NewPaymentPortal =  () => {
 
     const loadAccounts = async () => {
         try {
-            const data = await fetchAccount(userId);
+            const data = await fetchAccountsForUser(userId);
             setAccounts(data);
         } catch (err) {
             console.error("Failed to fetch accounts:", err);

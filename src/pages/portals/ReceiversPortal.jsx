@@ -7,10 +7,10 @@ import RecipientModal from "../../components/common/RecipientModal";
 import {
     createRecipient,
     deleteRecipient,
-    fetchAccount,
+    fetchAccountsForUser,
     fetchRecipients,
     updateRecipient
-} from "../../services/Axios";
+} from "../../services/AxiosBanking";
 
 
 
@@ -59,7 +59,7 @@ function ReceiversPortal() {
 
     const loadAccounts = async () => {  //ucitavanje racuna
         try {
-            const data = await fetchAccount(userId);
+            const data = await fetchAccountsForUser(userId);
             setAccounts(data);
         } catch (err) {
             console.error("Failed to fetch accounts:", err);

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Modal, Box, Typography, Button, Select, MenuItem, FormControl, InputLabel } from "@mui/material";
 import { useCards } from "../../context/CardContext";
-import { fetchCustomerById } from "../../services/Axios.js"; 
+import { fetchCustomerById } from "../../services/AxiosUser.js";
 
 const CreateCardModal = ({ open, onClose, accountId }) => {
   const { addCard } = useCards();

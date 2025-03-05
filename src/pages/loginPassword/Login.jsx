@@ -11,7 +11,7 @@ import { useNavigate, Link as RouterLink } from 'react-router-dom'; // Added Rou
 // Import our custom components
 import AuthCard from '../../components/loginComponents/AuthCard';
 import PasswordField from '../../components/loginComponents/Password';
-import { loginUser } from '../../services/Axios'; // Updated import
+import { loginUser } from '../../services/AxiosUser'; // Updated import
 
 const Login = () => {
     const navigate = useNavigate();

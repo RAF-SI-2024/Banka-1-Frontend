@@ -8,7 +8,7 @@ import {
     fetchCustomerById,
     updateCustomer,
     createCustomer
-} from "../../services/Axios";
+} from "../../services/AxiosUser";
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import AddButton from "../../components/common/AddButton";
@@ -157,6 +157,7 @@ const CustomerPortal = () => {
     // Add create customer handler
     const handleCreateCustomer = async (customerData) => {
         try {
+            // otvori se portal za kreiranje racuna
             customerData.birthDate = transformDateForApi(customerData.birthDate);
             console.log(customerData);
             await createCustomer(customerData);
@@ -251,6 +252,8 @@ const CustomerPortal = () => {
                     onSave={handleCreateCustomer}
                     title="Create New Customer"
                 />
+
+                 {/*ovde ce biti ona 3 racuna*/}
 
                 <ToastContainer position="bottom-right" />
             </div>

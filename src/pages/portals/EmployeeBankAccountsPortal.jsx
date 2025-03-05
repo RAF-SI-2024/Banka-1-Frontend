@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import Sidebar from '../../components/mainComponents/Sidebar';
 import SearchDataTable from '../../components/tables/SearchDataTable';
 import AddButton from '../../components/common/AddButton';
-import { fetchAccounts } from '../../services/Axios';
+import { fetchAccounts } from '../../services/AxiosBanking';
 import { toast } from 'react-toastify';
 import NewAccountModal from "../../components/common/NewAccountModal";
 import NewCurrentAccountModal from "../../components/common/NewCurrentAccountModal";

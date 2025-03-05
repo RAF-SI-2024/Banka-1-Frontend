@@ -1,6 +1,6 @@
 
 import React, { createContext, useContext, useState } from "react";
-import { fetchUserCards, createCard, changeCardName, changeCardLimit, updateCardStatus } from "../services/Axios.js";
+import { fetchUserCards, createCard, changeCardName, changeCardLimit, updateCardStatus } from "../services/AxiosBanking.js";
 
 const CardContext = createContext();
 

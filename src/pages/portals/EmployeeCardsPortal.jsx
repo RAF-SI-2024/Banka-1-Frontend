@@ -9,7 +9,7 @@ import {
 import { useLocation, useNavigate } from 'react-router-dom';
 import Sidebar from '../../components/mainComponents/Sidebar';
 import DataTable from '../../components/tables/DataTable';
-import { fetchCardsByAccountId } from '../../services/Axios';
+import { fetchCardsByAccountId } from '../../services/AxiosBanking';
 import { toast } from 'react-toastify';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 

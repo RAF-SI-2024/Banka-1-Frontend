@@ -9,7 +9,7 @@ import AuthCard from '../../components/loginComponents/AuthCard';
 import PasswordField from '../../components/loginComponents/Password';
 import Alert from '@mui/material/Alert';
 import CircularProgress from '@mui/material/CircularProgress';
-import { setupPassword } from '../../services/Axios'; 
+import { setupPassword } from '../../services/AxiosUser';
 
 const PasswordSetConfirmation = () => {
     const navigate = useNavigate();
@@ -72,7 +72,7 @@ const PasswordSetConfirmation = () => {
         setIsSubmitting(true);
 
         try {
-            // Use the setupPassword function from Axios.js
+            // Use the setupPassword function from AxiosUser.js
             await setupPassword(token, password);
             setSuccess(true);
         } catch (err) {

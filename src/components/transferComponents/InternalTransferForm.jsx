@@ -5,7 +5,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import VerificationModal from "./VerificationModal";
-import { createInternalTransfer, verifyOTP, fetchAccounts } from "../../services/Axios";
+import { createInternalTransfer, verifyOTP, fetchAccounts } from "../../services/AxiosBanking";
 
 const InternalTransferForm = () => {
     const [accounts, setAccounts] = useState([]);

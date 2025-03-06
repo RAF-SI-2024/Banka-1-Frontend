@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { AlertDialog } from '@base-ui-components/react/alert-dialog';
-import styles from "./../../styles/Logout.module.css"
+import styles from "./../../styles/logout.module.css"
 import { useNavigate } from 'react-router-dom';
 import { logoutUser } from '../../services/AxiosUser';
 

@@ -106,7 +106,6 @@ export const fetchAccountsId = async (id) => {
 
 export const fetchRecipients = async (accountId) => {
     try {
-        console.log("AccountId = " + accountId);
         const response = await apiBanking.get(`/receiver/${accountId}`);
         return response.data;
     } catch (error) {
@@ -139,10 +138,11 @@ export const updateRecipient = async (
 
 export const createRecipient = async (accountId, recipientData) => {
     try {
+
         const newReceiverData = {
             ownerAccountId: accountId,
             accountNumber: recipientData.accountNumber,
-            fullName: recipientData.fullName,
+            fullName: recipientData.fullName
         };
 
         const response = await apiBanking.post(`/receiver`, newReceiverData);

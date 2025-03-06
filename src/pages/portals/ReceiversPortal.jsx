@@ -38,7 +38,13 @@ function ReceiversPortal() {
 
 
     const openEditModal =  (recipient) => {
-        setEditRecipient(recipient);
+
+        const newRecipient = {
+            id: recipient.id,
+            fullName: recipient.firstName + " " + recipient.lastName,
+            accountNumber: recipient.accountNumber
+        }
+        setEditRecipient(newRecipient);
         setIsEditModalOpen(true);
     };
 
@@ -60,7 +66,8 @@ function ReceiversPortal() {
     const loadAccounts = async () => {  //ucitavanje racuna
         try {
             const data = await fetchAccountsForUser(userId);
-            setAccounts(data);
+            setAccounts(data.data.accounts);
+
         } catch (err) {
             console.error("Failed to fetch accounts:", err);
         }
@@ -70,7 +77,7 @@ function ReceiversPortal() {
     const loadRecipients = async (accountId) => {
         try {
             const data = await fetchRecipients(accountId);
-            setRecipients(data);
+            setRecipients( data.data.receivers);
         } catch (err) {
             console.error("Failed to fetch recipients:", err);
         }
@@ -80,9 +87,9 @@ function ReceiversPortal() {
     const handleCreateRecipient = async (recipient) => {
 
         try {
-            const createdRecipient = await createRecipient(selectedAccount, recipient);
+            const selectedAcc = accounts.find(acc => acc.id.toString() === selectedAccount);
+            const createdRecipient = await createRecipient(selectedAcc.accountNumber, recipient);
 
-            const selectedAcc = accounts.find(acc => acc.ownerID.toString() === selectedAccount);
             await loadRecipients(selectedAcc.id);
             closeAddModal();
         } catch (error) {
@@ -95,9 +102,10 @@ function ReceiversPortal() {
         console.log(recipient)
 
         try {
-            await updateRecipient(selectedAccount ,recipient.id, recipient);
+            const selectedAcc = accounts.find(acc => acc.id.toString() === selectedAccount);
 
-            const selectedAcc = accounts.find(acc => acc.ownerID.toString() === selectedAccount);
+            await updateRecipient(selectedAcc.accountNumber ,recipient.id, recipient);
+
             await loadRecipients(selectedAcc.id);
             closeEditModal();
         } catch (error) {
@@ -106,14 +114,11 @@ function ReceiversPortal() {
     };
 
 
-
-
-
     const handleDeleteRecipient = async (recipientId) => {
 
         try {
             await deleteRecipient(recipientId);
-            const selectedAcc = accounts.find(acc => acc.ownerID.toString() === selectedAccount);
+            const selectedAcc = accounts.find(acc => acc.id.toString() === selectedAccount);
             await loadRecipients(selectedAcc.id);
         } catch (error) {
             console.error("Error deleting recipient:", error);
@@ -122,14 +127,11 @@ function ReceiversPortal() {
     };
     const handleAccountSelection = (accountId) => {
         if (!accountId) return;
-
         setSelectedAccount(accountId);
 
-        const selectedAcc = accounts.find(acc => acc.ownerID.toString() === accountId);
 
+        const selectedAcc = accounts.find(acc => acc.id.toString() === accountId);
         if (selectedAcc) {
-            console.log("Selected Account:", selectedAcc);
-            console.log("Account Number:", selectedAcc.accountNumber);
 
             loadRecipients(selectedAcc.id);
         }
@@ -175,7 +177,7 @@ function ReceiversPortal() {
                     <tbody>
                     {recipients.map((recipient) => (
                         <tr key={recipient.id}>
-                            <td>{recipient.fullName}</td>
+                            <td>{recipient.firstName + " " + recipient.lastName}</td>
                             <td>{recipient.accountNumber}</td>
                             <td>
                                 <button

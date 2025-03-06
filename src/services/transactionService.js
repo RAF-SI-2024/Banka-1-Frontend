@@ -69,7 +69,7 @@ export const fetchAccountsTransactions = async (accountId) => {
 
         if (response.data.success) {
             let transactions = response.data.data?.transactions || [];
-            transactions.sort((a, b) => b.timestamp - a.timestamp);
+            transactions.sort((a, b) => b.timestamp - a.timestamp); // Sortiranje po vremenu
 
             console.log(`Transactions for account ${accountId}:`, transactions);
             return transactions.map((t) => ({
@@ -99,9 +99,56 @@ export const fetchAccountsTransactions = async (accountId) => {
     } catch (error) {
         if (error.response?.status === 404) {
             console.warn(`No transactions found for account ${accountId} (404 Not Found)`);
-            return [];
+            return []; // Umesto error-a, vraćamo prazan niz
         }
         console.error("Error fetching account transactions:", error.response?.data || error.message);
         return [];
+    }
+};
+
+export const fetchTransactionDetails = async (transactionId) => {
+    try {
+        if (!transactionId) {
+            console.warn("Transaction ID is missing");
+            return null;
+        }
+
+        console.log(`Fetching details for transaction ID: ${transactionId}...`);
+        const response = await apiBanking.get(`/transactions/${transactionId}`);
+
+        if (response.status === 204 || !response.data.success) {
+            console.warn(`No details found for transaction ID: ${transactionId}`);
+            return null;
+        }
+
+        if (response.data.success) {
+            const transaction = response.data.data;
+
+            return {
+                id: transaction.id || "N/A",
+                sender: transaction.sender || "N/A",
+                senderAccount: transaction.senderAccount || "N/A",
+                receiver: transaction.receiver || "N/A",
+                receiverAccount: transaction.receiverAccount || "N/A",
+                amount: transaction.amount ? `${transaction.amount} ${transaction.currency || "N/A"}` : "N/A",
+                currency: transaction.currency || "N/A",
+                status: transaction.status || "N/A",
+                date: transaction.timestamp ? new Date(transaction.timestamp).toLocaleDateString() : "N/A",
+                time: transaction.timestamp ? new Date(transaction.timestamp).toLocaleTimeString() : "N/A",
+                paymentPurpose: transaction.paymentPurpose || "N/A",
+                paymentCode: transaction.paymentCode || "N/A",
+                referenceNumber: transaction.referenceNumber || "N/A"
+            };
+        } else {
+            console.warn(`No transaction details found for ID ${transactionId}`);
+            return null;
+        }
+    } catch (error) {
+        if (error.response?.status === 404) {
+            console.warn(`Transaction details not found (404) for ID: ${transactionId}`);
+            return null; // Vraćamo `null` umesto bacanja error-a
+        }
+        console.error("Error fetching transaction details:", error.response?.data || error.message);
+        return null;
     }
 };

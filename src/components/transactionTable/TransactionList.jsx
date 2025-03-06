@@ -24,7 +24,7 @@ const TransactionList = ({ transactions = [] }) => {
                     <TableBody>
                         {transactions.map((transaction, index) => (
                             <TransactionItem
-                                key={`${transaction.id}-${index}`} // Unique key
+                                key={`${transaction.id}-${index}`} // Unikatni key
                                 transaction={transaction}
                                 onDoubleClick={() => setSelectedTransaction(transaction)}
                             />

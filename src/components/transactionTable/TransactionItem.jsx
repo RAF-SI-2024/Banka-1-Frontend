@@ -2,19 +2,21 @@ import React from "react";
 import { TableRow, TableCell, Avatar, Tooltip } from "@mui/material";
 
 // Komponenta prikazuje jednu transakciju u tabeli
-
 const TransactionItem = ({ transaction, onDoubleClick }) => {
-    const receiverName = transaction.receiver || "Unknown Account";
+    const receiverName = transaction.receiverName || "Unknown";
+    const amount = transaction.amount ? `${transaction.amount} ${transaction.currency || ""}` : "0.00";
+    const status = transaction.status || "Pending";
 
-    // Funkcija za Avatar(prvo slovo imena)
     const getInitial = (name) => (name ? name.charAt(0).toUpperCase() : "?");
 
     return (
         <TableRow
             onDoubleClick={onDoubleClick}
-            sx={{ cursor: "pointer", "&:hover": { backgroundColor: "#44475a" } }}
+            sx={{
+                cursor: onDoubleClick ? "pointer" : "default",
+                "&:hover": { backgroundColor: "#44475a" },
+            }}
         >
-            {/* Prikaz primaoca sa avatarom */}
             <TableCell sx={{ color: "#fff", display: "flex", alignItems: "center", gap: 1 }}>
                 <Tooltip title={receiverName} arrow>
                     <Avatar sx={{ bgcolor: "#efefef", color: "#000", fontWeight: "bold" }}>
@@ -23,12 +25,8 @@ const TransactionItem = ({ transaction, onDoubleClick }) => {
                 </Tooltip>
                 {receiverName}
             </TableCell>
-            {/* Status transakcije */}
-            <TableCell sx={{ color: "#fff" }}>{transaction.status || "N/A"}</TableCell>
-            {/* Iznos transakcije sa valutom*/}
-            <TableCell sx={{ color: "#fff", textAlign: "right" }}>
-                {transaction.amount ? `${transaction.amount} ${transaction.currency || ""}` : "N/A"}
-            </TableCell>
+            <TableCell sx={{ color: "#fff" }}>{status}</TableCell>
+            <TableCell sx={{ color: "#fff", textAlign: "right" }}>{amount}</TableCell>
         </TableRow>
     );
 };

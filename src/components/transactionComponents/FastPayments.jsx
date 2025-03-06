@@ -2,7 +2,12 @@ import React, {useEffect, useState} from "react";
 import { Button, Box, Typography} from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import AddFastPayment from "./AddFastPayment";
-import {addFastPaymentPerson, getFastPaymentPersons} from "../../services/TansactionService";
+import {addFastPaymentPerson} from "../../services/TansactionService";
+import {
+    createRecipient,
+    fetchRecipientsForFast,
+    getUserIdFromToken
+} from "../../services/AxiosBanking";
 
 
 
@@ -15,14 +20,28 @@ const FastPayments = () => {
     const [recipient, setRecipient] = useState({ name: "", accountNumber: "" });
     const [recipientList, setRecipientList] = useState([]);
     const [error, setError] = useState("");
+    const [loading, setLoading] = useState(true);
 
-    // Učitavanje mockovanih podataka sa API-ja, nema rute i dalje
     useEffect(() => {
-        const fetchRecipients = async () => {
-            const data = await getFastPaymentPersons();
-            setRecipientList(data);
-        };
-        fetchRecipients();
+        const userId = getUserIdFromToken();
+        if (userId) {
+            const fetchRecipients1 = async () => {
+                try {
+                    setLoading(true);
+                    const data = await fetchRecipientsForFast(userId);
+                    console.log(data);
+                    setRecipientList(data || []);
+                } catch {
+                    setError("Failed to load recipients.");
+                } finally {
+                    setLoading(false);
+                }
+            };
+            fetchRecipients1();
+        } else {
+            setError("User ID not found.");
+            setLoading(false);
+        }
     }, []);
 
 
@@ -35,16 +54,41 @@ const FastPayments = () => {
             return;
         }
 
+        const userId = getUserIdFromToken();
+        if (!userId) {
+            setError("User ID not found.");
+            return;
+        }
+
+        const newRecipient = {
+            ownerAccountId: userId,  // Dinamički podatak
+            accountNumber: recipient.accountNumber,
+            fullName: recipient.name
+        };
+
         try {
-            const newRecipient = await addFastPaymentPerson(recipient);
-            setRecipientList([...recipientList, newRecipient]);
+
+            await createRecipient(userId, newRecipient);
+
+            const updatedRecipients = await fetchRecipientsForFast(userId);
+
+
+            setRecipientList(updatedRecipients);
+
+
+
+            // Resetuj formu
             setOpenModal(false);
             setRecipient({ name: "", accountNumber: "" });
             setError("");
+
+
         } catch (err) {
-            setError(err);
+            setError("Failed to add recipient.");
         }
     };
+
+
 
 
 
@@ -62,9 +106,9 @@ const FastPayments = () => {
                         variant="contained"
                         sx={{ marginRight: 1 }}
                         //ovde kad se klikne treba da se otvori stranica za placanje sa datim
-                        onClick={() => navigate("./pages/portal/NewPaymentPortal", { state: { recipient } })}
+                        onClick={() => navigate("/new-payment-portal", { state: { recipient } })}
                     >
-                        {recipient.name}
+                        {recipient.firstName}{recipient.lastName}
                     </Button>
                 ))}
 

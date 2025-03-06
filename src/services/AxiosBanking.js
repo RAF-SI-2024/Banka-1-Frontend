@@ -283,7 +283,7 @@ export const updateAccount = async (account) => {
     }
 };
 
-export const gcreateInternalTransfer = async (transferData) => {
+export const createInternalTransfer = async (transferData) => {
     try {
         const response = await apiBanking.post("/internal-transfer", transferData);
         return response.data; // trebalo bi da sadrzi id transakcije : transferId

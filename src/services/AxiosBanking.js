@@ -27,7 +27,7 @@ apiBanking.interceptors.request.use(
         return Promise.reject(error);
     }
 );
-const getUserIdFromToken = () => {
+export const getUserIdFromToken = () => {
     const token = localStorage.getItem('token');
     if(!token) return null;
     try{
@@ -305,4 +305,61 @@ export const verifyOTP = async (otpData) => {
     return await apiBanking.post("/otp/verification", otpData);
 };
 
+export const fetchAccountsId1 = async (id) => {
+    try {
+        const response = await apiBanking.get(`/accounts/user/${id}`, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+        });
+
+        // Pristupanje pravom nizu
+        const accounts = response.data.data.accounts;
+        console.log(response.data.data.accounts)
+
+        if (!Array.isArray(accounts)) {
+            console.error("Invalid response format:", response.data);
+            return [];
+        }
+
+        return accounts.map((account) => ({
+            id: account.id,
+            name: account.ownerID,
+            number: account.accountNumber,
+            balance: account.balance,
+            subtype: account.subtype,
+
+        }));
+
+    } catch (error) {
+        console.error(`Error fetching account with ID ${id}:`, error);
+        return null;
+    }
+};
+
+export const fetchRecipientsForFast = async (userId) => {
+    try {
+        console.log("UserId = " + userId);
+        const response = await apiBanking.get(`/receiver/${userId}`);
+
+        // Logujemo celu strukturu odgovora
+        console.log("Response data:", response.data);
+
+        // Proveravamo da li postoji 'receivers' unutar 'data'
+        const receivers = response.data?.data?.receivers;
+
+        if (Array.isArray(receivers)) {
+            const reversedReceivers = receivers.reverse();
+
+            // Vraćamo prve tri osobe nakon obrtanja niza
+            return reversedReceivers.slice(0, 3);
+        } else {
+            console.error("Response data is not an array:", response.data);
+            return [];  // Ako nije niz, vraćamo prazan niz
+        }
+    } catch (error) {
+        console.error("Error fetching recipients:", error);
+        throw error;
+    }
+};
 export default apiBanking;

@@ -68,10 +68,11 @@ const EmployeeCardsPortal = () => {
           >
             Back to Accounts
           </Button>
-          <Typography variant="h4" component="h1">
-            Account information
-          </Typography>
+
         </Box>
+        <Typography variant="h4" component="h1">
+          Account information
+        </Typography>
 
         {selectedAccount ? (
           <>
@@ -80,9 +81,10 @@ const EmployeeCardsPortal = () => {
               sx={{ 
                 p: 3, 
                 mb: 4,
-                backgroundColor: '#f5f5f5',
+                backgroundColor: 'rgba(25,25,25,0.01)',
                 border: '1px solid #e0e0e0',
-                boxShadow: '0 2px 4px rgba(0,0,0,0.05)'
+                boxShadow: '0 2px 4px rgba(0,0,0,0.05)',
+                mt: 2,
               }}
             >
               <Grid container spacing={2} alignItems="center">

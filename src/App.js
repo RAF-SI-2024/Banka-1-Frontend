@@ -37,12 +37,19 @@ function App() {
                         {/* Public Routes */}
                         <Route path="/" element={<Landing />} />
                         <Route path="/login" element={<Login />} />
-                        <Route path="/home" element={<HomePage />} />
                         <Route path="/reset-password-email" element={<PasswordReset />} />
                         <Route path="/reset-password" element={<PasswordResetConfirmation />} />
                         <Route path="/set-password" element={<PasswordSetConfirmation />} />
 
                         {/* Employee-Only Routes (Admin or  not) */}
+                        <Route
+                            path="/admin-home"
+                            element={
+                                <AuthGuard allowedPositions={["WORKER", "MANAGER", "DIRECTOR", "HR", "ADMIN", "NONE"]}>
+                                    <HomePage />
+                                </AuthGuard>
+                            }
+                        />
                         <Route
                             path="/customer-portal"
                             element={

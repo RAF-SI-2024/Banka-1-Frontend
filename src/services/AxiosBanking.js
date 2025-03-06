@@ -106,7 +106,6 @@ export const fetchAccountsId = async (id) => {
 
 export const fetchRecipients = async (accountId) => {
     try {
-        console.log("AccountId = " + accountId);
         const response = await apiBanking.get(`/receiver/${accountId}`);
         return response.data;
     } catch (error) {
@@ -139,10 +138,11 @@ export const updateRecipient = async (
 
 export const createRecipient = async (accountId, recipientData) => {
     try {
+
         const newReceiverData = {
             ownerAccountId: accountId,
             accountNumber: recipientData.accountNumber,
-            fullName: recipientData.fullName,
+            fullName: recipientData.fullName
         };
 
         const response = await apiBanking.post(`/receiver`, newReceiverData);
@@ -286,7 +286,7 @@ export const updateAccount = async (account) => {
 export const createInternalTransfer = async (transferData) => {
     try {
         const response = await apiBanking.post("/internal-transfer", transferData);
-        return response; // trebalo bi da sadrzi id transakcije : transferId
+        return response.data; // trebalo bi da sadrzi id transakcije : transferId
     } catch (error) {
         console.error("API Error during internal transfer: ", error);
         throw error;
@@ -304,6 +304,7 @@ export const deleteRecipient = async (id) => {
 };
 
 export const verifyOTP = async (otpData) => {
+    console.log(otpData);
     return await apiBanking.post("/otp/verification", otpData);
 };
 

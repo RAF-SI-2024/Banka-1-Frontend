@@ -70,6 +70,7 @@ const InternalTransferForm = () => {
 
             // trebalo bi da je odgovor u formatu: { transferId: "neki-id" }
             const transactionId = response.data.transferId;
+            //console.log(response.data);
 
             console.log("Transaction ID: ", transactionId);
 
@@ -88,7 +89,7 @@ const InternalTransferForm = () => {
 
         const otpVerificationData = {
             transferId: transactionId, // postavljen nakon sto se kreira transakcija
-            otpCode: verificationCode
+            OtpCode: verificationCode
         };
 
         try {

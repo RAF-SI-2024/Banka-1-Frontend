@@ -1,11 +1,29 @@
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 
-// API BASE URL - promeni ako backend ima drugi endpoint
-const API_BASE_URL = "http://localhost:8080/api/transactions";
+const apiBanking = axios.create({
+    baseURL: "http://localhost:8082",
+    headers: {
+        "Content-Type": "application/json",
+    },
+});
+
+apiBanking.interceptors.request.use(
+    (config) => {
+        const token = localStorage.getItem("token");
+        if (token) {
+            config.headers.Authorization = `Bearer ${token}`;
+            console.log(`API Request: ${config.method.toUpperCase()} ${config.url} - Token Set`);
+        }
+        return config;
+    },
+    (error) => {
+        return Promise.reject(error);
+    }
+);
 
 /**
- * Dohvata ID korisnika iz JWT tokena.
+ * Izvlači userId iz JWT tokena
  */
 const getUserIdFromToken = () => {
     const token = localStorage.getItem("token");
@@ -20,103 +38,104 @@ const getUserIdFromToken = () => {
 };
 
 /**
- * Fetchuje sve transakcije za trenutno prijavljenog korisnika sa backend-a.
- * Ako API ne radi, vraća prazan niz.
+ * Dohvata sve račune ulogovanog korisnika
  */
-export const fetchTransactions = async () => {
+export const fetchAccountsForUser = async () => {
     try {
-        const response = await axios.get(`${API_BASE_URL}`, {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem("token")}`
-            }
-        });
+        const userId = getUserIdFromToken(); // Automatski dohvata userId
+        if (!userId) {
+            console.warn("User ID is missing from token");
+            return [];
+        }
 
-        // Mapiramo odgovor tako da format ostane isti kao ranije
-        return response.data.map((t) => ({
-            id: t.id,
-            sender: t.sender,
-            senderAccount: t.senderAccount,
-            receiver: t.receiver,
-            receiverAccount: t.receiverAccount,
-            amount: t.amount,
-            currency: t.currency,
-            status: t.status,
-            date: new Date(t.timestamp).toLocaleDateString(),
-            time: new Date(t.timestamp).toLocaleTimeString(),
-            paymentPurpose: t.description,
-            paymentCode: t.paymentCode,
-            referenceNumber: t.referenceNumber
-        }));
+        console.log(` Fetching accounts for user ID: ${userId}`);
+        const response = await apiBanking.get(`/accounts/user/${userId}`);
+
+        if (response.data.success && response.data.data?.accounts.length > 0) {
+            console.log(" Accounts fetched:", response.data.data.accounts);
+            return response.data.data.accounts;
+        } else {
+            console.warn(`No accounts found for user ${userId}`);
+            return [];
+        }
     } catch (error) {
-        console.error("Error fetching transactions:", error);
+        console.error(" Error fetching user accounts:", error.response?.data || error.message);
         return [];
     }
 };
 
 /**
- * Fetchuje detalje o pojedinačnoj transakciji na osnovu ID-a.
+ * Dohvata transakcije za određeni račun
  */
-export const fetchTransactionDetails = async (id) => {
+export const fetchAccountsTransactions = async (accountId) => {
     try {
-        const response = await axios.get(`${API_BASE_URL}/${id}`, {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem("token")}`
-            }
-        });
+        if (!accountId) {
+            console.warn(" Account ID is missing");
+            return [];
+        }
 
-        // Mapiramo odgovor u isti format kao ranije
-        const transaction = response.data;
-        return {
-            id: transaction.id,
-            sender: transaction.sender,
-            senderAccount: transaction.senderAccount,
-            receiver: transaction.receiver,
-            receiverAccount: transaction.receiverAccount,
-            amount: transaction.amount,
-            currency: transaction.currency,
-            status: transaction.status,
-            date: new Date(transaction.timestamp).toLocaleDateString(),
-            time: new Date(transaction.timestamp).toLocaleTimeString(),
-            paymentPurpose: transaction.description,
-            paymentCode: transaction.paymentCode,
-            referenceNumber: transaction.referenceNumber
-        };
+        console.log(`Fetching transactions for account ID: ${accountId}...`);
+        const response = await apiBanking.get(`/accounts/${accountId}/transactions`);
+
+        if (response.data.success) {
+            let transactions = response.data.data?.transactions || [];
+            transactions.sort((a, b) => b.timestamp - a.timestamp); // Sortiranje po vremenu
+
+            console.log(`Transactions for account ${accountId}:`, transactions);
+
+            return transactions.map((t) => ({
+                id: t.id || "N/A",
+                sender: t.fromAccountId?.ownerID || "N/A",
+                senderAccount: t.fromAccountId?.accountNumber || "N/A",
+                receiver: t.toAccountId?.ownerID || "N/A",
+                receiverAccount: t.toAccountId?.accountNumber || "N/A",
+                amount: t.amount ? `${t.amount} ${t.currency?.code || "N/A"}` : "N/A",
+                currency: t.currency?.code || "N/A",
+                status: t.transfer?.status || "N/A",
+                date: t.timestamp ? new Date(t.timestamp).toLocaleDateString() : "N/A",
+                time: t.timestamp ? new Date(t.timestamp).toLocaleTimeString() : "N/A",
+                paymentPurpose: t.transfer?.paymentDescription || "N/A",
+                paymentCode: t.transfer?.paymentCode || "N/A",
+                referenceNumber: t.transfer?.paymentReference || "N/A",
+                receiverName: t.transfer?.receiver || "N/A",
+                receiverAddress: t.transfer?.address || "N/A",
+                transferType: t.transfer?.type || "N/A",
+                completedAt: t.transfer?.completedAt ? new Date(t.transfer.completedAt).toLocaleString() : "N/A",
+                loanId: t.loanId || "N/A"
+            }));
+        } else {
+            console.warn(` Error fetching transactions for account ${accountId}: ${response.data?.error || "Unknown error"}`);
+            return [];
+        }
     } catch (error) {
-        console.error(`Error fetching transaction with ID ${id}:`, error);
-        return null;
+        console.error(" Error fetching account transactions:", error.response?.data || error.message);
+        return [];
     }
 };
 
-// OVAKO TREBA DA IZGELDA DTO DA BI MOGLO IME DA IDE U DETALJE.
-/**]\[
- {
- "id": 1,
- "sender": "Marko Marković",
- "senderAccount": "205-123456789-01",
- "receiver": "Petar Petrović",
- "receiverAccount": "160-987654321-02",
- "amount": 100.00,
- "currency": "RSD",
- "status": "COMPLETED",
- "timestamp": "2025-03-01T14:35:00Z",
- "description": "Money Transfer",
- "paymentCode": "289",
- "referenceNumber": "12345678"
- },
- {
- "id": 2,
- "sender": "Jovan Jovanović",
- "senderAccount": "205-999988877-01",
- "receiver": "Ana Anić",
- "receiverAccount": "160-555566667-02",
- "amount": 250.00,
- "currency": "EUR",
- "status": "PENDING",
- "timestamp": "2025-03-02T09:15:00Z",
- "description": "Freelance Payment",
- "paymentCode": "333",
- "referenceNumber": "98765432"
- }
- ]
+/**
+ * Dohvata SVE transakcije svih računa korisnika
  */
+export const fetchAllUserTransactions = async () => {
+    try {
+        // 1. Dohvati račune korisnika
+        const accounts = await fetchAccountsForUser();
 
+        if (!accounts || accounts.length === 0) {
+            console.warn(" No accounts found for user");
+            return [];
+        }
+
+        const transactionsPromises = accounts.map((account) => fetchAccountsTransactions(account.id));
+
+        const allTransactions = (await Promise.all(transactionsPromises)).flat();
+
+        allTransactions.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+
+        console.log("All user transactions fetched:", allTransactions);
+        return allTransactions;
+    } catch (error) {
+        console.error(" Error fetching all user transactions:", error.message);
+        return [];
+    }
+};

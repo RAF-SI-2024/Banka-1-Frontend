@@ -81,7 +81,7 @@ const TransactionDetailsModal = ({ open, onClose, transaction }) => {
                             <TextField fullWidth label="Payment Purpose" value={transaction.paymentPurpose} InputProps={{ readOnly: true }} />
                         </Grid>
                         <Grid item xs={6}>
-                            <TextField fullWidth label="Amount" value={`${transaction.amount} ${transaction.currency}`} InputProps={{ readOnly: true }} />
+                            <TextField fullWidth label="Amount" value={`${transaction.amount}`} InputProps={{ readOnly: true }} />
                         </Grid>
                         <Grid item xs={6}>
                             <TextField fullWidth label="Payment Code" value={transaction.paymentCode} InputProps={{ readOnly: true }} />

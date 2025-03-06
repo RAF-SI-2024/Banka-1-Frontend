@@ -44,10 +44,11 @@ const AccountTransactionsList = ({ accountId }) => {
 
         const response = await fetchAccountsTransactions(accountId);
         const data = response.data.transactions; 
+        console.log(data);
         const formattedTransactions = data.map((transaction) => ({
           id: transaction.id,
-          date: new Date(transaction.date).toLocaleString(),
-          /*date: formatLogDate(transaction.date),*/ /*mozda treba ova da se iskoristi*/
+          date: new Date(transaction.transfer.createdAt).toLocaleDateString(),
+          /*date: formatLogDate(transaction.date), /*mozda treba ova da se iskoristi*/
           amount: transaction.amount,
           description: transaction.description,
         }));

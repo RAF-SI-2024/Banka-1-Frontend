@@ -21,9 +21,8 @@ const TransactionDetailsModal = ({ open, onClose, transaction }) => {
 
     // Funkcija za generisanje i preuzimanje PDF
     const handleDownloadPDF = () => {
-        const formattedDate = new Date(transaction.date).toISOString().split("T")[0];
 
-        const fileName = `Payment_${transaction.receiver.replace(/\s+/g, "_")}_${formattedDate}.pdf`;
+        const fileName = `Payment.pdf`;
 
         const docDefinition = {
             content: [
@@ -39,7 +38,7 @@ const TransactionDetailsModal = ({ open, onClose, transaction }) => {
                             ["Recipient Name", transaction.receiver],
                             ["Recipient Account", transaction.receiverAccount],
                             ["Payment Purpose", transaction.paymentPurpose],
-                            ["Amount", `${transaction.amount} ${transaction.currency}`],
+                            ["Amount", `${transaction.amount} `],
                             ["Payment Code", transaction.paymentCode],
                             ["Reference Number", transaction.referenceNumber],
                             ["Date & Time", `${transaction.date} at ${transaction.time}`]
@@ -56,7 +55,7 @@ const TransactionDetailsModal = ({ open, onClose, transaction }) => {
                 }
             }
         };
-    // Download pdf-a
+        // Download pdf-a
         pdfMake.createPdf(docDefinition).download(fileName);
     };
 
@@ -93,7 +92,7 @@ const TransactionDetailsModal = ({ open, onClose, transaction }) => {
                             <TextField fullWidth label="Payment Purpose" value={formatValue(transaction.paymentPurpose)} InputProps={{ readOnly: true }} />
                         </Grid>
                         <Grid item xs={6}>
-                            <TextField fullWidth label="Amount" value={`${formatValue(transaction.amount)} ${formatValue(transaction.currency)}`} InputProps={{ readOnly: true }} />
+                            <TextField fullWidth label="Amount" value={`${formatValue(transaction.amount)} `} InputProps={{ readOnly: true }} />
                         </Grid>
                         <Grid item xs={6}>
                             <TextField fullWidth label="Payment Code" value={formatValue(transaction.paymentCode)} InputProps={{ readOnly: true }} />

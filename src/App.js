@@ -86,8 +86,6 @@ function App() {
                                 </AuthGuard>
                             }
                         />
-<<<<<<< Updated upstream
-=======
                           <Route
                               path="/employee-bank-accounts-portal"
                               element={
@@ -154,7 +152,6 @@ function App() {
                                   </AuthGuard>
                               }
                           />
->>>>>>> Stashed changes
 
                         {/* Customer-Only Routes */}
                         <Route
@@ -220,6 +217,32 @@ function App() {
             </CardProvider>
         </ThemeProvider>
     );
+  return (
+    <ThemeProvider>
+      <CardProvider>  {/* Dodala globalni CardProvider */}
+        <CssBaseline />
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Landing />} /> 
+            <Route path="/login" element={<Login />} />
+            <Route path="/home" element={<HomePage />} />
+            <Route path="/cards" element={<CardsPage/>} />
+            <Route path="/customer-portal" element={<CustomerPortal />} />
+            <Route path="/employee-portal" element={<EmployeePortal />} />
+            <Route path="/employee-bank-accounts-portal" element={<EmployeeBankAccountsPortal />} />
+          <Route path="/employee-cards-portal" element={<EmployeeCardsPortal />} />
+          <Route path="/reset-password-email" element={<PasswordReset />} />
+          <Route path="/reset-password" element={<PasswordResetConfirmation />} />
+          <Route path="/set-password" element={<PasswordSetConfirmation />} />
+          <Route path="/transactions" element={<TransactionsPage />} />
+          <Route path="/transactions/:id" element={<TransactionDetailsPage />} />
+          <Route path="/internal-transfer-portal" element={< InternalTransferPortal />} />
+        </Routes>
+          <ThemeToggle />
+        </BrowserRouter>
+      </CardProvider>
+    </ThemeProvider>
+  );
 }
 
 export default App;

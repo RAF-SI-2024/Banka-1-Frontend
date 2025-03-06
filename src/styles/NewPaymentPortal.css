@@ -27,6 +27,7 @@
 .recipient-account input,
 .payment-purpose input,
 .amount input,
+.adress input,
 .reference-number input {
     width: 100%;
     padding: 10px;
@@ -61,6 +62,17 @@
     background-color: #3A5F3A !important;
 }
 
+/*.recipient-name .MuiInputBase-root::after {*/
+/*    content: '👥'; */
+/*    font-size: 18px;*/
+/*    position: absolute;*/
+/*    right: 30px;*/
+/*    top: 50%;*/
+/*    transform: translateY(-50%);*/
+/*    pointer-events: none;*/
+/*    color: white;*/
+/*}*/
+
 .form-row {
     display: flex;
     gap: 20px;
@@ -76,9 +88,9 @@
 
 .amount-row {
     display: flex;
-    justify-content: space-between;
+    /*justify-content: space-between;*/
     width: 100%;
-    gap: 20px;
+    gap: 25px;
 }
 
 .amount {
@@ -87,9 +99,15 @@
     flex-direction: column;
 }
 
-.empty-space {
-    width: 45%;
+.adress{
+    width: 49%;
+    display: flex;
+    flex-direction: column;
 }
+
+/*.empty-space {*/
+/*    width: 45%;*/
+/*}*/
 
 .amount-wrapper {
     position: relative;
@@ -111,7 +129,7 @@
 }
 
 .info-icon::after {
-    content: "Više informacija";
+    /*content: "Više informacija";*/
     position: absolute;
     background-color: rgba(0, 0, 0, 0.8);
     color: white;

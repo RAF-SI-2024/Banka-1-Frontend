@@ -21,6 +21,7 @@ import InternalTransferPortal from "./pages/portals/InternalTransferPortal";
 import TransactionsPage from "./pages/transactions/TransactionsPage";
 import CardsPortal from "./pages/portals/CardsPortal";
 import ReceiversPortal from "./pages/portals/ReceiversPortal";
+import EmployeeCardsPortal from "./pages/portals/EmployeeCardsPortal";
 
 // import ClientAccountPortal from "./pages/portals/ClientAccountPortal";
 
@@ -68,6 +69,14 @@ function App() {
                               }
                           />
 
+                          <Route
+                              path="/employee-cards-portal"
+                              element={
+                                  <AuthGuard allowedPositions={["Radnik", "Menadžer", "Direktor", "HR", "Admin"]}>
+                                       <EmployeeCardsPortal />
+                                  </AuthGuard>
+                              }
+                          />
 
                           <Route
                               path="/home-portal"

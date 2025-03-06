@@ -88,24 +88,31 @@ const NewCurrentAccountModal = ({ open, onClose, accountType }) => {
     const handleCreateCustomer = async (customerData) => {
         try {
             const customerPayload = {
-                ime: customerData.firstName,
-                prezime: customerData.lastName,
+                firstName: customerData.firstName,
+                lastName: customerData.lastName,
                 username: customerData.username,
-                datum_rodjenja: transformDateForApi(customerData.birthDate),
-                pol: customerData.gender,
+                birthDate: transformDateForApi(customerData.birthDate),
+                gender: customerData.gender,
                 email: customerData.email,
-                broj_telefona: customerData.phoneNumber,
-                adresa: customerData.address,
+                phoneNumber: customerData.phoneNumber,
+                address: customerData.address,
+                accountInfo: {
+                    currency: "RSD",
+                    type: "CURRENT",
+                    subtype: accountType.toUpperCase(),
+                    dailyLimit: 0,
+                    monthlyLimit: 0,
+                    status: "ACTIVE"
+                }
             };
 
             const response = await createCustomer(customerPayload);
             const createdCustomer = response.data;
 
             setIsCreateModalOpen(false);
+            onClose();
             resetCustomerForm();
             toast.success('Customer created successfully');
-
-            await loadCustomers();
 
         } catch (error) {
             toast.error(`Failed to create customer: ${error.message}`);
@@ -175,34 +182,6 @@ const NewCurrentAccountModal = ({ open, onClose, accountType }) => {
             <DialogTitle>Creating a {accountType} current account</DialogTitle>
 
             <DialogContent sx={{ mt: 2 }}>
-                <FormControl fullWidth sx={{ mt: 2 }}>
-                    <InputLabel id="customer-label" shrink>
-                        Choose a customer
-                    </InputLabel>
-                    <Select
-                        labelId="customer-label"
-                        value={selectedOwnerId} // Using selectedOwnerId for storing the customer ID
-                        onChange={(e) => setSelectedOwnerId(e.target.value)} // Saving the customer ID here
-                        displayEmpty
-                        label="Choose a customer"
-                    >
-                        <MenuItem value="" disabled>Choose a customer</MenuItem>
-                        {customers.map((customer) => (
-                            <MenuItem key={customer.id} value={customer.id}>
-                                {customer.firstName} {customer.lastName}
-                            </MenuItem>
-                        ))}
-                    </Select>
-
-                </FormControl>
-
-                <Button
-                    variant="outlined"
-                    sx={{ mt: 2, width: '100%' }}
-                    onClick={() => setIsCreateModalOpen(true)}
-                >
-                    Create New Customer
-                </Button>
 
                 <FormControlLabel
                     control={
@@ -224,6 +203,35 @@ const NewCurrentAccountModal = ({ open, onClose, accountType }) => {
                     sx={{ mt: 2 }}
                 />
             </DialogContent>
+
+            <FormControl fullWidth sx={{ mt: 2 }}>
+                <InputLabel id="customer-label" shrink>
+                    Choose a customer
+                </InputLabel>
+                <Select
+                    labelId="customer-label"
+                    value={selectedOwnerId} // Using selectedOwnerId for storing the customer ID
+                    onChange={(e) => setSelectedOwnerId(e.target.value)} // Saving the customer ID here
+                    displayEmpty
+                    label="Choose a customer"
+                >
+                    <MenuItem value="" disabled>Choose a customer</MenuItem>
+                    {customers.map((customer) => (
+                        <MenuItem key={customer.id} value={customer.id}>
+                            {customer.firstName} {customer.lastName}
+                        </MenuItem>
+                    ))}
+                </Select>
+
+            </FormControl>
+
+            <Button
+                variant="outlined"
+                sx={{ mt: 2, width: '100%' }}
+                onClick={() => setIsCreateModalOpen(true)}
+            >
+                Create New Customer
+            </Button>
 
             <DialogActions sx={{ justifyContent: 'space-between', padding: '16px' }}>
                 <Button onClick={onClose}>Cancel</Button>

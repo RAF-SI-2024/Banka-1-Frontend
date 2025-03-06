@@ -70,8 +70,11 @@ const NewCurrentAccountModal = ({ open, onClose, accountType }) => {
             dailyLimit: 0,
             monthlyLimit: 0,
             status: "ACTIVE",
-            balance: parseFloat(startingBalance)
+            balance: parseFloat(startingBalance),
+            createCard: makeCard
         };
+
+        console.log(accountData);
 
 
         try {
@@ -102,12 +105,12 @@ const NewCurrentAccountModal = ({ open, onClose, accountType }) => {
                     subtype: accountType.toUpperCase(),
                     dailyLimit: 0,
                     monthlyLimit: 0,
-                    status: "ACTIVE"
+                    status: "ACTIVE",
+                    createCard: makeCard
                 }
             };
 
             const response = await createCustomer(customerPayload);
-            const createdCustomer = response.data;
 
             setIsCreateModalOpen(false);
             onClose();

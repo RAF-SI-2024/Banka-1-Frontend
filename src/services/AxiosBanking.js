@@ -283,10 +283,10 @@ export const updateAccount = async (account) => {
     }
 };
 
-export const createInternalTransfer = async (transferData) => {
+export const gcreateInternalTransfer = async (transferData) => {
     try {
         const response = await apiBanking.post("/internal-transfer", transferData);
-        return response; // trebalo bi da sadrzi id transakcije : transferId
+        return response.data; // trebalo bi da sadrzi id transakcije : transferId
     } catch (error) {
         console.error("API Error during internal transfer: ", error);
         throw error;
@@ -304,6 +304,7 @@ export const deleteRecipient = async (id) => {
 };
 
 export const verifyOTP = async (otpData) => {
+    console.log(otpData);
     return await apiBanking.post("/otp/verification", otpData);
 };
 

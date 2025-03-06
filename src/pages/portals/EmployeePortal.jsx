@@ -169,7 +169,7 @@ const EmployeePortal = () => {
                 address: employeeData.address,
                 birthDate: employeeData.birthDate,
                 gender: employeeData.gender,
-                position: "Nijedna", // Hardcoded as requested
+                position: "NONE", // Hardcoded as requested
                 department: employeeData.department,
                 active: employeeData.active,
                 isAdmin: employeeData.isAdmin,

@@ -220,11 +220,10 @@ const CustomerPortal = () => {
                 ) : (
                     // Display the customer data in a table
                     <SearchDataTable
-                        rows={rows} 
-                        columns={columns} 
+                        rows={rows}
+                        columns={columns}
                         checkboxSelection={false}
                         onRowClick={handleRowClick}
-                        actionButton={<AddButton onClick={() => setIsCreateModalOpen(true)} label="Add Customer" />}
                     />
                 )}
 

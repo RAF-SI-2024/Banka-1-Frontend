@@ -14,6 +14,7 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
 import HomeIcon from '@mui/icons-material/Home';
 import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
 import PeopleIcon from '@mui/icons-material/People';
@@ -30,7 +31,6 @@ import { useNavigate } from 'react-router-dom';
 import LogoutButton from '../common/LogoutButton';
 import { jwtDecode } from 'jwt-decode';
 import { useEffect, useState } from 'react';
-import {ListItemText} from "@mui/material";
 
 const drawerWidth = 240;
 
@@ -64,6 +64,7 @@ export default function Sidebar() {
   const [open, setOpen] = useState(false);
   const [position, setPosition] = useState(null);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [isEmployed, setIsEmployed] = useState(false);
   const [showPaymentsMenu, setShowPaymentsMenu] = useState(false);
   const navigate = useNavigate();
 
@@ -81,8 +82,9 @@ export default function Sidebar() {
 
         setPosition(decodedToken.position);
         setIsAdmin(decodedToken.isAdmin);
+        setIsEmployed(decodedToken.isEmployed);
 
-        console.log("Set position:", decodedToken.position, "Admin status:", decodedToken.isAdmin);
+        console.log("Set position:", decodedToken.position, "Admin status:", decodedToken.isAdmin, "Employed:", decodedToken.isEmployed);
       } catch (error) {
         console.error("Invalid token", error);
       }
@@ -133,8 +135,10 @@ export default function Sidebar() {
           <Divider />
 
           <List>
+
             {/* Customer Routes */}
-            {position === "Nijedna" && (
+
+            {!isEmployed && (
                 <>
                   <ListItem disablePadding>
                     <ListItemButton onClick={() => handleNavigation('/home-portal')}>
@@ -196,16 +200,15 @@ export default function Sidebar() {
                   {/* Non Clickable */}
                   <ListItem disablePadding>
                     <ListItemButton disabled>
-                      <ListItemIcon><CreditCardIcon /></ListItemIcon>
+                      <ListItemIcon><CurrencyExchangeIcon /></ListItemIcon>
                       <ListItemText primary="Credits" />
                     </ListItemButton>
                   </ListItem>
-
                 </>
             )}
 
             {/* Employee & Admin Routes */}
-            {position !== "Nijedna" && (
+            {isEmployed && (
                 <>
                   <ListItem disablePadding>
                     <ListItemButton onClick={() => handleNavigation('/customer-portal')}>
@@ -222,7 +225,7 @@ export default function Sidebar() {
                 </>
             )}
 
-            {/* Route Only For Admin */}
+            {/* Route only for Admin */}
             {isAdmin && (
                 <ListItem disablePadding>
                   <ListItemButton onClick={() => handleNavigation('/employee-portal')}>

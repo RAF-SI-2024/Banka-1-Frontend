@@ -21,8 +21,9 @@ import TransactionsPage from "./pages/transactions/TransactionsPage";
 import CardsPortal from "./pages/portals/CardsPortal";
 import ReceiversPortal from "./pages/portals/ReceiversPortal";
 import EmployeeCardsPortal from "./pages/portals/EmployeeCardsPortal";
+import CustomerAccountPortal from "./pages/portals/CustomerAccountPortal";
 
-// import ClientAccountPortal from "./pages/portals/ClientAccountPortal";
+// import CustomerAccountPortal from "./pages/portals/CustomerAccountPortal";
 
 
 function App() {
@@ -81,10 +82,10 @@ function App() {
 
                         {/* Customer-Only Routes */}
                         <Route
-                            path="/home-portal"
+                            path="/home"
                             element={
                                 <AuthGuard>
-                                    {/*<ClientAccountPortal />*/}
+                                   <CustomerAccountPortal />
                                 </AuthGuard>
                             }
                         />

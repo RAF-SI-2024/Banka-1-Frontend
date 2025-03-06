@@ -4,6 +4,7 @@ import DataTable from "../../components/tables/DataTable";
 import AccountTransactionsList from "../../components/lists/AccountTransactionLists";
 import {
     fetchAccounts,
+    fetchAccountsForUser
 } from "../../services/AxiosBanking";
 import AccountButton from "../../components/common/AccountButton";
 import { jwtDecode } from "jwt-decode";
@@ -23,7 +24,7 @@ const AccountsPortal = () => {
         { field: "balance", headerName: "Balance", width: 100 },
         { field: "reservedBalance", headerName: "Reserved Balance", width: 100},
         { field: "type", headerName: "Type", width: 120 },
-        { field: "currency", headerName: "Currency", width: 100 },
+        { field: "currencyType", headerName: "Currency", width: 100 },
         { field: "subtype", headerName: "Subtype", width: 120 },
         { field: "createdDate", headerName: "Created Date", width: 150 },
         { field: "expirationDate", headerName: "Expiration Date", width: 150 },
@@ -58,8 +59,10 @@ const AccountsPortal = () => {
     useEffect(() => {
         const loadAccounts = async () => {
             try {
-                const response = await fetchAccounts();
-                const filteredAccounts = response.filter(row => row.ownerID === userId);
+                const filteredAccounts = await fetchAccountsForUser();
+                console.log(filteredAccounts);
+                //const response = await fetchAccounts();
+                //const filteredAccounts = response.filter(row => row.ownerID === userId);
     
                 const formattedRows = filteredAccounts.map(row => ({
                     id: row.id,
@@ -68,7 +71,7 @@ const AccountsPortal = () => {
                     balance: row.balance,
                     reservedBalance: row.reservedBalance,
                     type: row.type,
-                    currency: row.currency,
+                    currencyType: row.currencyType,
                     subtype: row.subtype,
                     createdDate: new Date(row.createdDate).toLocaleDateString(),
                     expirationDate: new Date(row.expirationDate).toLocaleDateString(),

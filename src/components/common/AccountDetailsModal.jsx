@@ -25,10 +25,10 @@ const AccountDetailsModal = ({ open, onClose, account }) => {
       </DialogTitle>
       <DialogContent>
         <Grid container spacing={2} sx={{ mt: 1 }}>
-          <Grid item xs={12} sm={6}>
+          {/*<Grid item xs={12} sm={6}>
             <TextField fullWidth label="Account name" value={account?.id || ""} disabled />
-          </Grid>
-          <Grid item xs={12} sm={6}>
+          </Grid>*/}
+          <Grid item xs={12}>
             <TextField fullWidth label="Account number" value={account?.accountNumber || ""} disabled />
           </Grid>
           <Grid item xs={12} sm={6}>
@@ -50,8 +50,8 @@ const AccountDetailsModal = ({ open, onClose, account }) => {
         {/* Linkovi za otvaranje modala */}
         <Grid container spacing={2} mt={3}>
           <Grid item xs={6}>
-            <Link href="#" onClick={() => setIsNameModalOpen(true)} sx={{ color: "#FDD835", textDecoration: "none", fontSize: "0.9rem", "&:hover": { textDecoration: "underline" } }}>Name change</Link>
-            <br />
+            {/*<Link href="#" onClick={() => setIsNameModalOpen(true)} sx={{ color: "#FDD835", textDecoration: "none", fontSize: "0.9rem", "&:hover": { textDecoration: "underline" } }}>Name change</Link>
+            <br />*/}
             <Link href="#" onClick={() => setIsLimitModalOpen(true)} sx={{ color: "#FDD835", textDecoration: "none", fontSize: "0.9rem", "&:hover": { textDecoration: "underline" } }}>Limit Change</Link>
           </Grid>
           <Grid item xs={6} textAlign="right">

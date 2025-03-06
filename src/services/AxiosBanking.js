@@ -77,7 +77,7 @@ export const fetchAccountsForUser = async () => {
     const userId = getUserIdFromToken();
     try {
         const response = await apiBanking.get(`/accounts/user/${userId}`);
-        return response.data;
+        return response.data.data.accounts;
     } catch (error) {
         console.error("Error fetching recipients:", error);
         throw error;
@@ -270,13 +270,10 @@ export const fetchCardsByAccountId = async (accountId) => {
     }
 };
 
-//ovaj poziv vrv nije dobar
+
 export const updateAccount = async (account) => {
     try {
-        const response = await axios.put(
-            `/accounts/${account.ownerID}`,
-            account
-        );
+        const response = await apiBanking.put(`/accounts/${account.id}`, account);
         return response.data;
     } catch (error) {
         throw error;

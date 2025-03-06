@@ -1,7 +1,7 @@
 import React from "react";
 import Sidebar from "../../components/mainComponents/Sidebar";
 import { Box, Card, CardContent, Typography, Tabs, Tab } from "@mui/material";
-import { fetchTransactions } from "../../services/transactionService";
+import { fetchAccountsTransactions } from "../../services/AxiosBanking";
 import TransactionList from "../../components/transactionTable/TransactionList";
 
 // Komponenta za prikaz liste transakcija
@@ -13,7 +13,7 @@ const TransactionsPage = () => {
 
     // useEffect se startuje jednom pri mountovanj-u komponente da povuce listu transakcija
     React.useEffect(() => {
-        fetchTransactions().then(setTransactions);
+        fetchAccountsTransactions().then(setTransactions);
     }, []);
 
     return (

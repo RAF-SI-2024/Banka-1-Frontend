@@ -11,7 +11,8 @@ import { useNavigate, Link as RouterLink } from 'react-router-dom'; // Added Rou
 // Import our custom components
 import AuthCard from '../../components/loginComponents/AuthCard';
 import PasswordField from '../../components/loginComponents/Password';
-import { loginUser } from '../../services/AxiosUser'; // Updated import
+import { loginUser } from '../../services/AxiosUser';
+import {jwtDecode} from "jwt-decode"; // Updated import
 
 const Login = () => {
     const navigate = useNavigate();
@@ -26,7 +27,12 @@ const Login = () => {
             const response = await loginUser(email, password);
             const token = response.data.token;
             localStorage.setItem("token", token);
-            navigate('/home');
+            const decodedToken = jwtDecode(token);
+
+            if(decodedToken.isEmployed)
+                navigate('/admin-home');
+            else
+                navigate('/home');
         } catch (error) {
             console.log(error);
             alert('Invalid email or password');

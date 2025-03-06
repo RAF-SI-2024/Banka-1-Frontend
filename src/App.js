@@ -86,6 +86,75 @@ function App() {
                                 </AuthGuard>
                             }
                         />
+<<<<<<< Updated upstream
+=======
+                          <Route
+                              path="/employee-bank-accounts-portal"
+                              element={
+                                  <AuthGuard allowedPositions={["Radnik", "Menadžer", "Direktor", "HR", "Admin"]}>
+                                       <EmployeeBankAccountsPortal />
+                                  </AuthGuard>
+                              }
+                          />
+
+
+                          <Route
+                              path="/home-portal"
+                              element={
+                                  <AuthGuard allowedPositions={["Nijedna"]}>
+                                       {/*<ClientAccountPortal />*/}
+                                  </AuthGuard>
+                              }
+                          />
+                          <Route
+                              path="/accounts-portal"
+                              element={
+                                  <AuthGuard allowedPositions={["Nijedna"]}>
+                                       <AccountsPortal />
+                                  </AuthGuard>
+                              }
+                          />
+                          <Route
+                              path="/new-payment-portal"
+                              element={
+                                  // <AuthGuard allowedPositions={["Nijedna"]}>
+                                       <NewPaymentPortal />
+                                  // </AuthGuard>
+                              }
+                          />
+                          <Route
+                              path="/internal-transfer-portal"
+                              element={
+                                  <AuthGuard allowedPositions={["Nijedna"]}>
+                                       <InternalTransferPortal />
+                                  </AuthGuard>
+                              }
+                          />
+                          <Route
+                              path="/receiver-portal"
+                              element={
+                                  <AuthGuard allowedPositions={["Nijedna"]}>
+                                       <ReceiversPortal />
+                                  </AuthGuard>
+                              }
+                          />
+                          <Route
+                              path="/transactions-page"
+                              element={
+                                  <AuthGuard allowedPositions={["Nijedna"]}>
+                                       <TransactionsPage />
+                                  </AuthGuard>
+                              }
+                          />
+                          <Route
+                              path="/cards-portal"
+                              element={
+                                  <AuthGuard allowedPositions={["Nijedna"]}>
+                                       <CardsPortal />
+                                  </AuthGuard>
+                              }
+                          />
+>>>>>>> Stashed changes
 
                         {/* Customer-Only Routes */}
                         <Route

@@ -300,6 +300,16 @@ export const deleteRecipient = async (id) => {
     }
 };
 
+export const createNewMoneyTransfer = async (transferData) => {
+    try {
+        const response = await apiBanking.post("/money-transfer", transferData);
+        return response.data;
+    } catch (error) {
+        console.error("API Error during new payment transfer: ", error);
+        throw error;
+    }
+};
+
 export const verifyOTP = async (otpData) => {
     console.log(otpData);
     return await apiBanking.post("/otp/verification", otpData);

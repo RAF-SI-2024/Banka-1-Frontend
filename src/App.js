@@ -25,219 +25,164 @@ import CustomerAccountPortal from "./pages/portals/CustomerAccountPortal";
 
 // import CustomerAccountPortal from "./pages/portals/CustomerAccountPortal";
 
-
 function App() {
-    return (
-        <ThemeProvider>
-            <CardProvider>
-                <CssBaseline />
-                <BrowserRouter>
-                    <Routes>
-
-                        {/* Public Routes */}
-                        <Route path="/" element={<Landing />} />
-                        <Route path="/login" element={<Login />} />
-                        <Route path="/reset-password-email" element={<PasswordReset />} />
-                        <Route path="/reset-password" element={<PasswordResetConfirmation />} />
-                        <Route path="/set-password" element={<PasswordSetConfirmation />} />
-
-                        {/* Employee-Only Routes (Admin or  not) */}
-                        <Route
-                            path="/admin-home"
-                            element={
-                                <AuthGuard allowedPositions={["WORKER", "MANAGER", "DIRECTOR", "HR", "ADMIN", "NONE"]}>
-                                    <HomePage />
-                                </AuthGuard>
-                            }
-                        />
-                        <Route
-                            path="/customer-portal"
-                            element={
-                                <AuthGuard allowedPositions={["WORKER", "MANAGER", "DIRECTOR", "HR", "ADMIN", "NONE"]}>
-                                    <CustomerPortal />
-                                </AuthGuard>
-                            }
-                        />
-
-                        <Route
-                            path="/employee-bank-accounts-portal"
-                            element={
-                                <AuthGuard allowedPositions={["WORKER", "MANAGER", "DIRECTOR", "HR", "ADMIN", "NONE"]}>
-                                    <EmployeeBankAccountsPortal />
-                                </AuthGuard>
-                            }
-                        />
-
-                        <Route
-                            path="/employee-cards-portal"
-                            element={
-                                <AuthGuard allowedPositions={["WORKER", "MANAGER", "DIRECTOR", "HR", "ADMIN", "NONE"]}>
-                                    <EmployeeCardsPortal />
-                                </AuthGuard>
-                            }
-                        />
-
-                        {/* Admin Only */}
-                        <Route
-                            path="/employee-portal"
-                            element={
-                                <AuthGuard allowedPositions={["ADMIN"]}>
-                                    <EmployeePortal />
-                                </AuthGuard>
-                            }
-                        />
-                          <Route
-                              path="/employee-bank-accounts-portal"
-                              element={
-                                  <AuthGuard allowedPositions={["Radnik", "Menadžer", "Direktor", "HR", "Admin"]}>
-                                       <EmployeeBankAccountsPortal />
-                                  </AuthGuard>
-                              }
-                          />
-
-
-                          <Route
-                              path="/home-portal"
-                              element={
-                                  <AuthGuard allowedPositions={["Nijedna"]}>
-                                       {/*<ClientAccountPortal />*/}
-                                  </AuthGuard>
-                              }
-                          />
-                          <Route
-                              path="/accounts-portal"
-                              element={
-                                  <AuthGuard allowedPositions={["Nijedna"]}>
-                                       <AccountsPortal />
-                                  </AuthGuard>
-                              }
-                          />
-                          <Route
-                              path="/new-payment-portal"
-                              element={
-                                  // <AuthGuard allowedPositions={["Nijedna"]}>
-                                       <NewPaymentPortal />
-                                  // </AuthGuard>
-                              }
-                          />
-                          <Route
-                              path="/internal-transfer-portal"
-                              element={
-                                  <AuthGuard allowedPositions={["Nijedna"]}>
-                                       <InternalTransferPortal />
-                                  </AuthGuard>
-                              }
-                          />
-                          <Route
-                              path="/receiver-portal"
-                              element={
-                                  <AuthGuard allowedPositions={["Nijedna"]}>
-                                       <ReceiversPortal />
-                                  </AuthGuard>
-                              }
-                          />
-                          <Route
-                              path="/transactions-page"
-                              element={
-                                  <AuthGuard allowedPositions={["Nijedna"]}>
-                                       <TransactionsPage />
-                                  </AuthGuard>
-                              }
-                          />
-                          <Route
-                              path="/cards-portal"
-                              element={
-                                  <AuthGuard allowedPositions={["Nijedna"]}>
-                                       <CardsPortal />
-                                  </AuthGuard>
-                              }
-                          />
-
-                        {/* Customer-Only Routes */}
-                        <Route
-                            path="/home"
-                            element={
-                                <AuthGuard>
-                                   <CustomerAccountPortal />
-                                </AuthGuard>
-                            }
-                        />
-                        <Route
-                            path="/accounts-portal"
-                            element={
-                                <AuthGuard>
-                                    <AccountsPortal />
-                                </AuthGuard>
-                            }
-                        />
-                        <Route
-                            path="/new-payment-portal"
-                            element={
-                                <AuthGuard>
-                                    <NewPaymentPortal />
-                                </AuthGuard>
-                            }
-                        />
-                        <Route
-                            path="/internal-transfer-portal"
-                            element={
-                                <AuthGuard>
-                                    <InternalTransferPortal />
-                                </AuthGuard>
-                            }
-                        />
-                        <Route
-                            path="/receiver-portal"
-                            element={
-                                <AuthGuard>
-                                    <ReceiversPortal />
-                                </AuthGuard>
-                            }
-                        />
-                        <Route
-                            path="/transactions-page"
-                            element={
-                                <AuthGuard>
-                                    <TransactionsPage />
-                                </AuthGuard>
-                            }
-                        />
-                        <Route
-                            path="/cards-portal"
-                            element={
-                                <AuthGuard>
-                                    <CardsPortal />
-                                </AuthGuard>
-                            }
-                        />
-                    </Routes>
-
-                    <ThemeToggle />
-                </BrowserRouter>
-            </CardProvider>
-        </ThemeProvider>
-    );
   return (
     <ThemeProvider>
-      <CardProvider>  {/* Dodala globalni CardProvider */}
+      <CardProvider>
         <CssBaseline />
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<Landing />} /> 
+            {/* Public Routes */}
+            <Route path="/" element={<Landing />} />
             <Route path="/login" element={<Login />} />
-            <Route path="/home" element={<HomePage />} />
-            <Route path="/cards" element={<CardsPage/>} />
-            <Route path="/customer-portal" element={<CustomerPortal />} />
-            <Route path="/employee-portal" element={<EmployeePortal />} />
-            <Route path="/employee-bank-accounts-portal" element={<EmployeeBankAccountsPortal />} />
-          <Route path="/employee-cards-portal" element={<EmployeeCardsPortal />} />
-          <Route path="/reset-password-email" element={<PasswordReset />} />
-          <Route path="/reset-password" element={<PasswordResetConfirmation />} />
-          <Route path="/set-password" element={<PasswordSetConfirmation />} />
-          <Route path="/transactions" element={<TransactionsPage />} />
-          <Route path="/transactions/:id" element={<TransactionDetailsPage />} />
-          <Route path="/internal-transfer-portal" element={< InternalTransferPortal />} />
-        </Routes>
+            <Route path="/reset-password-email" element={<PasswordReset />} />
+            <Route
+              path="/reset-password"
+              element={<PasswordResetConfirmation />}
+            />
+            <Route path="/set-password" element={<PasswordSetConfirmation />} />
+
+            {/* Employee-Only Routes (Admin or  not) */}
+            <Route
+              path="/admin-home"
+              element={
+                <AuthGuard
+                  allowedPositions={[
+                    "WORKER",
+                    "MANAGER",
+                    "DIRECTOR",
+                    "HR",
+                    "ADMIN",
+                    "NONE",
+                  ]}
+                >
+                  <HomePage />
+                </AuthGuard>
+              }
+            />
+            <Route
+              path="/customer-portal"
+              element={
+                <AuthGuard
+                  allowedPositions={[
+                    "WORKER",
+                    "MANAGER",
+                    "DIRECTOR",
+                    "HR",
+                    "ADMIN",
+                    "NONE",
+                  ]}
+                >
+                  <CustomerPortal />
+                </AuthGuard>
+              }
+            />
+
+            <Route
+              path="/employee-bank-accounts-portal"
+              element={
+                <AuthGuard
+                  allowedPositions={[
+                    "WORKER",
+                    "MANAGER",
+                    "DIRECTOR",
+                    "HR",
+                    "ADMIN",
+                    "NONE",
+                  ]}
+                >
+                  <EmployeeBankAccountsPortal />
+                </AuthGuard>
+              }
+            />
+
+            <Route
+              path="/employee-cards-portal"
+              element={
+                <AuthGuard
+                  allowedPositions={[
+                    "WORKER",
+                    "MANAGER",
+                    "DIRECTOR",
+                    "HR",
+                    "ADMIN",
+                    "NONE",
+                  ]}
+                >
+                  <EmployeeCardsPortal />
+                </AuthGuard>
+              }
+            />
+
+            {/* Admin Only */}
+            <Route
+              path="/employee-portal"
+              element={
+                <AuthGuard allowedPositions={["ADMIN"]}>
+                  <EmployeePortal />
+                </AuthGuard>
+              }
+            />
+
+            {/* Customer-Only Routes */}
+            <Route
+              path="/home"
+              element={
+                <AuthGuard>
+                  <CustomerAccountPortal />
+                </AuthGuard>
+              }
+            />
+            <Route
+              path="/accounts-portal"
+              element={
+                <AuthGuard>
+                  <AccountsPortal />
+                </AuthGuard>
+              }
+            />
+            <Route
+              path="/new-payment-portal"
+              element={
+                <AuthGuard>
+                  <NewPaymentPortal />
+                </AuthGuard>
+              }
+            />
+            <Route
+              path="/internal-transfer-portal"
+              element={
+                <AuthGuard>
+                  <InternalTransferPortal />
+                </AuthGuard>
+              }
+            />
+            <Route
+              path="/receiver-portal"
+              element={
+                <AuthGuard>
+                  <ReceiversPortal />
+                </AuthGuard>
+              }
+            />
+            <Route
+              path="/transactions-page"
+              element={
+                <AuthGuard>
+                  <TransactionsPage />
+                </AuthGuard>
+              }
+            />
+            <Route
+              path="/cards-portal"
+              element={
+                <AuthGuard>
+                  <CardsPortal />
+                </AuthGuard>
+              }
+            />
+          </Routes>
+
           <ThemeToggle />
         </BrowserRouter>
       </CardProvider>

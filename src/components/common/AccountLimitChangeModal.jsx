@@ -14,21 +14,79 @@ const AccountLimitChangeModal = ({ open, onClose, account, onSave }) => {
   useEffect(() => {
     if (account) {
       setLimit(account.available || "");
+      console.log(account);
     }
   }, [account]);
 
   const handleSave = async () => {
 
     const updatedAccount = {
-      ownerID: account.ownerID,
+      id: account.id,
       currency: account.currency,
       type: account.type,
       subtype: account.subtype,
-      dailyLimit: account.dailyLimit,
+      dailyLimit: limit,
       monthlyLimit: account.monthlyLimit,
       status: account.status,
-      available: limit, // Novi limit računa
     };
+
+    /*
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false)
+    private Long ownerID;
+
+    @Column(nullable = false)
+    private String accountNumber;
+
+    @Column(nullable = false)
+    private Double balance;
+
+    @Column(nullable = false)
+    private Double reservedBalance;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private AccountType type;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private CurrencyType currencyType;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private AccountSubtype subtype;
+
+    @Column(nullable = false)
+    private Long createdDate;
+
+    @Column(nullable = false)
+    private Long expirationDate;
+
+    @Column(nullable = false)
+    private Double dailyLimit;
+
+    @Column(nullable = false)
+    private Double monthlyLimit;
+
+    @Column(nullable = false)
+    private Double dailySpent;
+
+    @Column(nullable = false)
+    private Double monthlySpent;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private AccountStatus status;
+
+    @Column(nullable = false)
+    private Long employeeID;
+
+    @Column(nullable = false)
+    private Double monthlyMaintenanceFee;
+    */
 
     //api poziv
     try {
@@ -49,7 +107,7 @@ const AccountLimitChangeModal = ({ open, onClose, account, onSave }) => {
             <TextField
               fullWidth
               label="Current limit"
-              value={account?.available || ""}
+              value={account?.dailyLimit || ""}
               disabled
             />
           </Grid>

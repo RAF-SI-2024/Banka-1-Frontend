@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { AlertDialog } from '@base-ui-components/react/alert-dialog';
-import styles from "./../../styles/logout.module.css"
+import styles from "./../../styles/Logout.module.css"
 import { useNavigate } from 'react-router-dom';
 import { logoutUser } from '../../services/AxiosUser';
 
@@ -22,7 +22,7 @@ const LogoutButton = () => {
 
 
   return (
-    <div className="logout-button">
+    <div className={styles.Start}>
     <AlertDialog.Root>
       <AlertDialog.Trigger data-color="red" className={styles.Button}>
         Logout

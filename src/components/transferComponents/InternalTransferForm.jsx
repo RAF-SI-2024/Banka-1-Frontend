@@ -5,7 +5,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import VerificationModal from "./VerificationModal";
-import { createInternalTransfer, verifyOTP, fetchAccounts } from "../../services/AxiosBanking";
+import { createInternalTransfer, verifyOTP, fetchAccountsForUser } from "../../services/AxiosBanking";
 
 const InternalTransferForm = () => {
     const [accounts, setAccounts] = useState([]);
@@ -20,14 +20,17 @@ const InternalTransferForm = () => {
     useEffect(() => {
         const getAccounts = async () => {
             try {
-                const accountData = await fetchAccounts();
-                setAccounts(accountData);
+                const response = await fetchAccountsForUser();
+                if (response.data && response.data.accounts) {
+                    setAccounts(response.data.accounts);
+                }
             } catch (error) {
                 console.error("Error fetching accounts:", error);
             }
         };
         getAccounts();
     }, []);
+
 
     // ako je outflow account selektovan, uzima se valuta
     const selectedOutflow = accounts.find(acc => acc.id === outflowAccount);
@@ -92,6 +95,7 @@ const InternalTransferForm = () => {
             const response = await verifyOTP(otpVerificationData);
             if (response.status === 200) {
                 console.log("Transaction successfully verified!");
+                alert("Transaction successfully verified!");
                 resetForm();
                 setShowModal(false);
             } else {
@@ -100,8 +104,10 @@ const InternalTransferForm = () => {
         } catch (error) {
             if (error.response?.status === 401) {
                 console.error("Invalid OTP code.");
+                alert("Invalid OTP code.");
             } else if (error.response?.status === 408) {
                 console.error("OTP code expired.");
+                alert("OTP code expired.");
             } else {
                 console.error("Error during OTP verification: ", error);
             }

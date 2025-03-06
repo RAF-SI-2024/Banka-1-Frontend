@@ -1,4 +1,5 @@
 import axios from "axios";
+import {jwtDecode} from "jwt-decode";
 
 const apiBanking = axios.create({
     baseURL: "http://localhost:8082",
@@ -26,6 +27,19 @@ apiBanking.interceptors.request.use(
         return Promise.reject(error);
     }
 );
+const getUserIdFromToken = () => {
+    const token = localStorage.getItem('token');
+    if(!token) return null;
+    try{
+        const decoded = jwtDecode(token);
+        return decoded.id;
+    }catch (error){
+        console.error("Invalid token", error);
+        return null;
+    }
+
+}
+
 
 export const createAccount = async (accountData) => {
     try {
@@ -40,14 +54,27 @@ export const createAccount = async (accountData) => {
 export const fetchAccounts = async () => {
     try {
         const response = await apiBanking.get("/accounts/");
-        return response.data.accounts; // vraca niz racuna
+        console.log(response);
+        // if (!response.data) {
+        //     return [];
+        // }
+
+        const accounts = response.data.data.accounts;
+        
+        if (!Array.isArray(accounts)) {
+            console.error('Accounts is not an array, type:', typeof accounts);
+            return [];
+        }
+
+        return accounts;
     } catch (error) {
         console.error("Error fetching accounts:", error);
         throw error;
     }
 };
 
-export const fetchAccountsForUser = async (userId) => {
+export const fetchAccountsForUser = async () => {
+    const userId = getUserIdFromToken();
     try {
         const response = await apiBanking.get(`/accounts/user/${userId}`);
         return response.data;
@@ -235,6 +262,7 @@ export const fetchAccountsTransactions = async (accountId) => {
 export const fetchCardsByAccountId = async (accountId) => {
     try {
         const response = await apiBanking.get(`/cards/admin/${accountId}`);
+        console.log(response);
         return response.data;
     } catch (error) {
         console.error("Error fetching cards:", error);

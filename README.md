@@ -93,6 +93,17 @@ src
         ```
 - **Global Styles** should use ```kebab-case``` (for globally defined classes use all lower case letters with ```-``` isntead of spaces).
 
+# Starting the backend
+
+To properly run the backend, you need to have Docker installed.
+
+In the backend project run:
+
+```shell
+docker compose -f compose.full.yaml up -d
+```
+
+
 # React info: Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
@@ -163,19 +174,3 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 #### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
-
-
-```
-To properly run the app after you are done isntalling everything
-
-First run user-service on the back:
-cd user-service ./gradlew bootRun
-
-Second run message-broker-service
-cd message-broker-service ./gradlew bootRun
-
-Third run notification-service
-cd notification-service ./gradlew bootRun
-
-After on the front type npm start
-```

@@ -20,19 +20,19 @@ const NewPaymentPortal =  () => {
     const [accounts, setAccounts] = useState([]);
     const [selectedAccount, setSelectedAccount] = useState(null);
     const [recipients, setRecipients] = useState([]);
-    useEffect(() => {
-        loadAccounts();
-    }, []);
     const [dailyLimit, setDailyLimit] = useState(null);
     const [paymentMessage, setPaymentMessage] = useState("");
 
 
 
+    useEffect(() => {
+        loadAccounts();
+    }, []);
+
     const loadAccounts = async () => {
         try {
             const data = await fetchAccountsForUser(userId);
-            setAccounts(data.data.accounts);
-            // console.log(data);
+            setAccounts(data);
         } catch (err) {
             console.error("Failed to fetch accounts:", err);
         }
@@ -64,16 +64,18 @@ const NewPaymentPortal =  () => {
         // ])
 
     };
+
     useEffect(() => {
-        console.log("Accounts Loaded:", accounts);
-    }, [accounts]);
+        if (selectedAccount) {
+            loadRecipients();
+        }
+    }, [selectedAccount]);
 
-
-    const loadRecipients = async (accountId) => {
+    const loadRecipients = async () => {
         try {
-            const data = await fetchRecipients(accountId);
-            setRecipients(data.data.receivers);
-            console.log(data);
+            const data = await fetchRecipients(selectedAccount.id);
+            setRecipients(data);
+            console.log("Recipients", data);
         } catch (err) {
             console.error("Failed to fetch recipients:", err);
         }
@@ -82,16 +84,15 @@ const NewPaymentPortal =  () => {
     const handleAccountSelection = (accountId) => {
         if (!accountId) return;
 
-        setSelectedAccount(accountId);
-
         const selectedAcc = accounts.find(acc => acc.id.toString() === accountId);
-
+        
         if (selectedAcc) {
+            setSelectedAccount(selectedAcc);
             setDailyLimit(selectedAcc.dailyLimit);
             console.log("Selected Account:", selectedAcc);
             console.log("Account Number:", selectedAcc.accountNumber);
 
-            loadRecipients(selectedAcc.id);
+            loadRecipients();
 
             // setRecipients([
             //     { fullName: "John Doe", accountNumber: "123456789" },

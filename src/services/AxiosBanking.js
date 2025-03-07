@@ -110,6 +110,7 @@ export const fetchAccountsId = async (id) => {
 export const fetchRecipients = async (accountId) => {
     try {
         const response = await apiBanking.get(`/receiver/${accountId}`);
+        console.log("rec:"+ response.data)
         return response.data;
     } catch (error) {
         console.error("Error fetching recipients:", error);

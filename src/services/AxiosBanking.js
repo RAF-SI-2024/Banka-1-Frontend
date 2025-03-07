@@ -76,8 +76,11 @@ export const fetchAccounts = async () => {
 export const fetchAccountsForUser = async () => {
     const userId = getUserIdFromToken();
     try {
+        console.log("Running GET /accounts/user/" + userId);
         const response = await apiBanking.get(`/accounts/user/${userId}`);
-        return response.data.data.accounts;
+        const accounts = response.data.data.accounts;
+        console.log(accounts);
+        return accounts;
     } catch (error) {
         console.error("Error fetching recipients:", error);
         throw error;
@@ -156,7 +159,9 @@ export const createRecipient = async (accountId, recipientData) => {
 // Fetch cards linked to an account
 export const fetchUserCards = async (accountId) => {
     try {
-        const response = await apiBanking.get(`/cards?account_id=${accountId}`);
+        console.log("Account id: " + accountId);
+        const response = await apiBanking.get(`/cards/${accountId}`);
+        console.log(response)
         return response.data;
     } catch (error) {
         console.error(`Error fetching cards for account ${accountId}:`, error);
@@ -168,19 +173,19 @@ export const fetchUserCards = async (accountId) => {
 export const createCard = async (
     accountId,
     cardType,
+    cardBrand = "VISA",
     authorizedPerson = null
 ) => {
     try {
         const requestBody = {
-            racun_id: accountId,
-            tip: cardType,
+            accountID: accountId,
+            cardType : cardType,
+            cardBrand: cardBrand
         };
-
         if (authorizedPerson) {
             requestBody.ovlasceno_lice = authorizedPerson;
         }
-
-        const response = await apiBanking.post("/cards", requestBody);
+        const response = await apiBanking.post("/cards/", requestBody);
         return response.data;
     } catch (error) {
         console.error("Error creating a new card:", error);
@@ -325,7 +330,6 @@ export const fetchAccountsId1 = async (id) => {
 
         // Pristupanje pravom nizu
         const accounts = response.data.data.accounts;
-        console.log(response.data.data.accounts)
 
         if (!Array.isArray(accounts)) {
             console.error("Invalid response format:", response.data);

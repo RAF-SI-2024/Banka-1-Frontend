@@ -271,9 +271,9 @@ export const fetchCardsByAccountId = async (accountId) => {
 };
 
 
-export const updateAccount = async (account) => {
+export const updateAccount = async (accountId, ownerId, account) => {
     try {
-        const response = await apiBanking.put(`/accounts/${account.id}`, account);
+        const response = await apiBanking.put(`/accounts/user/${ownerId}/${accountId}`, account);
         return response.data;
     } catch (error) {
         throw error;

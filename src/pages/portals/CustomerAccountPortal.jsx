@@ -1,10 +1,7 @@
 import AccountSlider from "../../components/accountComponent/AccountSlider";
 import React, {useEffect, useState} from "react";
-import {Box, Button, Card, CardContent, Container, Typography} from "@mui/material";
-import AddIcon from "@mui/icons-material/Add";
-import CreateCardModal from "../../components/common/CreateCardModal";
-import CardSlider from "../../components/common/CardSlider";
-import {fetchAccountsId, fetchAccountsId1, getUserIdFromToken} from "../../services/AxiosBanking";
+import {Box, Card, CardContent, Container, Typography} from "@mui/material";
+import {fetchAccountsId1, getUserIdFromToken} from "../../services/AxiosBanking";
 import CircularProgress from "@mui/material/CircularProgress";
 import FastPayments from "../../components/transactionComponents/FastPayments";
 import RecentTransactions from "../../components/transactionComponents/RecentTransations";

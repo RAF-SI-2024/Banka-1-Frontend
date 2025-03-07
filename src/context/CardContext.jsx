@@ -15,19 +15,26 @@ export const CardProvider = ({ children }) => {
       const data = await fetchUserCards(accountId);
       setCards(data);
     } catch (error) {
-      console.error("Error fetching cards:", error);
+      if (error.response.status === 404) {
+      } else {
+        console.error("Error fetching cards:", {error});
+      }
     }
     setLoading(false);
   };
 
   // Add a new card
-  const addCard = async (accountId, cardType) => {
+  const addCard = async (accountId, cardType, cardBrand) => {
     setLoading(true);
     try {
-      await createCard(accountId, cardType);
-      fetchCards(accountId);
+      await createCard(accountId, cardType, cardBrand);
+      await fetchCards(accountId);
     } catch (error) {
-      console.error("Error creating card:", error);
+      // ignore not found errors
+      if (error.response.status === 404) {
+      } else {
+        console.error("Error creating card:", error);
+      }
     }
     setLoading(false);
   };

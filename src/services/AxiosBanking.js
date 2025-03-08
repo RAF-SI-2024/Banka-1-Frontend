@@ -336,15 +336,17 @@ export const fetchAccountsId1 = async (id) => {
             console.error("Invalid response format:", response.data);
             return [];
         }
+        
+        //ostavio sam ovako da bi imali sve parametre za details
+        return accounts;
+        // return accounts.map((account) => ({
+        //     id: account.id,
+        //     name: account.ownerID,
+        //     number: account.accountNumber,
+        //     balance: account.balance,
+        //     subtype: account.subtype,
 
-        return accounts.map((account) => ({
-            id: account.id,
-            name: account.ownerID,
-            number: account.accountNumber,
-            balance: account.balance,
-            subtype: account.subtype,
-
-        }));
+        // }));
 
     } catch (error) {
         console.error(`Error fetching account with ID ${id}:`, error);

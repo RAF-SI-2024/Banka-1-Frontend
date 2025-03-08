@@ -115,16 +115,11 @@ const CardSlider = () => {
     return (
         <Container maxWidth="" sx={{padding: "20px"}}>
             <Box className="card-slider-container" maxWidth="md">
-                <IconButton onClick={goToPrevCard}>
-                    <ArrowBackIosIcon/>
-                </IconButton>
-
                 <Card className="card-slider-card">
                     <CardContent>
-
                         <Box display="flex" flexDirection="column" gap={2}>
                             <Box display="flex" flexDirection="row" alignItems="center" gap={2}>
-                                <Typography variant="h6">{currentCard?.cardNumber}</Typography>
+                                <Typography variant="h6">{maskCardNumber(currentCard?.cardNumber)}</Typography>
                                 <Typography
                                     variant="h6">{capitalizeFirstLetter(currentCard?.cardType)} Card</Typography>
                                 <CreditCardIcon/>
@@ -153,8 +148,11 @@ const CardSlider = () => {
                         </Box>
                     </CardContent>
                 </Card>
-
-                <IconButton onClick={goToNextCard}>
+                
+                <IconButton sx={{ mt: 3 }} onClick={goToPrevCard}>
+                    <ArrowBackIosIcon/>
+                </IconButton>
+                <IconButton  sx={{ mt: 3, ml: 102 }} onClick={goToNextCard}>
                     <ArrowForwardIosIcon/>
                 </IconButton>
             </Box>
@@ -172,6 +170,9 @@ const CardSlider = () => {
 function capitalizeFirstLetter(string) {
     if (!string) return '';
     return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
+}
+function maskCardNumber(cardNumber) {
+    return cardNumber.replace(/^(\d{4})\d+(?=\d{4}$)/, '$1********');
 }
 
 

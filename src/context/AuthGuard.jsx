@@ -15,7 +15,7 @@ const AuthGuard = ({ allowedPositions, children }) => {
         const isAdmin = decodedToken.isAdmin || false; // Boolean
         const userPosition = decodedToken.position || null; // "WORKER", "MANAGER", "DIRECTOR", "HR", "NONE"
 
-        console.log("User employed:", isEmployed, "Admin status:", isAdmin, "Position:", userPosition);
+        // console.log("User employed:", isEmployed, "Admin status:", isAdmin, "Position:", userPosition);
 
         // If User is Employed, we check allowedPositions
         if (isEmployed) {

@@ -1,12 +1,26 @@
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 
-// API BASE URL - promeni ako backend ima drugi endpoint
-const API_BASE_URL = "http://localhost:8080/api/transactions";
+const apiBanking = axios.create({
+    baseURL: "http://localhost:8082",
+    headers: {
+        "Content-Type": "application/json",
+    },
+});
 
-/**
- * Dohvata ID korisnika iz JWT tokena.
- */
+apiBanking.interceptors.request.use(
+    (config) => {
+        const token = localStorage.getItem("token");
+        if (token) {
+            config.headers.Authorization = `Bearer ${token}`;
+            console.log(`API Request: ${config.method.toUpperCase()} ${config.url} - Token Set`);
+        }
+        return config;
+    },
+    (error) => Promise.reject(error)
+);
+
+
 const getUserIdFromToken = () => {
     const token = localStorage.getItem("token");
     if (!token) return null;
@@ -19,104 +33,122 @@ const getUserIdFromToken = () => {
     }
 };
 
-/**
- * Fetchuje sve transakcije za trenutno prijavljenog korisnika sa backend-a.
- * Ako API ne radi, vraća prazan niz.
- */
-export const fetchTransactions = async () => {
-    try {
-        const response = await axios.get(`${API_BASE_URL}`, {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem("token")}`
-            }
-        });
 
-        // Mapiramo odgovor tako da format ostane isti kao ranije
-        return response.data.map((t) => ({
-            id: t.id,
-            sender: t.sender,
-            senderAccount: t.senderAccount,
-            receiver: t.receiver,
-            receiverAccount: t.receiverAccount,
-            amount: t.amount,
-            currency: t.currency,
-            status: t.status,
-            date: new Date(t.timestamp).toLocaleDateString(),
-            time: new Date(t.timestamp).toLocaleTimeString(),
-            paymentPurpose: t.description,
-            paymentCode: t.paymentCode,
-            referenceNumber: t.referenceNumber
-        }));
+export const fetchAccountsForUser = async () => {
+    try {
+        const userId = getUserIdFromToken();
+        if (!userId) {
+            console.warn("User ID is missing from token");
+            return [];
+        }
+
+        console.log(`Fetching accounts for user ID: ${userId}`);
+        const response = await apiBanking.get(`/accounts/user/${userId}`);
+
+        return response.data.success && response.data.data?.accounts ? response.data.data.accounts : [];
     } catch (error) {
-        console.error("Error fetching transactions:", error);
+        console.error("Error fetching user accounts:", error.response?.data || error.message);
         return [];
     }
 };
 
-/**
- * Fetchuje detalje o pojedinačnoj transakciji na osnovu ID-a.
- */
-export const fetchTransactionDetails = async (id) => {
+export const fetchAccountsTransactions = async (accountId) => {
     try {
-        const response = await axios.get(`${API_BASE_URL}/${id}`, {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem("token")}`
-            }
-        });
+        if (!accountId) {
+            console.warn("Account ID is missing");
+            return [];
+        }
 
-        // Mapiramo odgovor u isti format kao ranije
-        const transaction = response.data;
-        return {
-            id: transaction.id,
-            sender: transaction.sender,
-            senderAccount: transaction.senderAccount,
-            receiver: transaction.receiver,
-            receiverAccount: transaction.receiverAccount,
-            amount: transaction.amount,
-            currency: transaction.currency,
-            status: transaction.status,
-            date: new Date(transaction.timestamp).toLocaleDateString(),
-            time: new Date(transaction.timestamp).toLocaleTimeString(),
-            paymentPurpose: transaction.description,
-            paymentCode: transaction.paymentCode,
-            referenceNumber: transaction.referenceNumber
-        };
+        console.log(`Fetching transactions for account ID: ${accountId}...`);
+        const response = await apiBanking.get(`/accounts/${accountId}/transactions`);
+
+        if (response.status === 204 || !response.data.success) {
+            console.warn(`No transactions found for account ID: ${accountId}`);
+            return [];
+        }
+
+        if (response.data.success) {
+            let transactions = response.data.data?.transactions || [];
+            transactions.sort((a, b) => b.timestamp - a.timestamp); // Sortiranje po vremenu
+
+            console.log(`Transactions for account ${accountId}:`, transactions);
+            return transactions.map((t) => ({
+                id: t.id || "N/A",
+                sender: t.fromAccountId?.ownerID || "N/A",
+                senderAccount: t.fromAccountId?.accountNumber || "N/A",
+                receiver: t.toAccountId?.ownerID || "N/A",
+                receiverAccount: t.toAccountId?.accountNumber || "N/A",
+                amount: t.amount ? `${t.amount} ${t.currency?.code || "N/A"}` : "N/A",
+                currency: t.currency?.code || "N/A",
+                status: t.transfer?.status || "N/A",
+                date: t.timestamp ? new Date(t.timestamp).toLocaleDateString() : "N/A",
+                time: t.timestamp ? new Date(t.timestamp).toLocaleTimeString() : "N/A",
+                paymentPurpose: t.transfer?.paymentDescription || "N/A",
+                paymentCode: t.transfer?.paymentCode || "N/A",
+                referenceNumber: t.transfer?.paymentReference || "N/A",
+                receiverName: t.transfer?.receiver || "N/A",
+                receiverAddress: t.transfer?.address || "N/A",
+                transferType: t.transfer?.type || "N/A",
+                completedAt: t.transfer?.completedAt ? new Date(t.transfer.completedAt).toLocaleString() : "N/A",
+                loanId: t.loanId || "N/A"
+            }));
+        } else {
+            console.warn(`No transactions found for account ${accountId}`);
+            return [];
+        }
     } catch (error) {
-        console.error(`Error fetching transaction with ID ${id}:`, error);
-        return null;
+        if (error.response?.status === 404) {
+            console.warn(`No transactions found for account ${accountId} (404 Not Found)`);
+            return []; // Umesto error-a, vraćamo prazan niz
+        }
+        console.error("Error fetching account transactions:", error.response?.data || error.message);
+        return [];
     }
 };
 
-// OVAKO TREBA DA IZGELDA DTO DA BI MOGLO IME DA IDE U DETALJE.
-/**]\[
- {
- "id": 1,
- "sender": "Marko Marković",
- "senderAccount": "205-123456789-01",
- "receiver": "Petar Petrović",
- "receiverAccount": "160-987654321-02",
- "amount": 100.00,
- "currency": "RSD",
- "status": "COMPLETED",
- "timestamp": "2025-03-01T14:35:00Z",
- "description": "Money Transfer",
- "paymentCode": "289",
- "referenceNumber": "12345678"
- },
- {
- "id": 2,
- "sender": "Jovan Jovanović",
- "senderAccount": "205-999988877-01",
- "receiver": "Ana Anić",
- "receiverAccount": "160-555566667-02",
- "amount": 250.00,
- "currency": "EUR",
- "status": "PENDING",
- "timestamp": "2025-03-02T09:15:00Z",
- "description": "Freelance Payment",
- "paymentCode": "333",
- "referenceNumber": "98765432"
- }
- ]
- */
+export const fetchTransactionDetails = async (transactionId) => {
+    try {
+        if (!transactionId) {
+            console.warn("Transaction ID is missing");
+            return null;
+        }
 
+        console.log(`Fetching details for transaction ID: ${transactionId}...`);
+        const response = await apiBanking.get(`/transactions/${transactionId}`);
+
+        if (response.status === 204 || !response.data.success) {
+            console.warn(`No details found for transaction ID: ${transactionId}`);
+            return null;
+        }
+
+        if (response.data.success) {
+            const transaction = response.data.data;
+
+            return {
+                id: transaction.id || "N/A",
+                sender: transaction.sender || "N/A",
+                senderAccount: transaction.senderAccount || "N/A",
+                receiver: transaction.receiver || "N/A",
+                receiverAccount: transaction.receiverAccount || "N/A",
+                amount: transaction.amount ? `${transaction.amount} ${transaction.currency || "N/A"}` : "N/A",
+                currency: transaction.currency || "N/A",
+                status: transaction.status || "N/A",
+                date: transaction.timestamp ? new Date(transaction.timestamp).toLocaleDateString() : "N/A",
+                time: transaction.timestamp ? new Date(transaction.timestamp).toLocaleTimeString() : "N/A",
+                paymentPurpose: transaction.paymentPurpose || "N/A",
+                paymentCode: transaction.paymentCode || "N/A",
+                referenceNumber: transaction.referenceNumber || "N/A"
+            };
+        } else {
+            console.warn(`No transaction details found for ID ${transactionId}`);
+            return null;
+        }
+    } catch (error) {
+        if (error.response?.status === 404) {
+            console.warn(`Transaction details not found (404) for ID: ${transactionId}`);
+            return null; // Vraćamo `null` umesto bacanja error-a
+        }
+        console.error("Error fetching transaction details:", error.response?.data || error.message);
+        return null;
+    }
+};

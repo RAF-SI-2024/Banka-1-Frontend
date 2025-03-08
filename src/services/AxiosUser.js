@@ -137,7 +137,7 @@ export const resetPassword = async (token, password) => {
 export const setupPassword = async (token, password) => {
   try {
     const response = await apiUser.post("/api/set-password", {
-      code: token,
+      token,
       password,
     });
     return response.data;

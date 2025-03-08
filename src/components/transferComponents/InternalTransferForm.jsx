@@ -6,6 +6,7 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import VerificationModal from "./VerificationModal";
 import { createInternalTransfer, verifyOTP, fetchAccountsForUser } from "../../services/AxiosBanking";
+import {useNavigate} from "react-router-dom";
 
 const InternalTransferForm = () => {
     const [accounts, setAccounts] = useState([]);
@@ -15,15 +16,16 @@ const InternalTransferForm = () => {
     const [transactionId, setTransactionId] = useState('');
     const [showModal, setShowModal] = useState(false);
     const [verificationCode, setVerificationCode] = useState('');
-
+    const navigate = useNavigate();
     // Fetch accounts data
     useEffect(() => {
         const getAccounts = async () => {
             try {
                 const response = await fetchAccountsForUser();
-                if (response.data && response.data.accounts) {
-                    setAccounts(response.data.accounts);
-                }
+
+                setAccounts(response);
+                console.log(accounts);
+
             } catch (error) {
                 console.error("Error fetching accounts:", error);
             }
@@ -70,6 +72,7 @@ const InternalTransferForm = () => {
 
             // trebalo bi da je odgovor u formatu: { transferId: "neki-id" }
             const transactionId = response.data.transferId;
+            //console.log(response.data);
 
             console.log("Transaction ID: ", transactionId);
 
@@ -98,6 +101,7 @@ const InternalTransferForm = () => {
                 alert("Transaction successfully verified!");
                 resetForm();
                 setShowModal(false);
+                navigate('/home');
             } else {
                 console.error("Invalid OTP or expired OTP.");
             }

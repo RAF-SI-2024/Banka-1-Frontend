@@ -7,7 +7,7 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import "../../styles/PaymentResultModal.css";
 
-const PaymentResultModal = ({ open, onClose, success, onConfirm }) => {
+const PaymentResultModal = ({ open, onClose, success, onConfirm, paymentMessage }) => {
     return (
         <Dialog open={open} onClose={onClose} className="payment-modal">
             <div className="payment-modal-content">
@@ -17,6 +17,10 @@ const PaymentResultModal = ({ open, onClose, success, onConfirm }) => {
 
                 <DialogContent>
                     <Typography variant="h6" className="modal-reason">Reason</Typography>
+
+                    <Typography variant="body1" className="modal-message">
+                        {paymentMessage} {/* Prikazuje poruku iz backend-a */}
+                    </Typography>
 
                     {success && (
                         <Typography variant="body1" className="modal-message">

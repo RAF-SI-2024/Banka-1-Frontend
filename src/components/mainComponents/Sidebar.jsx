@@ -136,7 +136,7 @@ export default function Sidebar() {
             {!isEmployed && (
                 <>
                   <ListItem disablePadding>
-                    <ListItemButton onClick={() => handleNavigation('/home-portal')}>
+                    <ListItemButton onClick={() => handleNavigation('/home')}>
                       <ListItemIcon><HomeIcon /></ListItemIcon>
                       <ListItemText primary="Home" />
                     </ListItemButton>

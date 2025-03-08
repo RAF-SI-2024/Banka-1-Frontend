@@ -27,7 +27,7 @@ apiBanking.interceptors.request.use(
         return Promise.reject(error);
     }
 );
-const getUserIdFromToken = () => {
+export const getUserIdFromToken = () => {
     const token = localStorage.getItem('token');
     if(!token) return null;
     try{
@@ -76,8 +76,11 @@ export const fetchAccounts = async () => {
 export const fetchAccountsForUser = async () => {
     const userId = getUserIdFromToken();
     try {
+        console.log("Running GET /accounts/user/" + userId);
         const response = await apiBanking.get(`/accounts/user/${userId}`);
-        return response.data;
+        const accounts = response.data.data.accounts;
+        console.log(accounts);
+        return accounts;
     } catch (error) {
         console.error("Error fetching recipients:", error);
         throw error;
@@ -106,8 +109,8 @@ export const fetchAccountsId = async (id) => {
 
 export const fetchRecipients = async (accountId) => {
     try {
-        console.log("AccountId = " + accountId);
         const response = await apiBanking.get(`/receiver/${accountId}`);
+        console.log("rec:"+ response.data)
         return response.data;
     } catch (error) {
         console.error("Error fetching recipients:", error);
@@ -139,10 +142,11 @@ export const updateRecipient = async (
 
 export const createRecipient = async (accountId, recipientData) => {
     try {
+
         const newReceiverData = {
             ownerAccountId: accountId,
             accountNumber: recipientData.accountNumber,
-            fullName: recipientData.fullName,
+            fullName: recipientData.fullName
         };
 
         const response = await apiBanking.post(`/receiver`, newReceiverData);
@@ -156,7 +160,9 @@ export const createRecipient = async (accountId, recipientData) => {
 // Fetch cards linked to an account
 export const fetchUserCards = async (accountId) => {
     try {
-        const response = await apiBanking.get(`/cards?account_id=${accountId}`);
+        console.log("Account id: " + accountId);
+        const response = await apiBanking.get(`/cards/${accountId}`);
+        console.log(response)
         return response.data;
     } catch (error) {
         console.error(`Error fetching cards for account ${accountId}:`, error);
@@ -168,19 +174,19 @@ export const fetchUserCards = async (accountId) => {
 export const createCard = async (
     accountId,
     cardType,
+    cardBrand = "VISA",
     authorizedPerson = null
 ) => {
     try {
         const requestBody = {
-            racun_id: accountId,
-            tip: cardType,
+            accountID: accountId,
+            cardType : cardType,
+            cardBrand: cardBrand
         };
-
         if (authorizedPerson) {
             requestBody.ovlasceno_lice = authorizedPerson;
         }
-
-        const response = await apiBanking.post("/cards", requestBody);
+        const response = await apiBanking.post("/cards/", requestBody);
         return response.data;
     } catch (error) {
         console.error("Error creating a new card:", error);
@@ -270,13 +276,10 @@ export const fetchCardsByAccountId = async (accountId) => {
     }
 };
 
-//ovaj poziv vrv nije dobar
-export const updateAccount = async (account) => {
+
+export const updateAccount = async (accountId, ownerId, account) => {
     try {
-        const response = await axios.put(
-            `/accounts/${account.ownerID}`,
-            account
-        );
+        const response = await apiBanking.put(`/accounts/user/${ownerId}/${accountId}`, account);
         return response.data;
     } catch (error) {
         throw error;
@@ -286,7 +289,7 @@ export const updateAccount = async (account) => {
 export const createInternalTransfer = async (transferData) => {
     try {
         const response = await apiBanking.post("/internal-transfer", transferData);
-        return response; // trebalo bi da sadrzi id transakcije : transferId
+        return response.data; // trebalo bi da sadrzi id transakcije : transferId
     } catch (error) {
         console.error("API Error during internal transfer: ", error);
         throw error;
@@ -303,8 +306,75 @@ export const deleteRecipient = async (id) => {
     }
 };
 
+export const createNewMoneyTransfer = async (transferData) => {
+    try {
+        const response = await apiBanking.post("/money-transfer", transferData);
+        return response.data;
+    } catch (error) {
+        console.error("API Error during new payment transfer: ", error);
+        throw error;
+    }
+};
+
 export const verifyOTP = async (otpData) => {
+    console.log(otpData);
     return await apiBanking.post("/otp/verification", otpData);
 };
 
+export const fetchAccountsId1 = async (id) => {
+    try {
+        const response = await apiBanking.get(`/accounts/user/${id}`, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+        });
+
+        // Pristupanje pravom nizu
+        const accounts = response.data.data.accounts;
+
+        if (!Array.isArray(accounts)) {
+            console.error("Invalid response format:", response.data);
+            return [];
+        }
+
+        return accounts.map((account) => ({
+            id: account.id,
+            name: account.ownerID,
+            number: account.accountNumber,
+            balance: account.balance,
+            subtype: account.subtype,
+
+        }));
+
+    } catch (error) {
+        console.error(`Error fetching account with ID ${id}:`, error);
+        return null;
+    }
+};
+
+export const fetchRecipientsForFast = async (userId) => {
+    try {
+        console.log("UserId = " + userId);
+        const response = await apiBanking.get(`/receiver/${userId}`);
+
+        // Logujemo celu strukturu odgovora
+        console.log("Response data:", response.data);
+
+        // Proveravamo da li postoji 'receivers' unutar 'data'
+        const receivers = response.data?.data?.receivers;
+
+        if (Array.isArray(receivers)) {
+            const reversedReceivers = receivers.reverse();
+
+            // Vraćamo prve tri osobe nakon obrtanja niza
+            return reversedReceivers.slice(0, 3);
+        } else {
+            console.error("Response data is not an array:", response.data);
+            return [];  // Ako nije niz, vraćamo prazan niz
+        }
+    } catch (error) {
+        console.error("Error fetching recipients:", error);
+        throw error;
+    }
+};
 export default apiBanking;

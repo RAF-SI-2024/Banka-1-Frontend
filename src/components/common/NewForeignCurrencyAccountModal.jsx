@@ -63,21 +63,24 @@ const NewForeignCurrencyAccountModal = ({ open, onClose, accountType }) => {
 
     const handleConfirm = async () => {
 
+        // This is what is sent to the backend
         const accountData = {
             ownerID: selectedOwnerId,
-            currency: selectedCurrency,
+            currency: selectedCurrency.toUpperCase(),
             type: 'FOREIGN_CURRENCY',
             subtype: accountType.toLocaleUpperCase(),
             dailyLimit: 0,
             monthlyLimit: 0,
             status: "ACTIVE",
-            balance: parseFloat(startingBalance)
+            balance: parseFloat(startingBalance),
+            createCard: makeCard
         };
 
-        console.log("Account Data:", accountData);
+        console.log(accountData);
+
 
         try {
-            // da se vrati u createCustomer accountData kako bi se kreirao i korisnik
+            // Calls the POST createAccount in Axios
             await createAccount(accountData);
             onClose();
         } catch (error) {
@@ -88,32 +91,31 @@ const NewForeignCurrencyAccountModal = ({ open, onClose, accountType }) => {
     const handleCreateCustomer = async (customerData) => {
         try {
             const customerPayload = {
-                ime: customerData.firstName,
-                prezime: customerData.lastName,
+                firstName: customerData.firstName,
+                lastName: customerData.lastName,
                 username: customerData.username,
-                datum_rodjenja: transformDateForApi(customerData.birthDate),
-                pol: customerData.gender,
+                birthDate: transformDateForApi(customerData.birthDate),
+                gender: customerData.gender,
                 email: customerData.email,
-                broj_telefona: customerData.phoneNumber,
-                adresa: customerData.address,
+                phoneNumber: customerData.phoneNumber,
+                address: customerData.address,
+                accountInfo: {
+                    currency: selectedCurrency.toUpperCase(),
+                    type: "FOREIGN_CURRENCY",
+                    subtype: accountType.toUpperCase(),
+                    dailyLimit: 0,
+                    monthlyLimit: 0,
+                    status: "ACTIVE",
+                    createCard: makeCard
+                }
             };
 
             const response = await createCustomer(customerPayload);
-            const createdCustomer = response.data;
 
             setIsCreateModalOpen(false);
+            onClose();
             resetCustomerForm();
             toast.success('Customer created successfully');
-
-            await loadCustomers();
-
-            setSelectedCustomer({
-                id: createdCustomer.id,
-                firstName: createdCustomer.firstName,
-                lastName: createdCustomer.lastName,
-                email: createdCustomer.email,
-                phoneNumber: createdCustomer.phoneNumber
-            });
 
         } catch (error) {
             toast.error(`Failed to create customer: ${error.message}`);
@@ -182,34 +184,6 @@ const NewForeignCurrencyAccountModal = ({ open, onClose, accountType }) => {
             <DialogTitle>Creating a {accountType} foreign currency account</DialogTitle>
 
             <DialogContent sx={{ mt: 2 }}>
-                <FormControl fullWidth sx={{ mt: 2 }}>
-                    <InputLabel id="customer-label" shrink>
-                        Choose a customer
-                    </InputLabel>
-                    <Select
-                        labelId="customer-label"
-                        value={selectedOwnerId}
-                        onChange={(e) => setSelectedOwnerId(e.target.value)}
-                        displayEmpty
-                        label="Choose a customer"
-                    >
-                        <MenuItem value="" disabled>Choose a customer</MenuItem>
-                        {customers.map((customer) => (
-                            <MenuItem key={customer.id} value={customer.id}>
-                                {customer.firstName} {customer.lastName}
-                            </MenuItem>
-                        ))}
-                    </Select>
-
-                </FormControl>
-
-                <Button
-                    variant="outlined"
-                    sx={{ mt: 2, width: '100%' }}
-                    onClick={() => setIsCreateModalOpen(true)}
-                >
-                    Create New Customer
-                </Button>
 
                 <Typography variant="subtitle1" sx={{ mt: 2 }}>
                     Choose Currency
@@ -248,6 +222,36 @@ const NewForeignCurrencyAccountModal = ({ open, onClose, accountType }) => {
                     onChange={(e) => setStartingBalance(e.target.value)}
                     sx={{ mt: 2 }}
                 />
+
+                <FormControl fullWidth sx={{ mt: 2 }}>
+                    <InputLabel id="customer-label" shrink>
+                        Choose a customer
+                    </InputLabel>
+                    <Select
+                        labelId="customer-label"
+                        value={selectedOwnerId}
+                        onChange={(e) => setSelectedOwnerId(e.target.value)}
+                        displayEmpty
+                        label="Choose a customer"
+                    >
+                        <MenuItem value="" disabled>Choose a customer</MenuItem>
+                        {customers.map((customer) => (
+                            <MenuItem key={customer.id} value={customer.id}>
+                                {customer.firstName} {customer.lastName}
+                            </MenuItem>
+                        ))}
+                    </Select>
+
+                </FormControl>
+
+                <Button
+                    variant="outlined"
+                    sx={{ mt: 2, width: '100%' }}
+                    onClick={() => setIsCreateModalOpen(true)}
+                >
+                    Create New Customer
+                </Button>
+
             </DialogContent>
 
             <DialogActions sx={{ justifyContent: 'space-between', padding: '16px' }}>

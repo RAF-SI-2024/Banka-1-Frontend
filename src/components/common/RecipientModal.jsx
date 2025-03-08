@@ -13,7 +13,7 @@ function RecipientModal({ isOpen, onClose, data, onSave,tittle }) {
     }, [isOpen]);
 
     const [errors, setErrors] = useState({
-        fullaName: "",
+        fullName: "",
         accountNumber: "",
     });
 

@@ -1,14 +1,15 @@
 .card-slider-container {
     display: flex;
+    flex-direction: row;
     align-items: center;
     justify-content: center;
     margin-top: 16px;
   }
   
   .card-slider-card {
-    width: 300px;
+    width: 30%;
     text-align: center;
-    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     border-radius: 8px;
     background-color: #e0c78f;
   }

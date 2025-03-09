@@ -39,6 +39,9 @@ const CreateCardModal = ({open, onClose, accountId}) => {
         try {
             await addCard(selectedAccount, selectedType, selectedBrand);
             onClose();
+
+            //neka stoji privremeno
+            window.location.reload();
         } catch (error) {
             console.error("Error creating card:", error);
         }
@@ -74,7 +77,7 @@ const CreateCardModal = ({open, onClose, accountId}) => {
                         {accounts.length > 0 ? (
                             accounts.map((acc) => (
                                 <MenuItem key={acc.id} value={acc.id}>
-                                    {acc.number}
+                                    {acc.accountNumber}
                                 </MenuItem>
                             ))
                         ) : (

@@ -35,13 +35,13 @@ const AccountDetailsModal = ({ open, onClose, account }) => {
             <TextField fullWidth label="Account owner" value={account?.ownerID || ""} disabled />
           </Grid>
           <Grid item xs={12} sm={6}>
-            <TextField fullWidth label="Type" value={account?.type || ""} disabled />
+            <TextField fullWidth label="Type" value={`${account?.type}` || ""} disabled />
           </Grid>
           <Grid item xs={12} sm={6}>
             <TextField fullWidth label="Available" value={`${account?.dailyLimit} RSD`} disabled />   {/*Da li ovde treba dailyLimit? */}
           </Grid>
           <Grid item xs={12} sm={6}>
-            <TextField fullWidth label="Reserved" value={`${account?.dailySpent} RSD`} disabled />   {/*Da li ovde treba dailySpent? */}
+            <TextField fullWidth label="Reserved" value={`${account?.reservedBalance} RSD`} disabled />   {/*Da li ovde treba dailySpent? */}
           </Grid>
           <Grid item xs={12}>
             <TextField fullWidth label="Balance" value={`${account?.balance} RSD`} disabled />

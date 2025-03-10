@@ -31,7 +31,6 @@ const AllLoansEmployeePortal = () => {
             setLoading(true);
             const response = await fetchAllLoansForEmployees();
 
-            // Check if response.data exists and if loans array is present
             const data = response.data;
             if (!data || !Array.isArray(data.loans)) {
                 setLoans([]);
@@ -51,7 +50,11 @@ const AllLoansEmployeePortal = () => {
                 loanStatus: loan.paymentStatus || "N/A",
             }));
 
-            setLoans(formattedLoans);
+            const sortedLoans = formattedLoans.sort((a, b) => {
+                return a.accountNumber.localeCompare(b.accountNumber);
+            });
+
+            setLoans(sortedLoans);
         } catch (err) {
             console.error("Error loading loans:", err);
             setError("Failed to load loans data");

@@ -377,4 +377,17 @@ export const fetchRecipientsForFast = async (userId) => {
         throw error;
     }
 };
+
+export const fetchAllLoansForEmployees = async () => {
+    try {
+        const response = await apiBanking.get("/loans/admin");
+        return response.data;
+    } catch (error) {
+        console.error("Error fetching loans:", error);
+        throw error;
+    }
+};
+
+
+
 export default apiBanking;

@@ -210,8 +210,8 @@ export const changeCardName = async (cardId, newName) => {
 // Change card limit
 export const changeCardLimit = async (cardId, newLimit) => {
     try {
-        const response = await apiBanking.patch(`/cards/${cardId}`, {
-            limit: newLimit,
+        const response = await apiBanking.patch(`/cards/${cardId}/limit`, {
+            newLimit: newLimit,
         });
         return response.data;
     } catch (error) {
@@ -223,7 +223,14 @@ export const changeCardLimit = async (cardId, newLimit) => {
 // Block or unblock a card
 export const updateCardStatus = async (cardId, status) => {
     try {
-        const response = await apiBanking.patch(`/cards/${cardId}`, { status });
+        const response = await apiBanking.patch(`/cards/${cardId}`, { status},
+            {
+                headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+            }
+        );
+        
         return response.data;
     } catch (error) {
         console.error(`Error updating status for card ${cardId}:`, error);
@@ -336,15 +343,17 @@ export const fetchAccountsId1 = async (id) => {
             console.error("Invalid response format:", response.data);
             return [];
         }
+        
+        //ostavio sam ovako da bi imali sve parametre za details
+        return accounts;
+        // return accounts.map((account) => ({
+        //     id: account.id,
+        //     name: account.ownerID,
+        //     number: account.accountNumber,
+        //     balance: account.balance,
+        //     subtype: account.subtype,
 
-        return accounts.map((account) => ({
-            id: account.id,
-            name: account.ownerID,
-            number: account.accountNumber,
-            balance: account.balance,
-            subtype: account.subtype,
-
-        }));
+        // }));
 
     } catch (error) {
         console.error(`Error fetching account with ID ${id}:`, error);

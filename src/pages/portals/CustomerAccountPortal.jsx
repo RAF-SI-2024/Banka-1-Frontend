@@ -33,7 +33,6 @@ const CustomerAccountPortal = () =>{
         loadAccounts();
     }, []);
 
-    console.log(accounts);
     //dok se ucitava circular progress se vidi
     if (loading) {
         return (

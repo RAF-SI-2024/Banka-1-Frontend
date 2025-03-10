@@ -22,8 +22,8 @@ import CardsPortal from "./pages/portals/CardsPortal";
 import ReceiversPortal from "./pages/portals/ReceiversPortal";
 import EmployeeCardsPortal from "./pages/portals/EmployeeCardsPortal";
 import CustomerAccountPortal from "./pages/portals/CustomerAccountPortal";
-import AllLoansEmployee from "./pages/portals/AllLoansEmployee";
-import PendingLoansEmployee from "./pages/portals/PendingLoansEmployee";
+import AllLoansEmployeePortal from "./pages/portals/AllLoansEmployeePortal";
+import PendingLoansEmployeePortal from "./pages/portals/PendingLoansEmployeePortal";
 
 // import CustomerAccountPortal from "./pages/portals/CustomerAccountPortal";
 
@@ -129,7 +129,7 @@ function App() {
                       "NONE",
                    ]}
                   >
-                    <AllLoansEmployee />
+                    <AllLoansEmployeePortal />
                   </AuthGuard>
               }
               />
@@ -147,7 +147,7 @@ function App() {
                               "NONE",
                           ]}
                       >
-                          <PendingLoansEmployee />
+                          <PendingLoansEmployeePortal />
                       </AuthGuard>
                   }
               />

@@ -66,6 +66,7 @@ export default function Sidebar() {
   const [isAdmin, setIsAdmin] = useState(false);
   const [isEmployed, setIsEmployed] = useState(false);
   const [showPaymentsMenu, setShowPaymentsMenu] = useState(false);
+  const [showLoanOptions, setShowLoanOptions] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -217,6 +218,27 @@ export default function Sidebar() {
                       <ListItemText primary="Employee Bank Accounts" />
                     </ListItemButton>
                   </ListItem>
+
+                  {/* Loans Dropdown */}
+                  <ListItem disablePadding>
+                    <ListItemButton onClick={() => setShowLoanOptions(!showLoanOptions)}>
+                      <ListItemIcon><PaymentIcon /></ListItemIcon>
+                      <ListItemText primary="Loans" />
+                      {showLoanOptions ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+                    </ListItemButton>
+                  </ListItem>
+                  {showLoanOptions && (
+                      <>
+                        <ListItemButton onClick={() => handleNavigation('/all-loans-employee')}>
+                          <ListItemIcon><ReceiptIcon /></ListItemIcon>
+                          <ListItemText primary="All Loans" />
+                        </ListItemButton>
+                        <ListItemButton onClick={() => handleNavigation('/pending-loans-employee')}>
+                          <ListItemIcon><AttachMoneyIcon /></ListItemIcon>
+                          <ListItemText primary="Pending Loans" />
+                        </ListItemButton>
+                      </>
+                  )}
                 </>
             )}
 

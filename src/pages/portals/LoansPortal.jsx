@@ -1,18 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Sidebar from "../../components/mainComponents/Sidebar";
 import DataTable from "../../components/tables/DataTable";
 import Button from "@mui/material/Button";
 import LoanDetailsModal from "../../components/common/LoanDetailsModal";
+import { fetchUserLoans } from "../../services/AxiosBanking";
 
 const LoansPortal = () => {
-    const [rows, setRows] = useState([]); // Trenutno nema podataka sa backenda
-    const [selectedLoan, setSelectedLoan] = useState(null);
+    const [rows, setRows] = useState([]);
+    const [selectedLoanId, setSelectedLoanId] = useState(null);
     const [modalOpen, setModalOpen] = useState(false);
 
     const columns = [
         { field: "loanName", headerName: "Loan Name", width: 200 },
         { field: "loanNumber", headerName: "Loan Number", width: 150 },
-        { field: "totalAmount", headerName: "Total Amount", width: 150 },
+        { field: "remainingAmount", headerName: "Remaining Amount", width: 150 },
         {
             field: "details",
             headerName: "",
@@ -22,7 +23,7 @@ const LoansPortal = () => {
                     variant="contained"
                     color="primary"
                     size="small"
-                    onClick={() => handleOpenModal(params.row)}
+                    onClick={() => handleOpenModal(params.row.loanNumber)}
                 >
                     Details
                 </Button>
@@ -30,53 +31,104 @@ const LoansPortal = () => {
         },
     ];
 
-    const handleOpenModal = (loan) => {
-        setSelectedLoan(loan);
+    const handleOpenModal = (loanId) => {
+        setSelectedLoanId(loanId);
         setModalOpen(true);
     };
 
     const handleCloseModal = () => {
         setModalOpen(false);
-        setSelectedLoan(null);
+        setSelectedLoanId(null);
     };
+/*
+    useEffect(() => {
+        const loadLoans = async () => {
+            try {
+                const response = await fetchUserLoans();
+                if (response?.data?.loans) {
+                    const formattedLoans = response.data.loans.map((loan) => ({
+                        loanName: loan.loanType,
+                        loanNumber: loan.id,
+                        remainingAmount: loan.remainingAmount,
+                    }));
+                    setRows(formattedLoans);
+                }
+            } catch (error) {
+                console.error("Error loading loans:", error);
+            }
+        };
 
-    // Test podaci za proveru modala
-    const testLoanData = {
-        loanNumber: "12345678",
-        loanType: "Personal Loan",
-        totalAmount: "10,000 USD",
-        repaymentPeriod: "5 years",
-        nominalInterestRate: "5%",
-        effectiveInterestRate: "5.5%",
-        contractDate: "2023-01-15",
-        finalPaymentDate: "2028-01-15",
-        nextInstallmentAmount: "200 USD",
-        nextInstallmentDate: "2024-04-15",
-        remainingDebt: "8,000 USD",
-        currency: "USD",
-    };
+        loadLoans();
+    }, []);
+*/
 
+    // Simulirani podaci umesto fetchUserLoans
+    const testLoans = [
+        {
+            id: 1,
+            loanType: "CASH",
+            loanAmount: 500000,
+            duration: 24,
+            nominalRate: 5.5,
+            effectiveRate: 6.0,
+            createdDate: 1741545198899,
+            allowedDate: 1742149998899,
+            monthlyPayment: 22000.0,
+            nextPaymentDate: 1744137198899,
+            remainingAmount: 500000.0,
+            currencyType: "RSD",
+        },
+        {
+            id: 2,
+            loanType: "CAR LOAN",
+            loanAmount: 800000,
+            duration: 36,
+            nominalRate: 4.2,
+            effectiveRate: 4.8,
+            createdDate: 1700000000000,
+            allowedDate: 1750000000000,
+            monthlyPayment: 30000.0,
+            nextPaymentDate: 1746000000000,
+            remainingAmount: 600000.0,
+            currencyType: "EUR",
+        },
+    ];
+
+    // Zakomentariši backend poziv i koristi test podatke
+    useEffect(() => {
+        setRows(
+            testLoans.map((loan) => ({
+                loanName: loan.loanType, // Loan Type -> Loan Name
+                loanNumber: loan.id, // ID -> Loan Number
+                remainingAmount: loan.remainingAmount, // Remaining Amount umesto Total Amount
+                ...loan, // Dodaj sve ostale vrednosti za modal
+            }))
+        );
+    }, []);
+
+    //do ovde
     return (
         <div className="flex">
             <Sidebar />
             <div style={{ padding: "20px", marginTop: "64px", width: "100%", textAlign: "left", fontSize: 20 }}>
                 <h2>Loans Overview</h2>
 
-                {/* Test dugme za otvaranje modala */}
+                {/*test dugme*/}
                 <Button
                     variant="contained"
                     color="secondary"
-                    onClick={() => handleOpenModal(testLoanData)}
+                    onClick={() => handleOpenModal(1)} // Test dugme otvara modal sa Loan ID = 1
                     style={{ marginBottom: "20px" }}
                 >
-                    Test Modal
+                    Open Test Loan Modal
                 </Button>
+                {/*do ovde*/}
 
                 <DataTable rows={rows} columns={columns} checkboxSelection={false} />
             </div>
 
-            {/* Modal za prikaz detalja kredita */}
-            <LoanDetailsModal open={modalOpen} onClose={handleCloseModal} loan={selectedLoan} />
+            {/* Modal sa detaljima kredita */}
+            <LoanDetailsModal open={modalOpen} onClose={handleCloseModal} loanId={selectedLoanId} />
         </div>
     );
 };

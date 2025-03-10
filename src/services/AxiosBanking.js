@@ -377,4 +377,29 @@ export const fetchRecipientsForFast = async (userId) => {
         throw error;
     }
 };
+
+export const fetchUserLoans = async () => {
+    try {
+        console.log("Fetching loans for the authenticated user");
+        const response = await apiBanking.get("/loans");
+        return response.data;
+    } catch (error) {
+        console.error("Error fetching loans:", error);
+        throw error;
+    }
+};
+
+export const fetchLoanDetails = async (loan_id) => {
+    try {
+        console.log(`Fetching details for loan ID: ${loan_id}`);
+        const response = await apiBanking.get(`/loans/${loan_id}`);
+        return response.data;
+    } catch (error) {
+        console.error(`Error fetching loan details for ID ${loan_id}:`, error);
+        throw error;
+    }
+};
+
+
+
 export default apiBanking;

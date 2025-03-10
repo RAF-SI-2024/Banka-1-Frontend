@@ -22,6 +22,8 @@ import CardsPortal from "./pages/portals/CardsPortal";
 import ReceiversPortal from "./pages/portals/ReceiversPortal";
 import EmployeeCardsPortal from "./pages/portals/EmployeeCardsPortal";
 import CustomerAccountPortal from "./pages/portals/CustomerAccountPortal";
+import AllLoansEmployeePortal from "./pages/portals/AllLoansEmployeePortal";
+import PendingLoansEmployeePortal from "./pages/portals/PendingLoansEmployeePortal";
 
 // import CustomerAccountPortal from "./pages/portals/CustomerAccountPortal";
 
@@ -113,6 +115,42 @@ function App() {
                 </AuthGuard>
               }
             />
+
+            <Route
+              path={"/all-loans-employee"}
+              element={
+                <AuthGuard
+                   allowedPositions={[
+                      "WORKER",
+                      "MANAGER",
+                      "DIRECTOR",
+                      "HR",
+                      "ADMIN",
+                      "NONE",
+                   ]}
+                  >
+                    <AllLoansEmployeePortal />
+                  </AuthGuard>
+              }
+              />
+
+              <Route
+                  path={"/pending-loans-employee"}
+                  element={
+                      <AuthGuard
+                          allowedPositions={[
+                              "WORKER",
+                              "MANAGER",
+                              "DIRECTOR",
+                              "HR",
+                              "ADMIN",
+                              "NONE",
+                          ]}
+                      >
+                          <PendingLoansEmployeePortal />
+                      </AuthGuard>
+                  }
+              />
 
             {/* Admin Only */}
             <Route

@@ -1,22 +1,19 @@
 import Sidebar from "../../components/mainComponents/Sidebar";
 import styles from "../../styles/Receivers.module.css";
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 
 import RecipientModal from "../../components/common/RecipientModal";
 import {
-    createRecipient,
+    createRecipient, createRecipientt,
     deleteRecipient,
     fetchAccountsForUser,
     fetchRecipients,
-    updateRecipient
+    updateRecipient, updateRecipientt
 } from "../../services/AxiosBanking";
 
-
-
 function ReceiversPortal() {
-
-    const token =  localStorage.getItem("token");
+    const token = localStorage.getItem("token");
     const decodedToken = jwtDecode(token);
     const userId = decodedToken.id;
 
@@ -26,24 +23,26 @@ function ReceiversPortal() {
     const [newRecipient, setNewRecipient] = useState({
         fullName: "",
         accountNumber: "",
-
     });
+
     const [accounts, setAccounts] = useState([]);
     const [selectedAccount, setSelectedAccount] = useState(null);
     const [recipients, setRecipients] = useState([]);
+
     useEffect(() => {
         loadAccounts();
     }, []);
 
-
-
-    const openEditModal =  (recipient) => {
-
+    const openEditModal = (recipient) => {
         const newRecipient = {
             id: recipient.id,
             fullName: recipient.firstName + " " + recipient.lastName,
-            accountNumber: recipient.accountNumber
-        }
+            accountNumber: recipient.accountNumber,
+            address: recipient.address || "",
+        };
+
+        console.log("Recipient data for edit modal:", newRecipient);
+
         setEditRecipient(newRecipient);
         setIsEditModalOpen(true);
     };
@@ -53,8 +52,8 @@ function ReceiversPortal() {
     };
 
     const openAddModal = () => {
-        if(selectedAccount) { //ako nema izabranog naloga ne moze da se otvori dugme
-            setNewRecipient({fullName: "", accountNumber: ""});
+        if (selectedAccount) {
+            setNewRecipient({ fullName: "", accountNumber: "", address: "" });
             setIsAddModalOpen(true);
         }
     };
@@ -63,33 +62,48 @@ function ReceiversPortal() {
         setIsAddModalOpen(false);
     };
 
-    const loadAccounts = async () => {  //ucitavanje racuna
+    const loadAccounts = async () => {
         try {
-            const data = await fetchAccountsForUser(userId);
-            setAccounts(data.data.accounts);
-
+            console.log("Fetching accounts for user...");
+            const fetchedAccounts = await fetchAccountsForUser(userId);
+            console.log("Fetched accounts:", fetchedAccounts);
+            if (fetchedAccounts && Array.isArray(fetchedAccounts)) {
+                setAccounts(fetchedAccounts);
+                console.log("Accounts set:", fetchedAccounts);
+            } else {
+                console.error("API response does not contain accounts array:", fetchedAccounts);
+                setAccounts([]);
+            }
         } catch (err) {
             console.error("Failed to fetch accounts:", err);
         }
-
     };
 
     const loadRecipients = async (accountId) => {
         try {
             const data = await fetchRecipients(accountId);
-            setRecipients( data.data.receivers);
+            setRecipients(data.data.receivers);
         } catch (err) {
             console.error("Failed to fetch recipients:", err);
         }
     };
 
-
     const handleCreateRecipient = async (recipient) => {
-
         try {
             const selectedAcc = accounts.find(acc => acc.id.toString() === selectedAccount);
-            const createdRecipient = await createRecipient(selectedAcc.accountNumber, recipient);
+            if (!selectedAcc) {
+                console.error("No selected account.");
+                return;
+            }
 
+            const recipientData = {
+                ownerAccountId: selectedAcc.id,
+                accountNumber: recipient.accountNumber,
+                fullName: recipient.fullName,
+                address: recipient.address || "",
+            };
+
+            await createRecipientt(recipientData);
             await loadRecipients(selectedAcc.id);
             closeAddModal();
         } catch (error) {
@@ -97,25 +111,42 @@ function ReceiversPortal() {
         }
     };
 
-
     const handleEditRecipient = async (recipient) => {
-        console.log(recipient)
-
         try {
-            const selectedAcc = accounts.find(acc => acc.id.toString() === selectedAccount);
+            console.log("🔹 Raw recipient data received:", recipient);
 
-            await updateRecipient(selectedAcc.accountNumber ,recipient.id, recipient);
+            if (!recipient || !recipient.id || !recipient.accountNumber || !recipient.fullName) {
+                console.error("Invalid recipient data:", recipient);
+                return;
+            }
+
+            const selectedAcc = accounts.find(acc => acc.id.toString() === selectedAccount);
+            if (!selectedAcc) {
+                console.error("No account selected.");
+                return;
+            }
+
+            const updatedRecipientData = {
+                id: recipient.id,
+                ownerAccountId: selectedAcc.id,
+                accountNumber: recipient.accountNumber,
+                fullName: recipient.fullName,
+                address: recipient.address || "",
+            };
+
+
+            await updateRecipientt(recipient.id, updatedRecipientData);
+
+            console.log("Recipient successfully updated!");
 
             await loadRecipients(selectedAcc.id);
             closeEditModal();
         } catch (error) {
-            console.error("Error updating recipient:", error);
+            console.error("Error updating recipient:", error.response?.data || error.message);
         }
     };
 
-
     const handleDeleteRecipient = async (recipientId) => {
-
         try {
             await deleteRecipient(recipientId);
             const selectedAcc = accounts.find(acc => acc.id.toString() === selectedAccount);
@@ -123,24 +154,20 @@ function ReceiversPortal() {
         } catch (error) {
             console.error("Error deleting recipient:", error);
         }
-
     };
+
     const handleAccountSelection = (accountId) => {
         if (!accountId) return;
         setSelectedAccount(accountId);
-
-
         const selectedAcc = accounts.find(acc => acc.id.toString() === accountId);
         if (selectedAcc) {
-
             loadRecipients(selectedAcc.id);
         }
     };
 
-
     return (
         <div className={styles.page}>
-            <Sidebar/>
+            <Sidebar />
             <div className={styles.container}>
                 <h1 className={styles.title}>Recipients</h1>
                 <select
@@ -152,16 +179,16 @@ function ReceiversPortal() {
                     <option value="" disabled>
                         Select an account
                     </option>
-
                     {accounts.map((account) => (
                         <option key={account.id} value={account.id}>
-                            {account.accountNumber} {/* Display account number */}
+                            {account.accountNumber}
                         </option>
                     ))}
                 </select>
                 <table className={styles.table}>
-                <thead>
+                    <thead>
                     <tr>
+                        <th>ID</th>
                         <th>Recipient</th>
                         <th>Account Number</th>
                         <th></th>
@@ -177,6 +204,7 @@ function ReceiversPortal() {
                     <tbody>
                     {recipients.map((recipient) => (
                         <tr key={recipient.id}>
+                            <td>{recipient.id}</td>
                             <td>{recipient.firstName + " " + recipient.lastName}</td>
                             <td>{recipient.accountNumber}</td>
                             <td>
@@ -198,20 +226,21 @@ function ReceiversPortal() {
                     </tbody>
                 </table>
 
-                <RecipientModal isOpen={isEditModalOpen}
-                                onClose={closeEditModal}
-                                data={editRecipient}
-                                onSave={handleEditRecipient}
-                                tittle={"Edit Recipient"}
+                <RecipientModal
+                    isOpen={isEditModalOpen}
+                    onClose={closeEditModal}
+                    data={editRecipient}
+                    onSave={handleEditRecipient}
+                    tittle={"Edit Recipient"}
                 />
 
-                <RecipientModal isOpen={isAddModalOpen}
-                                onClose={closeAddModal}
-                                data={newRecipient}
-                                onSave={handleCreateRecipient}
-                                tittle={"Add New Recipient"}
+                <RecipientModal
+                    isOpen={isAddModalOpen}
+                    onClose={closeAddModal}
+                    data={newRecipient}
+                    onSave={handleCreateRecipient}
+                    tittle={"Add New Recipient"}
                 />
-
             </div>
         </div>
     );

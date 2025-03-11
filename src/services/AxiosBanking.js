@@ -387,6 +387,46 @@ export const fetchRecipientsForFast = async (userId) => {
     }
 };
 
+export const createRecipientt = async (recipientData) => {
+    try {
+        const requestBody = {
+            ownerAccountId: Number(recipientData.ownerAccountId),
+            accountNumber: recipientData.accountNumber,
+            fullName: recipientData.fullName,
+            address: recipientData.address || ""
+        };
+
+        console.log("Sending recipient data:", requestBody);
+
+        const response = await apiBanking.post(`/receiver`, requestBody);
+
+        console.log("Recipient added successfully:", response.data);
+        return response.data;
+    } catch (error) {
+        console.error("Error creating recipient:", error.response?.data || error.message);
+        throw error;
+    }
+};
+export const updateRecipientt = async (recipientId, recipientData) => {
+    try {
+        console.log(`Updating recipient ID: ${recipientId} with data:`, recipientData);
+
+        if (!recipientId || !recipientData || !recipientData.accountNumber) {
+            console.error("Missing recipient data:", recipientData);
+            throw new Error("Recipient data is missing required fields.");
+        }
+
+        const response = await apiBanking.put(`/receiver/${recipientId}`, recipientData);
+
+        console.log("Recipient update response:", response.data);
+
+        return response.data;
+    } catch (error) {
+        console.error(`Error updating recipient [${recipientId}]:`, error.response?.data || error.message);
+      throw error;
+    }
+};
+
 export const fetchAllLoansForEmployees = async () => {
     try {
         const response = await apiBanking.get("/loans/admin");
@@ -426,6 +466,5 @@ export const denyLoan = async (loan_id, deniedLoan) => {
         throw error;
     }
 };
-
 
 export default apiBanking;

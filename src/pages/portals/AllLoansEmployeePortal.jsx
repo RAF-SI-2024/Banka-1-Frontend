@@ -5,6 +5,7 @@ import SearchDataTable from "../../components/tables/SearchDataTable";
 import { toast } from "react-toastify";
 import { fetchAllLoansForEmployees } from "../../services/AxiosBanking";
 
+
 const AllLoansEmployeePortal = () => {
     const [loans, setLoans] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -55,6 +56,7 @@ const AllLoansEmployeePortal = () => {
             });
 
             setLoans(sortedLoans);
+
         } catch (err) {
             console.error("Error loading loans:", err);
             setError("Failed to load loans data");
@@ -64,7 +66,6 @@ const AllLoansEmployeePortal = () => {
             setLoading(false);
         }
     };
-
 
     return (
         <div>

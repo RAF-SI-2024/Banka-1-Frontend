@@ -467,4 +467,15 @@ export const denyLoan = async (loan_id, deniedLoan) => {
     }
 };
 
+// Submit loan request - podnosenje zahteva za kredit
+export const submitLoanRequest = async (loanData) => {
+    try {
+      const response = await apiBanking.post("/loans/", loanData);
+      return response.data;
+    } catch (error) {
+      console.error("Error submitting loan request:", error);
+      throw error;
+    }
+  };
+
 export default apiBanking;

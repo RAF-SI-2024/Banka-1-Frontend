@@ -397,6 +397,35 @@ export const fetchAllLoansForEmployees = async () => {
     }
 };
 
+export const fetchAllPendingLoans = async () => {
+    try {
+        const response = await apiBanking.get("/loans/pending");
+        return response.data.data.loans;
+    } catch (error) {
+        console.error("Error fetching loans:", error);
+        throw error;
+    }
+};
+
+export const approveLoan = async (loan_id, approvedLoan) => {
+    try {
+        const response = await apiBanking.put(`/loans/admin/${loan_id}/approve`, approvedLoan);
+        return response;
+    } catch (error) {
+        console.error("Error fetching loans:", error);
+        throw error;
+    }
+};
+
+export const denyLoan = async (loan_id, deniedLoan) => {
+    try {
+        const response = await apiBanking.put(`/loans/admin/${loan_id}/approve`, deniedLoan);
+        return response;
+    } catch (error) {
+        console.error("Error fetching loans:", error);
+        throw error;
+    }
+};
 
 
 export default apiBanking;

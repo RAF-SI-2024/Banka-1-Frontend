@@ -71,7 +71,7 @@ const AllLoansEmployeePortal = () => {
             <Sidebar />
             <div style={{ padding: "20px", marginTop: "64px" }}>
                 <Typography variant="h4" component="h1" gutterBottom>
-                    Employee Loan Overview
+                    Employee Loans
                 </Typography>
 
                 <SearchDataTable

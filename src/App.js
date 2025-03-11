@@ -152,6 +152,7 @@ function App() {
                   }
               />
 
+
             {/* Admin Only */}
             <Route
               path="/employee-portal"
@@ -220,7 +221,6 @@ function App() {
               }
             />
           </Routes>
-
           <ThemeToggle />
         </BrowserRouter>
       </CardProvider>

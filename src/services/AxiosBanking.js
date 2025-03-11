@@ -76,8 +76,11 @@ export const fetchAccounts = async () => {
 export const fetchAccountsForUser = async () => {
     const userId = getUserIdFromToken();
     try {
+        console.log("Running GET /accounts/user/" + userId);
         const response = await apiBanking.get(`/accounts/user/${userId}`);
-        return response.data.data.accounts;
+        const accounts = response.data.data.accounts;
+        console.log(accounts);
+        return accounts;
     } catch (error) {
         console.error("Error fetching recipients:", error);
         throw error;
@@ -107,6 +110,7 @@ export const fetchAccountsId = async (id) => {
 export const fetchRecipients = async (accountId) => {
     try {
         const response = await apiBanking.get(`/receiver/${accountId}`);
+        console.log("rec:"+ response.data)
         return response.data;
     } catch (error) {
         console.error("Error fetching recipients:", error);
@@ -156,7 +160,9 @@ export const createRecipient = async (accountId, recipientData) => {
 // Fetch cards linked to an account
 export const fetchUserCards = async (accountId) => {
     try {
-        const response = await apiBanking.get(`/cards?account_id=${accountId}`);
+        console.log("Account id: " + accountId);
+        const response = await apiBanking.get(`/cards/${accountId}`);
+        console.log(response)
         return response.data;
     } catch (error) {
         console.error(`Error fetching cards for account ${accountId}:`, error);
@@ -168,19 +174,19 @@ export const fetchUserCards = async (accountId) => {
 export const createCard = async (
     accountId,
     cardType,
+    cardBrand = "VISA",
     authorizedPerson = null
 ) => {
     try {
         const requestBody = {
-            racun_id: accountId,
-            tip: cardType,
+            accountID: accountId,
+            cardType : cardType,
+            cardBrand: cardBrand
         };
-
         if (authorizedPerson) {
             requestBody.ovlasceno_lice = authorizedPerson;
         }
-
-        const response = await apiBanking.post("/cards", requestBody);
+        const response = await apiBanking.post("/cards/", requestBody);
         return response.data;
     } catch (error) {
         console.error("Error creating a new card:", error);
@@ -204,8 +210,8 @@ export const changeCardName = async (cardId, newName) => {
 // Change card limit
 export const changeCardLimit = async (cardId, newLimit) => {
     try {
-        const response = await apiBanking.patch(`/cards/${cardId}`, {
-            limit: newLimit,
+        const response = await apiBanking.patch(`/cards/${cardId}/limit`, {
+            newLimit: newLimit,
         });
         return response.data;
     } catch (error) {
@@ -217,7 +223,14 @@ export const changeCardLimit = async (cardId, newLimit) => {
 // Block or unblock a card
 export const updateCardStatus = async (cardId, status) => {
     try {
-        const response = await apiBanking.patch(`/cards/${cardId}`, { status });
+        const response = await apiBanking.patch(`/cards/${cardId}`, { status},
+            {
+                headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+            }
+        );
+        
         return response.data;
     } catch (error) {
         console.error(`Error updating status for card ${cardId}:`, error);
@@ -271,9 +284,9 @@ export const fetchCardsByAccountId = async (accountId) => {
 };
 
 
-export const updateAccount = async (account) => {
+export const updateAccount = async (accountId, ownerId, account) => {
     try {
-        const response = await apiBanking.put(`/accounts/${account.id}`, account);
+        const response = await apiBanking.put(`/accounts/user/${ownerId}/${accountId}`, account);
         return response.data;
     } catch (error) {
         throw error;
@@ -325,21 +338,22 @@ export const fetchAccountsId1 = async (id) => {
 
         // Pristupanje pravom nizu
         const accounts = response.data.data.accounts;
-        console.log(response.data.data.accounts)
 
         if (!Array.isArray(accounts)) {
             console.error("Invalid response format:", response.data);
             return [];
         }
+        
+        //ostavio sam ovako da bi imali sve parametre za details
+        return accounts;
+        // return accounts.map((account) => ({
+        //     id: account.id,
+        //     name: account.ownerID,
+        //     number: account.accountNumber,
+        //     balance: account.balance,
+        //     subtype: account.subtype,
 
-        return accounts.map((account) => ({
-            id: account.id,
-            name: account.ownerID,
-            number: account.accountNumber,
-            balance: account.balance,
-            subtype: account.subtype,
-
-        }));
+        // }));
 
     } catch (error) {
         console.error(`Error fetching account with ID ${id}:`, error);
@@ -409,6 +423,46 @@ export const updateRecipientt = async (recipientId, recipientData) => {
         return response.data;
     } catch (error) {
         console.error(`Error updating recipient [${recipientId}]:`, error.response?.data || error.message);
+      throw error;
+    }
+};
+
+export const fetchAllLoansForEmployees = async () => {
+    try {
+        const response = await apiBanking.get("/loans/admin");
+        return response.data;
+    } catch (error) {
+        console.error("Error fetching loans:", error);
+        throw error;
+    }
+};
+
+export const fetchAllPendingLoans = async () => {
+    try {
+        const response = await apiBanking.get("/loans/pending");
+        return response.data.data.loans;
+    } catch (error) {
+        console.error("Error fetching loans:", error);
+        throw error;
+    }
+};
+
+export const approveLoan = async (loan_id, approvedLoan) => {
+    try {
+        const response = await apiBanking.put(`/loans/admin/${loan_id}/approve`, approvedLoan);
+        return response;
+    } catch (error) {
+        console.error("Error fetching loans:", error);
+        throw error;
+    }
+};
+
+export const denyLoan = async (loan_id, deniedLoan) => {
+    try {
+        const response = await apiBanking.put(`/loans/admin/${loan_id}/approve`, deniedLoan);
+        return response;
+    } catch (error) {
+        console.error("Error fetching loans:", error);
         throw error;
     }
 };

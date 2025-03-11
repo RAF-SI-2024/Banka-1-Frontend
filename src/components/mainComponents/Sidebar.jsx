@@ -69,12 +69,7 @@ export default function Sidebar() {
   const [showLoanOptions, setShowLoanOptions] = useState(false);
   const navigate = useNavigate();
 
-<<<<<<< HEAD
-  // Function to check if the user has read permission and set the state accordingly
-  const handleReadPermission = () =>{
-=======
   useEffect(() => {
->>>>>>> 2d66e0b (zavrsen auth guard, namestene rute u app.js i zavrsen side bar (#89))
     const token = localStorage.getItem("token");
     if (token) {
       try {

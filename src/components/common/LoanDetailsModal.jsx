@@ -22,7 +22,7 @@ const LoanDetailsModal = ({ open, onClose, loanId }) => {
 
                     setLoanDetails({
                         ...loanResponse.data.loan, // Information about loan
-                        remainingInstallments: installmentsResponse.data // Number of remaining installments
+                        remainingInstallments: installmentsResponse.data.remaining_number // Number of remaining installments
                     });
                 } catch (error) {
                     console.error("Error fetching loan details:", error);

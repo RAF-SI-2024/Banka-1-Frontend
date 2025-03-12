@@ -4,11 +4,13 @@ import DataTable from "../../components/tables/DataTable";
 import Button from "@mui/material/Button";
 import LoanDetailsModal from "../../components/common/LoanDetailsModal";
 import { fetchUserLoans } from "../../services/AxiosBanking";
+import LoanRequestModal from "../../components/common/LoanRequestModal";
 
 const LoansPortal = () => {
     const [rows, setRows] = useState([]);
     const [selectedLoanId, setSelectedLoanId] = useState(null);
     const [modalOpen, setModalOpen] = useState(false);
+    const [loanModalOpen, setLoanModalOpen] = useState(false);
 
     const columns = [
         { field: "loanName", headerName: "Loan Name", width: 200 },
@@ -47,6 +49,7 @@ const LoansPortal = () => {
                 const response = await fetchUserLoans();
                 if (response?.data?.loans) {
                     const formattedLoans = response.data.loans.map((loan) => ({
+                        id: loan.id,
                         loanName: loan.loanType,
                         loanNumber: loan.id,
                         remainingAmount: loan.remainingAmount,
@@ -68,11 +71,22 @@ const LoansPortal = () => {
             <div style={{ padding: "20px", marginTop: "64px", width: "100%", textAlign: "left", fontSize: 20 }}>
                 <h2>Loans Overview</h2>
 
+                <Button 
+                    variant="contained"     
+                    color="primary"          
+                    onClick={() => setLoanModalOpen(true)}  
+                >
+                    Apply for loan
+                </Button>
+
                 <DataTable rows={rows} columns={columns} checkboxSelection={false} />
             </div>
 
             {/* Pop up with loan details */}
             <LoanDetailsModal open={modalOpen} onClose={handleCloseModal} loanId={selectedLoanId} />
+
+            {/* Pop up za novi zahtev */}
+            <LoanRequestModal open={loanModalOpen} onClose={() => setLoanModalOpen(false)} />
         </div>
     );
 };

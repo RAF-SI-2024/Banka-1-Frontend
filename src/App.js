@@ -23,6 +23,8 @@ import ReceiversPortal from "./pages/portals/ReceiversPortal";
 import EmployeeCardsPortal from "./pages/portals/EmployeeCardsPortal";
 import CustomerAccountPortal from "./pages/portals/CustomerAccountPortal";
 import LoansPortal from "./pages/portals/LoansPortal"
+import AllLoansEmployeePortal from "./pages/portals/AllLoansEmployeePortal";
+import PendingLoansEmployeePortal from "./pages/portals/PendingLoansEmployeePortal";
 
 // import CustomerAccountPortal from "./pages/portals/CustomerAccountPortal";
 
@@ -115,6 +117,43 @@ function App() {
               }
             />
 
+            <Route
+              path={"/all-loans-employee"}
+              element={
+                <AuthGuard
+                   allowedPositions={[
+                      "WORKER",
+                      "MANAGER",
+                      "DIRECTOR",
+                      "HR",
+                      "ADMIN",
+                      "NONE",
+                   ]}
+                  >
+                    <AllLoansEmployeePortal />
+                  </AuthGuard>
+              }
+              />
+
+              <Route
+                  path={"/pending-loans-employee"}
+                  element={
+                      <AuthGuard
+                          allowedPositions={[
+                              "WORKER",
+                              "MANAGER",
+                              "DIRECTOR",
+                              "HR",
+                              "ADMIN",
+                              "NONE",
+                          ]}
+                      >
+                          <PendingLoansEmployeePortal />
+                      </AuthGuard>
+                  }
+              />
+
+
             {/* Admin Only */}
             <Route
               path="/employee-portal"
@@ -191,7 +230,6 @@ function App() {
                   }
               />
           </Routes>
-
           <ThemeToggle />
         </BrowserRouter>
       </CardProvider>

@@ -1,22 +1,32 @@
-// AddRecipientModal.jsx
-
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from '../../styles/ReceiversModal.module.css';
 
-function RecipientModal({ isOpen, onClose, data, onSave,tittle }) {
-    const [formData, setFormData] = useState({});
-    useEffect(() => {
-        if (isOpen) {
-            setFormData(data);
-            setErrors({});
-        }
-    }, [isOpen]);
+function RecipientModal({ isOpen, onClose, data, onSave, title }) {
+    const [formData, setFormData] = useState({
+        id: null,
+        fullName: "",
+        accountNumber: "",
+        address: ""
+    });
 
     const [errors, setErrors] = useState({
         fullName: "",
         accountNumber: "",
     });
 
+    useEffect(() => {
+        if (isOpen) {
+            console.log("Modal received recipient data:", data);
+
+            setFormData({
+                id: data?.id || null,
+                fullName: data?.fullName || "",
+                accountNumber: data?.accountNumber || "",
+                address: ""
+            });
+            setErrors({});
+        }
+    }, [isOpen, data]);
 
     if (!isOpen) return null;
 
@@ -29,6 +39,8 @@ function RecipientModal({ isOpen, onClose, data, onSave,tittle }) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+
+        console.log("Sending recipient data from modal:", formData);
 
         let validationErrors = {};
         if (!formData.fullName.trim()) {
@@ -52,36 +64,34 @@ function RecipientModal({ isOpen, onClose, data, onSave,tittle }) {
         <div className={styles.modal} onClick={handleBackgroundClick}>
             <div className={styles.modalContent}>
                 <span className={styles.closeButton} onClick={onClose}>&times;</span>
-                <h2>{tittle}</h2>
+                <h2>{title}</h2>
                 <form onSubmit={handleSubmit}>
-
-                    <div style={{position: "relative", marginBottom: "40px", textAlign: "left" }}>
+                    <div className={styles.inputContainer}>
                         <label className={styles.textboxLabel}>Recipient Name:</label>
                         <input
                             className={styles.textbox}
                             type="text"
                             value={formData.fullName}
                             placeholder="Enter recipient name"
-                            onChange={(e) => setFormData({...formData, fullName: e.target.value})}
+                            onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
                         />
                         {errors.fullName && <p className={styles.error}>{errors.fullName}</p>}
                     </div>
 
-                    <div style={{position: "relative", marginBottom: "40px", textAlign: "left" }}>
+                    <div className={styles.inputContainer}>
                         <label className={styles.textboxLabel}>Account Number:</label>
                         <input
                             className={styles.textbox}
                             type="text"
                             value={formData.accountNumber}
                             placeholder="Enter account number"
-                            onChange={(e) => setFormData({...formData, accountNumber: e.target.value})}
+                            onChange={(e) => setFormData({ ...formData, accountNumber: e.target.value })}
                         />
                         {errors.accountNumber && <p className={styles.error}>{errors.accountNumber}</p>}
                     </div>
 
-
                     <div className={styles.buttonContainer}>
-                        <button onClick={() => onClose()} className={styles.cancelButton} type="button">Cancel</button>
+                        <button onClick={onClose} className={styles.cancelButton} type="button">Cancel</button>
                         <button className={styles.saveButton} type="submit">Save</button>
                     </div>
                 </form>

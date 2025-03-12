@@ -193,11 +193,10 @@ export default function Sidebar() {
                     </ListItemButton>
                   </ListItem>
 
-                  {/* Non Clickable */}
                   <ListItem disablePadding>
-                    <ListItemButton disabled>
+                    <ListItemButton onClick={() => handleNavigation('/loans-portal')}>
                       <ListItemIcon><CurrencyExchangeIcon /></ListItemIcon>
-                      <ListItemText primary="Credits" />
+                      <ListItemText primary="Loans" />
                     </ListItemButton>
                   </ListItem>
                 </>

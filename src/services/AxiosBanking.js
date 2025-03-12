@@ -387,6 +387,28 @@ export const fetchRecipientsForFast = async (userId) => {
     }
 };
 
+
+export const fetchUserLoans = async () => {
+    try {
+        console.log("Fetching loans for the authenticated user");
+        const response = await apiBanking.get("/loans");
+        return response.data;
+    } catch (error) {
+        console.error("Error fetching loans:", error);
+        throw error;
+    }
+};
+
+export const fetchLoanDetails = async (loan_id) => {
+    try {
+        console.log(`Fetching details for loan ID: ${loan_id}`);
+        const response = await apiBanking.get(`/loans/${loan_id}`);
+        return response.data;
+    } catch (error) {
+        console.error(`Error fetching loan details for ID ${loan_id}:`, error);
+        throw error;
+    }
+};
 export const createRecipientt = async (recipientData) => {
     try {
         const requestBody = {
@@ -437,6 +459,17 @@ export const fetchAllLoansForEmployees = async () => {
     }
 };
 
+
+export const fetchRemainingInstallments = async (loanId) => {
+    try {
+        const response = await apiBanking.get(`/loans/${loanId}/remaining_installments`);
+        return response.data;
+    } catch (error) {
+        console.error(`Error fetching remaining installments for loan ${loanId}:`, error);
+      throw error;
+    }
+};
+
 export const fetchAllPendingLoans = async () => {
     try {
         const response = await apiBanking.get("/loans/pending");
@@ -446,6 +479,7 @@ export const fetchAllPendingLoans = async () => {
         throw error;
     }
 };
+
 
 export const approveLoan = async (loan_id, approvedLoan) => {
     try {

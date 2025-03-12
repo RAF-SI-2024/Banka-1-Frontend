@@ -22,6 +22,7 @@ import CardsPortal from "./pages/portals/CardsPortal";
 import ReceiversPortal from "./pages/portals/ReceiversPortal";
 import EmployeeCardsPortal from "./pages/portals/EmployeeCardsPortal";
 import CustomerAccountPortal from "./pages/portals/CustomerAccountPortal";
+import LoansPortal from "./pages/portals/LoansPortal"
 import AllLoansEmployeePortal from "./pages/portals/AllLoansEmployeePortal";
 import PendingLoansEmployeePortal from "./pages/portals/PendingLoansEmployeePortal";
 
@@ -220,6 +221,14 @@ function App() {
                 </AuthGuard>
               }
             />
+              <Route
+                  path="/loans-portal"
+                  element={
+                      <AuthGuard>
+                          <LoansPortal />
+                      </AuthGuard>
+                  }
+              />
           </Routes>
           <ThemeToggle />
         </BrowserRouter>

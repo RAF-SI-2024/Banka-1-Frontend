@@ -400,6 +400,15 @@ export const fetchLoanDetails = async (loan_id) => {
     }
 };
 
+export const fetchRemainingInstallments = async (loanId) => {
+    try {
+        const response = await apiBanking.get(`/loans/${loanId}/remaining_installments`);
+        return response.data;
+    } catch (error) {
+        console.error(`Error fetching remaining installments for loan ${loanId}:`, error);
+        throw error;
+    }
+};
 
 
 export default apiBanking;

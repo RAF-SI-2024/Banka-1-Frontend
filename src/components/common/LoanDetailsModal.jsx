@@ -6,7 +6,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
-import { fetchLoanDetails } from "../../services/AxiosBanking";
+import { fetchLoanDetails, fetchRemainingInstallments } from "../../services/AxiosBanking";
 
 const LoanDetailsModal = ({ open, onClose, loanId }) => {
     const [loanDetails, setLoanDetails] = useState(null);
@@ -17,8 +17,13 @@ const LoanDetailsModal = ({ open, onClose, loanId }) => {
             const loadLoanDetails = async () => {
                 setLoading(true);
                 try {
-                    const response = await fetchLoanDetails(loanId);
-                    setLoanDetails(response.data.loan); // Getting information from API
+                    const loanResponse = await fetchLoanDetails(loanId);
+                    const installmentsResponse = await fetchRemainingInstallments(loanId);
+
+                    setLoanDetails({
+                        ...loanResponse.data.loan, // Information about loan
+                        remainingInstallments: installmentsResponse.data // Number of remaining installments
+                    });
                 } catch (error) {
                     console.error("Error fetching loan details:", error);
                 } finally {
@@ -44,13 +49,13 @@ const LoanDetailsModal = ({ open, onClose, loanId }) => {
                         { label: "Loan Number", value: loanDetails.id },
                         { label: "Loan Type", value: loanDetails.loanType },
                         { label: "Remaining Debt", value: loanDetails.remainingAmount },
-                        { label: "Repayment Period", value: loanDetails.duration }, //PREPRAVI
+                        { label: "Remaining Installments", value: loanDetails.remainingInstallments },
                         { label: "Nominal Interest Rate", value: `${loanDetails.nominalRate}%` },
                         { label: "Effective Interest Rate", value: `${loanDetails.effectiveRate}%` },
                         { label: "Contract Date", value: new Date(loanDetails.createdDate).toLocaleDateString() },
                         { label: "Final Payment Date", value: new Date(loanDetails.allowedDate).toLocaleDateString() },
-                        { label: "Next Payment Amount", value: loanDetails.monthlyPayment },
-                        { label: "Next Payment Date", value: new Date(loanDetails.nextPaymentDate).toLocaleDateString() },
+                        { label: "Next Installment Amount", value: loanDetails.monthlyPayment },
+                        { label: "Next Installment Date", value: new Date(loanDetails.nextPaymentDate).toLocaleDateString() },
                         { label: "Currency", value: loanDetails.currencyType },
                         { label: "Loan Amount", value: loanDetails.loanAmount },
                     ].map((field, index) => (

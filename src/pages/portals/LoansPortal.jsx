@@ -71,7 +71,7 @@ const LoansPortal = () => {
                 <DataTable rows={rows} columns={columns} checkboxSelection={false} />
             </div>
 
-            {/* Modal sa detaljima kredita */}
+            {/* Pop up with loan details */}
             <LoanDetailsModal open={modalOpen} onClose={handleCloseModal} loanId={selectedLoanId} />
         </div>
     );

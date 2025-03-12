@@ -8,6 +8,7 @@ import Typography from "@mui/material/Typography";
 import "../../styles/PaymentResultModal.css";
 
 const PaymentResultModal = ({ open, onClose, success, onConfirm, paymentMessage }) => {
+
     return (
         <Dialog open={open} onClose={onClose} className="payment-modal">
             <div className="payment-modal-content">
@@ -19,8 +20,9 @@ const PaymentResultModal = ({ open, onClose, success, onConfirm, paymentMessage 
                     <Typography variant="h6" className="modal-reason">Reason</Typography>
 
                     <Typography variant="body1" className="modal-message">
-                        {paymentMessage} {/* Prikazuje poruku iz backend-a */}
+                        {paymentMessage || "No message provided"}
                     </Typography>
+
 
                     {success && (
                         <Typography variant="body1" className="modal-message">

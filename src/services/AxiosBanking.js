@@ -478,4 +478,20 @@ export const submitLoanRequest = async (loanData) => {
     }
   };
 
+
+export const getPaymentCodes = async () =>{
+    try{
+        const response = await apiBanking.get("/metadata/payment-codes");
+        // console.log("aaaa" + response);
+
+
+        const codes = response.data;
+        return codes;
+    }catch (error) {
+        console.error("Error fetching codes:", error);
+        throw error;
+    }
+
+};
+
 export default apiBanking;

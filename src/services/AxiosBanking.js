@@ -528,4 +528,94 @@ export const getPaymentCodes = async () =>{
 
 };
 
+// Exchange Rate Functions
+export const fetchExchangeRates = async () => {
+    try {
+        // TODO: Replace with actual API key and endpoint
+        const response = await axios.get('https://api.exchangerate-api.com/v4/latest/EUR', {
+            params: {
+                base: 'EUR',
+                symbols: ['RSD', 'CHF', 'USD', 'GBP', 'JPY', 'CAD', 'AUD'].join(',')
+            }
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching exchange rates:', error);
+        throw error;
+    }
+};
+
+export const convertCurrency = async (amount, fromCurrency, toCurrency) => {
+    try {
+        const { rates } = await fetchExchangeRates();
+        const COMMISSION_RATE = 0.01; // 1% commission
+
+        // Calculate buy and sell rates for all currencies
+        const getRates = (currency) => {
+            const middleRate = rates[currency];
+            return {
+                // buyRate: middleRate * 0.99,  // Bank buys at 1% less
+                // sellRate: middleRate * 1.01   // Bank sells at 1% more
+                buyRate: middleRate,
+                sellRate: middleRate
+            };
+        };
+
+        let convertedAmount;
+
+        if (fromCurrency === toCurrency) {
+            // Same currency, no conversion needed
+            convertedAmount = amount;
+        } else if (fromCurrency === 'RSD') {
+            // Converting FROM RSD TO foreign currency
+            // Use SELL rate because bank is selling foreign currency
+            const { sellRate } = getRates(fromCurrency);
+            convertedAmount = amount / sellRate;
+
+            console.log(rates);
+
+        } else if (toCurrency === 'RSD') {
+            // Converting FROM foreign currency TO RSD
+            // Use BUY rate because bank is buying foreign currency
+            const { buyRate } = getRates(toCurrency);
+            convertedAmount = amount * buyRate;
+        } else {
+            // Converting between two foreign currencies
+            // First convert to RSD using BUY rate (bank buys fromCurrency)
+            // Then convert to target using SELL rate (bank sells toCurrency)
+            const { buyRate: fromBuyRate } = getRates(toCurrency);
+            const { sellRate: toSellRate } = getRates(fromCurrency);
+            
+            // First get amount in RSD
+            const amountInRSD = amount * fromBuyRate;
+            // Then convert RSD to target currency
+            convertedAmount = amountInRSD / toSellRate;
+        }
+
+        // Calculate commission
+        let finalAmount;
+        let commission;
+        if(fromCurrency === toCurrency){
+            finalAmount = amount;
+            commission = 0;
+        }else{
+            finalAmount = convertedAmount * (1 - COMMISSION_RATE); // Subtract commission
+            commission = convertedAmount * COMMISSION_RATE;
+        }
+
+        return {
+            originalAmount: amount,
+            convertedAmount: finalAmount,
+            commission: commission,
+            commissionRate: COMMISSION_RATE * 100,
+            rate: rates[toCurrency],
+            fromCurrency,
+            toCurrency
+        };
+    } catch (error) {
+        console.error('Error converting currency:', error);
+        throw error;
+    }
+};
+
 export default apiBanking;

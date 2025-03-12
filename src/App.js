@@ -25,6 +25,8 @@ import CustomerAccountPortal from "./pages/portals/CustomerAccountPortal";
 import LoansPortal from "./pages/portals/LoansPortal"
 import AllLoansEmployeePortal from "./pages/portals/AllLoansEmployeePortal";
 import PendingLoansEmployeePortal from "./pages/portals/PendingLoansEmployeePortal";
+import ExchangeRateList from "./pages/exchange/ExchangeRateList";
+import CheckEquivalency from "./pages/exchange/CheckEquivalency";
 
 // import CustomerAccountPortal from "./pages/portals/CustomerAccountPortal";
 
@@ -229,6 +231,22 @@ function App() {
                       </AuthGuard>
                   }
               />
+            <Route
+              path="/exchange-rates"
+              element={
+                <AuthGuard>
+                  <ExchangeRateList />
+                </AuthGuard>
+              }
+            />
+            <Route
+              path="/currency-converter"
+              element={
+                <AuthGuard>
+                  <CheckEquivalency />
+                </AuthGuard>
+              }
+            />
           </Routes>
           <ThemeToggle />
         </BrowserRouter>

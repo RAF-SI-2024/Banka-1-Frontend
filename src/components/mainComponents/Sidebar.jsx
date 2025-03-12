@@ -31,6 +31,9 @@ import { useNavigate } from 'react-router-dom';
 import LogoutButton from '../common/LogoutButton';
 import { jwtDecode } from 'jwt-decode';
 import { useEffect, useState } from 'react';
+import { Collapse } from '@mui/material';
+import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
+import CompareArrowsIcon from '@mui/icons-material/CompareArrows';
 
 const drawerWidth = 240;
 
@@ -67,6 +70,7 @@ export default function Sidebar() {
   const [isEmployed, setIsEmployed] = useState(false);
   const [showPaymentsMenu, setShowPaymentsMenu] = useState(false);
   const [showLoanOptions, setShowLoanOptions] = useState(false);
+  const [showExchangeMenu, setShowExchangeMenu] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -178,13 +182,26 @@ export default function Sidebar() {
                       </>
                   )}
 
-                  {/* Non Clickable */}
+                  {/* Exchange Dropdown */}
                   <ListItem disablePadding>
-                    <ListItemButton disabled>
+                    <ListItemButton onClick={() => setShowExchangeMenu(!showExchangeMenu)}>
                       <ListItemIcon><CurrencyExchangeIcon /></ListItemIcon>
                       <ListItemText primary="Exchange" />
+                      {showExchangeMenu ? <ExpandLessIcon /> : <ExpandMoreIcon />}
                     </ListItemButton>
                   </ListItem>
+                  <Collapse in={showExchangeMenu} timeout="auto" unmountOnExit>
+                    <List component="div" disablePadding>
+                      <ListItemButton sx={{ pl: 4 }} onClick={() => navigate('/exchange-rates')}>
+                        <ListItemIcon><MonetizationOnIcon /></ListItemIcon>
+                        <ListItemText primary="Exchange Rates" />
+                      </ListItemButton>
+                      <ListItemButton sx={{ pl: 4 }} onClick={() => navigate('/currency-converter')}>
+                        <ListItemIcon><CompareArrowsIcon /></ListItemIcon>
+                        <ListItemText primary="Currency Converter" />
+                      </ListItemButton>
+                    </List>
+                  </Collapse>
 
                   <ListItem disablePadding>
                     <ListItemButton onClick={() => handleNavigation('/cards-portal')}>

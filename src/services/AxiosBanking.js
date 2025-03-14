@@ -2,7 +2,7 @@ import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 
 const apiBanking = axios.create({
-  baseURL: "http://localhost:8082",
+  baseURL: `${process.env.REACT_APP_BANKING_API_URL}`,
   headers: {
     "Content-Type": "application/json",
   },

@@ -2,7 +2,7 @@ import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 
 const apiUser = axios.create({
-  baseURL: "http://localhost:8081",
+  baseURL: `${process.env.REACT_APP_USER_API_URL}`,
   headers: {
     "Content-Type": "application/json",
   },

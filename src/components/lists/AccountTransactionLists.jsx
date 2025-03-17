@@ -40,11 +40,11 @@ const AccountTransactionsList = ({ accountId }) => {
   useEffect(() => {
     const loadTransactions = async () => {
       setLoading(true);
+      setError(null);
       try {
 
         const response = await fetchAccountsTransactions(accountId);
         const data = response.data.transactions; 
-        console.log(data);
         const formattedTransactions = data.map((transaction) => ({
           id: transaction.id,
           date: new Date(transaction.transfer.createdAt).toLocaleDateString(),
@@ -56,8 +56,7 @@ const AccountTransactionsList = ({ accountId }) => {
         setTransactions(formattedTransactions);
 
       } catch (err) {
-        setError("Error while fetching transactions.");
-        console.error(err);
+        setError("This account has no transactions available.");
       } finally {
         setLoading(false);
       }
@@ -69,7 +68,7 @@ const AccountTransactionsList = ({ accountId }) => {
   }, [accountId]);
 
   if (loading) return <p>loading transactions...</p>;
-  if (error) return <p>{error}</p>;
+  else if (error) return <p>{error}</p>;
 
   return (
     <Paper sx={{ height: 400, width: "100%" }}>

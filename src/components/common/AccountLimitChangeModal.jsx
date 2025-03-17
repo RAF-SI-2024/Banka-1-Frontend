@@ -9,7 +9,7 @@ import Grid from "@mui/material/Grid";
 import { updateAccount } from "../../services/AxiosBanking"; // Pretpostavljamo da imate ovu funkciju
 
 const AccountLimitChangeModal = ({ open, onClose, account, onSave }) => {
-  const [limit, setLimit] = useState("");
+  const [limit, setLimit] = useState(0);
 
   useEffect(() => {
     if (account) {
@@ -21,13 +21,8 @@ const AccountLimitChangeModal = ({ open, onClose, account, onSave }) => {
   const handleSave = async () => {
 
     const updatedAccount = {
-      id: account.id,
-      currency: account.currency,
-      type: account.type,
-      subtype: account.subtype,
       dailyLimit: limit,
       monthlyLimit: account.monthlyLimit,
-      status: account.status,
     };
 
     /*
@@ -90,9 +85,10 @@ const AccountLimitChangeModal = ({ open, onClose, account, onSave }) => {
 
     //api poziv
     try {
-      const response = await updateAccount(updatedAccount); 
+      const response = await updateAccount(account.id, account.ownerID, updatedAccount); 
       console.log("Account updated successfully:", response);
       onSave(updatedAccount); 
+      window.location.reload()
     } catch (err) {
       console.error("Failed to update account:", err);
     }

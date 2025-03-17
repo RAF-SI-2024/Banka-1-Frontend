@@ -1,28 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, {useState} from "react";
 import Sidebar from "../../components/mainComponents/Sidebar";
-import { Box, Typography, Button, Container } from "@mui/material";
+import {Box, Button, Container, Typography} from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import CardSlider from "../../components/common/CardSlider";
-import { useCards } from "../../context/CardContext";
 import CreateCardModal from "../../components/common/CreateCardModal";
 
 const CardsPage = () => {
-  const { cards, fetchCards } = useCards();
   const [modalOpen, setModalOpen] = useState(false);
-  
-  //User id from storage
-  const user = JSON.parse(localStorage.getItem("user"));
-  const accountId = user?.account_id; 
 
-  // Fetching user cards
-  useEffect(() => {
-    if (accountId) {
-      fetchCards(accountId);
-    }
-  }, [accountId, fetchCards]);
 
   return (
-    <Box sx={{ display: "flex" }}>
+    <Box sx={{ display: "flex" }} flexDirection="row">
       <Sidebar />
       <Box sx={{ flexGrow: 1 }}>
         <div style={{ padding: "20px", marginTop: "64px" }}>
@@ -41,11 +29,7 @@ const CardsPage = () => {
               Add Card
             </Button>
 
-            {cards.length === 0 ? (
-              <Typography>No cards available</Typography>
-            ) : (
-              <CardSlider accountId={accountId} />
-            )}
+              <CardSlider />
           </Container>
         </div>
       </Box>

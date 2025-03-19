@@ -31,6 +31,10 @@ import { useNavigate } from 'react-router-dom';
 import LogoutButton from '../common/LogoutButton';
 import { jwtDecode } from 'jwt-decode';
 import { useEffect, useState } from 'react';
+import { Collapse } from '@mui/material';
+import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
+import CompareArrowsIcon from '@mui/icons-material/CompareArrows';
+import {AttachFile, FileCopyTwoTone, FolderTwoTone, LibraryBooks} from "@mui/icons-material";
 
 const drawerWidth = 240;
 
@@ -67,6 +71,8 @@ export default function Sidebar() {
   const [isEmployed, setIsEmployed] = useState(false);
   const [showPaymentsMenu, setShowPaymentsMenu] = useState(false);
   const [showLoanOptions, setShowLoanOptions] = useState(false);
+  const [showExchangeMenu, setShowExchangeMenu] = useState(false);
+  const [hasTradePermission, setHasTradePermission] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -79,6 +85,8 @@ export default function Sidebar() {
         setPosition(decodedToken.position);
         setIsAdmin(decodedToken.isAdmin);
         setIsEmployed(decodedToken.isEmployed);
+        const permissions = decodedToken.permissions || [];
+        setHasTradePermission(permissions.includes("user.customer.trade")); //MOZDA SE NE BUDE OVAKO ZVALA PERMISIJA
 
         console.log("Set position:", decodedToken.position, "Admin status:", decodedToken.isAdmin, "Employed:", decodedToken.isEmployed);
       } catch (error) {
@@ -178,13 +186,26 @@ export default function Sidebar() {
                       </>
                   )}
 
-                  {/* Non Clickable */}
+                  {/* Exchange Dropdown */}
                   <ListItem disablePadding>
-                    <ListItemButton disabled>
+                    <ListItemButton onClick={() => setShowExchangeMenu(!showExchangeMenu)}>
                       <ListItemIcon><CurrencyExchangeIcon /></ListItemIcon>
                       <ListItemText primary="Exchange" />
+                      {showExchangeMenu ? <ExpandLessIcon /> : <ExpandMoreIcon />}
                     </ListItemButton>
                   </ListItem>
+                  <Collapse in={showExchangeMenu} timeout="auto" unmountOnExit>
+                    <List component="div" disablePadding>
+                      <ListItemButton sx={{ pl: 4 }} onClick={() => navigate('/exchange-rates')}>
+                        <ListItemIcon><MonetizationOnIcon /></ListItemIcon>
+                        <ListItemText primary="Exchange Rates" />
+                      </ListItemButton>
+                      <ListItemButton sx={{ pl: 4 }} onClick={() => navigate('/currency-converter')}>
+                        <ListItemIcon><CompareArrowsIcon /></ListItemIcon>
+                        <ListItemText primary="Currency Converter" />
+                      </ListItemButton>
+                    </List>
+                  </Collapse>
 
                   <ListItem disablePadding>
                     <ListItemButton onClick={() => handleNavigation('/cards-portal')}>
@@ -193,13 +214,30 @@ export default function Sidebar() {
                     </ListItemButton>
                   </ListItem>
 
-                  {/* Non Clickable */}
                   <ListItem disablePadding>
-                    <ListItemButton disabled>
+                    <ListItemButton onClick={() => handleNavigation('/loans-portal')}>
                       <ListItemIcon><CurrencyExchangeIcon /></ListItemIcon>
-                      <ListItemText primary="Credits" />
+                      <ListItemText primary="Loans" />
                     </ListItemButton>
                   </ListItem>
+
+                  {/* For Customers with Trade Permission */}
+                  {hasTradePermission && (
+                      <>
+                      <ListItem disablePadding>
+                        <ListItemButton onClick={() => handleNavigation('/portfolio-page')}>
+                          <ListItemIcon><LibraryBooks /></ListItemIcon>
+                          <ListItemText primary="Portfolio" />
+                        </ListItemButton>
+                      </ListItem>
+                        <ListItem disablePadding>
+                          <ListItemButton onClick={() => handleNavigation('/client-buying-portal')}>
+                            <ListItemIcon><FolderTwoTone /></ListItemIcon>
+                            <ListItemText primary="Important Files" />
+                          </ListItemButton>
+                        </ListItem>
+                        </>
+                  )}
                 </>
             )}
 
@@ -242,7 +280,55 @@ export default function Sidebar() {
                 </>
             )}
 
-            {/* Route only for Admin */}
+            {/* Supervisor only */}
+            {isEmployed && position === "SUPERVISOR" && (
+                <>
+                <ListItem disablePadding>
+                  <ListItemButton onClick={() => handleNavigation('/actuarial-management-portal')}>
+                    <ListItemIcon><CompareArrowsIcon /></ListItemIcon>
+                    <ListItemText primary="Agent Management" />
+                  </ListItemButton>
+                </ListItem>
+                  <ListItem disablePadding>
+                    <ListItemButton onClick={() => handleNavigation('/portfolio-page')}>
+                      <ListItemIcon><LibraryBooks /></ListItemIcon>
+                      <ListItemText primary="Portfolio" />
+                    </ListItemButton>
+                  </ListItem>
+                  <ListItem disablePadding>
+                    <ListItemButton onClick={() => handleNavigation('/actuary-buying-portal')}>
+                      <ListItemIcon><FolderTwoTone /></ListItemIcon>
+                      <ListItemText primary="Important Files" />
+                    </ListItemButton>
+                  </ListItem>
+                  <ListItem disablePadding>
+                    <ListItemButton onClick={() => handleNavigation('/view-order-portal')}>
+                      <ListItemIcon><FolderTwoTone /></ListItemIcon>
+                      <ListItemText primary="Orders" />
+                    </ListItemButton>
+                  </ListItem>
+                </>
+            )}
+
+            {/* Agent only */}
+            {isEmployed && position === "AGENT" && (
+                <>
+                  <ListItem disablePadding>
+                    <ListItemButton onClick={() => handleNavigation('/portfolio-page')}>
+                      <ListItemIcon><LibraryBooks /></ListItemIcon>
+                      <ListItemText primary="Portfolio" />
+                    </ListItemButton>
+                  </ListItem>
+                  <ListItem disablePadding>
+                    <ListItemButton onClick={() => handleNavigation('/actuary-buying-portal')}>
+                      <ListItemIcon><FolderTwoTone /></ListItemIcon>
+                      <ListItemText primary="Important Files" />
+                    </ListItemButton>
+                  </ListItem>
+                </>
+            )}
+
+            {/* Admin only */}
             {isAdmin && (
                 <ListItem disablePadding>
                   <ListItemButton onClick={() => handleNavigation('/employee-portal')}>

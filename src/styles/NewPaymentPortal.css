@@ -23,7 +23,7 @@
 }
 
 .payer-account select,
-.payment-code select,
+.payment-code .select,
 .recipient-account input,
 .payment-purpose input,
 .amount input,
@@ -37,6 +37,10 @@
     color: white;
     cursor: pointer;
     height: 44px;
+}
+
+.payment-code .select {
+    width: 130%;  /* Širimo paymentCode input */
 }
 
 .recipient-name .MuiInputBase-root {
@@ -62,17 +66,6 @@
     background-color: #3A5F3A !important;
 }
 
-/*.recipient-name .MuiInputBase-root::after {*/
-/*    content: '👥'; */
-/*    font-size: 18px;*/
-/*    position: absolute;*/
-/*    right: 30px;*/
-/*    top: 50%;*/
-/*    transform: translateY(-50%);*/
-/*    pointer-events: none;*/
-/*    color: white;*/
-/*}*/
-
 .form-row {
     display: flex;
     gap: 20px;
@@ -88,7 +81,6 @@
 
 .amount-row {
     display: flex;
-    /*justify-content: space-between;*/
     width: 100%;
     gap: 25px;
 }
@@ -99,16 +91,6 @@
     flex-direction: column;
 }
 
-.adress{
-    width: 49%;
-    display: flex;
-    flex-direction: column;
-}
-
-/*.empty-space {*/
-/*    width: 45%;*/
-/*}*/
-
 .amount-wrapper {
     position: relative;
     display: flex;
@@ -118,37 +100,35 @@
 
 .amount-wrapper input {
     flex: 1;
-    padding-right: 10px;
+    padding-right: 30px;
 }
 
 .info-icon {
-    position: relative;
+    position: absolute;
     font-size: 18px;
     color: gray;
     cursor: pointer;
+    right: 10px;
 }
 
-.info-icon::after {
-    /*content: "Više informacija";*/
-    position: absolute;
-    background-color: rgba(0, 0, 0, 0.8);
-    color: white;
-    padding: 5px 10px;
+
+.adress {
+    width: 49%;
+    display: flex;
+    flex-direction: column;
+}
+
+.payment-code select {
+    width: 100%;
+    padding: 10px;
     border-radius: 5px;
-    font-size: 12px;
-    white-space: nowrap;
-    left: 30px;
-    top: 50%;
-    transform: translateY(-50%);
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.2s ease-in-out;
+    border: none;
+    background-color: #282c34;
+    color: white;
+    cursor: pointer;
+    height: 44px;
 }
 
-.info-icon:hover::after {
-    opacity: 1;
-    visibility: visible;
-}
 
 .reference-row {
     display: flex;
@@ -158,8 +138,6 @@
 
 .reference-number {
     flex: 1;
-    display: flex;
-    flex-direction: column;
 }
 
 .submit-button {
@@ -175,4 +153,11 @@
 
 .submit-button:hover {
     background-color: #4A7F4A;
+}
+
+.warning {
+    color: #FF0000;
+    font-size: 12px;
+    margin-top: 5px;
+    display: none;
 }

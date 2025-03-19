@@ -70,9 +70,20 @@ const NewCurrentAccountModal = ({ open, onClose, accountType }) => {
             dailyLimit: 0,
             monthlyLimit: 0,
             status: "ACTIVE",
+            createCard: makeCard,
             balance: parseFloat(startingBalance),
-            createCard: makeCard
         };
+        // {
+        //     "ownerID": 0,
+        //     "currency": "RSD",
+        //     "type": "CURRENT",
+        //     "subtype": "STANDARD",
+        //     "dailyLimit": 0,
+        //     "monthlyLimit": 0,
+        //     "status": "ACTIVE",
+        //     "createCard": true,
+        //     "balance": 0
+        // }
 
         console.log(accountData);
 

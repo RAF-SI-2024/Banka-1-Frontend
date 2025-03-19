@@ -196,8 +196,7 @@ const CustomerPortal = () => {
         { name: 'birthDate', label: 'Birth Date', type: 'date' },
         { name: 'gender', label: 'Gender', type: 'select', options: [
             { value: 'MALE', label: 'Male' },
-            { value: 'FEMALE', label: 'Female' },
-            { value: 'OTHER', label: 'Other' }
+            { value: 'FEMALE', label: 'Female' }
         ] }
     ];
 

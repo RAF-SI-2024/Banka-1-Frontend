@@ -127,34 +127,40 @@ const EmployeePortal = () => {
     
     // Handle toggle of active status
     const handleStatusToggle = async (row) => {
-        try {
-            // Ensure we have all the original data from the row
-            console.log("Original row data:", row);
-            
-            // Create a clean employee object with all required fields
-            const employeeData = {
-                ...row.originalData,
-                active: !row.active // Toggle the current status
-            };
-            const activeSwitch = {
-                "active": employeeData.active
+
+        if(!row.isAdmin) {
+
+            try {
+                // Ensure we have all the original data from the row
+                console.log("Original row data:", row);
+
+                // Create a clean employee object with all required fields
+                const employeeData = {
+                    ...row.originalData,
+                    active: !row.active // Toggle the current status
+                };
+                const activeSwitch = {
+                    "active": employeeData.active
+                }
+
+                await updateEmployeeStatus(row.id, activeSwitch);
+
+                // Update local state after successful API call
+                setRows(prevRows =>
+                    prevRows.map(r =>
+                        r.id === row.id
+                            ? {...r, active: !r.active}
+                            : r
+                    )
+                );
+
+                toast.success(`Employee ${row.firstName} ${row.lastName} status updated successfully`);
+            } catch (error) {
+                console.error("Error updating employee status:", error);
+                toast.error(`Failed to update employee status: ${error.message}`);
             }
-            
-            await updateEmployeeStatus(row.id, activeSwitch);
-            
-            // Update local state after successful API call
-            setRows(prevRows =>
-                prevRows.map(r =>
-                    r.id === row.id
-                        ? { ...r, active: !r.active }
-                        : r
-                )
-            );
-            
-            toast.success(`Employee ${row.firstName} ${row.lastName} status updated successfully`);
-        } catch (error) {
-            console.error("Error updating employee status:", error);
-            toast.error(`Failed to update employee status: ${error.message}`);
+        } else {
+            toast.error("Admin cannot change the status of admin.")
         }
     };
 
@@ -173,7 +179,7 @@ const EmployeePortal = () => {
                 department: employeeData.department,
                 active: employeeData.active,
                 isAdmin: employeeData.isAdmin,
-                permissions: ["CREATE_CUSTOMER"] // Default permission
+                permissions: ["user.employee.create"] // Default permission
             };
             
             await createEmployee(employeePayload);
@@ -203,34 +209,39 @@ const EmployeePortal = () => {
     };
     
     const handleRowClick = async (row) => {
-        try {
-            const response = await fetchEmployeeById(row.id);
-            // console.log(response);
-            
-            // Extract the actual employee data, avoiding nested data structures
-            const employeeData = response.data || response;
-            
-            // Create a clean employee object
-            const cleanEmployeeData = {
-                id: row.id,
-                firstName: employeeData.firstName,
-                lastName: employeeData.lastName,
-                username: employeeData.username,
-                email: employeeData.email,
-                phoneNumber: employeeData.phoneNumber,
-                address: employeeData.address,
-                birthDate: employeeData.birthDate,
-                gender: employeeData.gender,
-                department: employeeData.department,
-                active: employeeData.active,
-                isAdmin: employeeData.isAdmin
-                // Removed position from here
-            };
-            
-            setSelectedEmployee(cleanEmployeeData);
-            setIsEditModalOpen(true);
-        } catch (error) {
-            toast.error(`Error fetching employee details: ${error.message}`);
+
+        if(!row.isAdmin) {
+            try {
+                const response = await fetchEmployeeById(row.id);
+                // console.log(response);
+
+                // Extract the actual employee data, avoiding nested data structures
+                const employeeData = response.data || response;
+
+                // Create a clean employee object
+                const cleanEmployeeData = {
+                    id: row.id,
+                    firstName: employeeData.firstName,
+                    lastName: employeeData.lastName,
+                    username: employeeData.username,
+                    email: employeeData.email,
+                    phoneNumber: employeeData.phoneNumber,
+                    address: employeeData.address,
+                    birthDate: employeeData.birthDate,
+                    gender: employeeData.gender,
+                    department: employeeData.department,
+                    active: employeeData.active,
+                    isAdmin: employeeData.isAdmin
+                    // Removed position from here
+                };
+
+                setSelectedEmployee(cleanEmployeeData);
+                setIsEditModalOpen(true);
+            } catch (error) {
+                toast.error(`Error fetching employee details: ${error.message}`);
+            }
+        } else {
+            toast.error(`Admin cannot edit admin.`);
         }
     };
     
@@ -252,7 +263,7 @@ const EmployeePortal = () => {
                 address: updatedEmployeeData.address,
                 birthDate: updatedEmployeeData.birthDate,
                 gender: updatedEmployeeData.gender,
-                position: "Nijedna", // Hardcoded to "Nijedna" as requested
+                position: "NONE", // Hardcoded to "Nijedna" as requested
                 department: updatedEmployeeData.department,
                 active: updatedEmployeeData.active,
                 isAdmin: updatedEmployeeData.isAdmin
@@ -278,7 +289,6 @@ const EmployeePortal = () => {
         { name: 'gender', label: 'Gender', type: 'select', options: [
             { value: 'MALE', label: 'Male' },
             { value: 'FEMALE', label: 'Female' },
-            { value: 'OTHER', label: 'Other' }
         ] },
         // Removed position field from here
         { name: 'department', label: 'Department', type: 'select', options: [

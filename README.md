@@ -5,6 +5,7 @@ Before you start, ensure you have installed the following on your computer:
 
 - **[Node.js](https://nodejs.org/en/) (LTS version recommended)**
 - **[npm](https://www.npmjs.com) (comes with Node.js)**
+-  **[Docker](https://www.docker.com/products/docker-desktop/) OR [Podman](https://podman.io/docs/installation) OR [LazyDocker + WSL](https://docs.docker.com/engine/install/ubuntu/)**
 
 Once Node.js and npm are setup, you will need to install the following packages globally:
 
@@ -12,9 +13,22 @@ Once Node.js and npm are setup, you will need to install the following packages 
 - **Axios**
 - **Material-UI**
 
-You can install all dependencies by running the command:
+## Running the app:
+### First make sure to install all dependencies:
 ```<bash>
 npm install
+```
+### Second run the back using the command:
+```<bash>
+docker compose up -d
+```
+Or if using podman
+```<bash>
+podman compose up -d
+```
+### Third start the local development server:
+```<bash>
+npm start
 ```
 
 # Project organization:

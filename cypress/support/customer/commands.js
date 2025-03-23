@@ -78,14 +78,28 @@ Cypress.Commands.add('createCard', () => {
 
 
 Cypress.Commands.add('applyLoan', () => {
-    //Opens hamburger and 
+    //Fill the form 
     cy.get('button[aria-label="open drawer"]').click();
     cy.contains('Loans').click();
     cy.contains("Loans Overview").should('be.visible');
     cy.contains("Apply for loan").click();
     cy.contains("New Loan Request").should('be.visible')
-    cy.get('MuiBackdrop-root').eq(0).should('be.visible').click();
+    cy.get(':nth-child(2) > .MuiInputBase-root > .MuiSelect-select').should('be.visible').click();
     cy.get('ul[role="listbox"] li').first().click();
-    cy.contains("Confirm").click()
+    cy.get(':nth-child(4) > .css-q8hpuo-MuiFormControl-root > .MuiInputBase-root > .MuiSelect-select').should('be.visible').click();
+    cy.get('ul[role="listbox"] li').first().click();
+    cy.get('#\\:r1n\\:').clear().type('1000');
+    cy.get('#\\:r1p\\:').clear().type("something")
+    cy.get(':nth-child(6) > .MuiInputBase-root > .MuiSelect-select').should('be.visible').click();
+    cy.get('ul[role="listbox"] li').first().click();
+    cy.get(':nth-child(7) > .MuiInputBase-root > .MuiSelect-select').should('be.visible').click();
+    cy.get('ul[role="listbox"] li').first().click();
+    cy.get('#\\:r1v\\:').clear().type('1000');
+    cy.get(':nth-child(9) > .css-q8hpuo-MuiFormControl-root > .MuiInputBase-root > .MuiSelect-select').should('be.visible').click();
+    cy.get('ul[role="listbox"] li').first().click();
+    cy.get('#\\:r23\\:').clear().type('2');
+    cy.get('#\\:r25\\:').clear().type('1200');
+    cy.contains("Submit").should('be.visible').click();
+    
 })
 

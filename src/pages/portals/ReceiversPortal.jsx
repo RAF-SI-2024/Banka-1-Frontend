@@ -15,6 +15,7 @@ import Button from "@mui/material/Button";
 import DataTable from "../../components/tables/DataTable";
 import MenuItem from "@mui/material/MenuItem";
 import TextField from "@mui/material/TextField";
+import {toast} from "react-toastify";
 
 function ReceiversPortal() {
     const token = localStorage.getItem("token");

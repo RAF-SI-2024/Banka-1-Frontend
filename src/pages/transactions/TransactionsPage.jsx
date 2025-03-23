@@ -1,13 +1,20 @@
 import React, { useEffect, useState } from "react";
 import Sidebar from "../../components/mainComponents/Sidebar";
 import {
-    Box, Card, CardContent, Typography, Tabs, Tab, TextField, Select, MenuItem, Button, Grid, InputAdornment, Collapse, IconButton, FormControl, InputLabel, OutlinedInput
+    Box, Typography, Tabs, Tab, TextField,
+    Select, MenuItem, Button, Grid, InputAdornment,
+    Collapse, IconButton, FormControl, InputLabel, OutlinedInput
 } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
 import TransactionList from "../../components/transactionTable/TransactionList";
 import { fetchAccountsForUser, fetchAccountsTransactions } from "../../services/transactionService";
 import { Tune, Refresh } from "@mui/icons-material";
+import styles from "../../styles/Transactions.module.css";
 
 const TransactionsPage = () => {
+    const theme = useTheme();
+    const isDarkMode = theme.palette.mode === "dark";
+
     const [selectedTab, setSelectedTab] = useState(0);
     const [transactions, setTransactions] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -31,7 +38,6 @@ const TransactionsPage = () => {
                 console.error("Failed to load accounts:", err);
             }
         };
-
         loadAccounts();
     }, []);
 
@@ -114,133 +120,110 @@ const TransactionsPage = () => {
     };
 
     return (
-        <Box sx={{ display: "flex" }}>
+        <Box className={styles.page}>
             <Sidebar />
-            <Box sx={{ flexGrow: 1, padding: 3, paddingTop: "80px", display: "flex", flexDirection: "column", alignItems: "center" }}>
-                <Card sx={{ width: "90%", backgroundColor: "#1e1e2e", color: "#fff", borderRadius: 3, padding: 2 }}>
-                    <CardContent>
-                        <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2 }}>
-                            <Typography variant="h5" sx={{ fontWeight: "bold" }}>
-                                Payment Overview
-                            </Typography>
+            <Box
+                sx={{
+                    backgroundColor: isDarkMode ? "#212128" : "#f1f1f1",
+                    padding: "20px",
+                    borderRadius: "12px",
+                    width: "50%",
+                    height: "600px",
+                    textAlign: "center",
+                    position: "relative",
+                }}
+            >
+                <Typography variant="h5" className={styles.title}>
+                    Transactions Overview
+                </Typography>
 
-                            <FormControl sx={{ minWidth: 250, backgroundColor: "#2C2F36", borderRadius: 2 }}>
-                                <InputLabel sx={{ color: "#A1A1A6" }}>Select an account</InputLabel>
-                                <Select
-                                    value={selectedAccount}
-                                    onChange={(e) => setSelectedAccount(e.target.value)}
-                                    displayEmpty
-                                    input={<OutlinedInput sx={{ color: "#fff", padding: "10px" }} />}
-                                    sx={{
-                                        color: "#fff",
-                                        borderRadius: 2,
-                                        height: "45px",
-                                        backgroundColor: "#2C2F36",
-                                        "& .MuiOutlinedInput-notchedOutline": { border: "none" },
-                                        "&:hover .MuiOutlinedInput-notchedOutline": { border: "1px solid #444" },
-                                        "& .MuiSelect-icon": { color: "#A1A1A6" },
+                <Box className={styles.dropdown}>
+                    <TextField
+                        id="accounts"
+                        select
+                        label="Select an account"
+                        value={selectedAccount || ""}
+                        onChange={(e) => setSelectedAccount(e.target.value)}
+                        helperText="Please select your account"
+                        variant="standard"
+                        fullWidth
+                    >
+                        {accounts.map((option) => (
+                            <MenuItem key={option.id} value={option.id}>
+                                {option.accountNumber} ({option.currency})
+                            </MenuItem>
+                        ))}
+                    </TextField>
+                </Box>
+
+                <Button
+                    variant="contained"
+                    color="primary"
+                    startIcon={<Tune />}
+                    onClick={() => setFiltersVisible(!filtersVisible)}
+                    className={styles.addButton}
+                >
+                    {filtersVisible ? "Hide Filters" : "Show Filters"}
+                </Button>
+
+                <Tabs
+                    value={selectedTab}
+                    onChange={(_, newValue) => setSelectedTab(newValue)}
+                    className={styles.tabs}
+                >
+                    <Tab label="Domestic Payments" />
+                    <Tab label="Exchange Transactions" />
+                </Tabs>
+
+                <Collapse in={filtersVisible}>
+                    <Box className={styles.filterContainer}>
+                        <Grid container spacing={2}>
+                            <Grid item xs={12} sm={4}>
+                                <TextField
+                                    fullWidth
+                                    type="date"
+                                    variant="outlined"
+                                    value={dateFilter}
+                                    onChange={(e) => setDateFilter(e.target.value)}
+                                />
+                            </Grid>
+                            <Grid item xs={12} sm={4}>
+                                <TextField
+                                    fullWidth
+                                    type="number"
+                                    placeholder="Amount"
+                                    variant="outlined"
+                                    value={amountFilter}
+                                    onChange={(e) => setAmountFilter(e.target.value)}
+                                    inputProps={{ min: 0 }}
+                                    InputProps={{
+                                        startAdornment: <InputAdornment position="start">RSD</InputAdornment>
                                     }}
+                                />
+                            </Grid>
+                            <Grid item xs={12} sm={3}>
+                                <Select
+                                    fullWidth
+                                    value={statusFilter}
+                                    onChange={(e) => setStatusFilter(e.target.value)}
+                                    displayEmpty
                                 >
-                                    {accounts.map(account => (
-                                        <MenuItem key={account.id} value={account.id}>
-                                            {account.accountNumber} ({account.currency})
-                                        </MenuItem>
-                                    ))}
+                                    <MenuItem value="">All Statuses</MenuItem>
+                                    <MenuItem value="COMPLETED">Completed</MenuItem>
+                                    <MenuItem value="PENDING">Pending</MenuItem>
+                                    <MenuItem value="REJECTED">Rejected</MenuItem>
                                 </Select>
-                            </FormControl>
+                            </Grid>
+                            <Grid item xs={12} sm={1}>
+                                <IconButton onClick={resetFilters} className={styles.refreshButton}>
+                                    <Refresh />
+                                </IconButton>
+                            </Grid>
+                        </Grid>
+                    </Box>
+                </Collapse>
 
-                            <Button
-                                variant="contained"
-                                color="warning"
-                                startIcon={<Tune />}
-                                onClick={() => setFiltersVisible(!filtersVisible)}
-                                sx={{ height: "40px" }}
-                            >
-                                {filtersVisible ? "Hide Filters" : "Show Filters"}
-                            </Button>
-                        </Box>
-
-                        <Tabs
-                            value={selectedTab}
-                            onChange={(_, newValue) => setSelectedTab(newValue)}
-                            sx={{
-                                marginBottom: 2,
-                                "& .MuiTabs-indicator": { backgroundColor: "#fdfdfd" },
-                                "& .MuiTab-root": { color: "#fff", fontWeight: "bold" },
-                                "& .Mui-selected": { color: "#e7e7e7" }
-                            }}
-                        >
-                            <Tab label="Domestic Payments" />
-                            <Tab label="Exchange Transactions" />
-                        </Tabs>
-
-                        <Collapse in={filtersVisible} sx={{ marginTop: 2 }}>
-                            <Box sx={{ padding: 2, borderRadius: 2, backgroundColor: "#2b2b3b" }}>
-                                <Grid container spacing={2} alignItems="center">
-                                    <Grid item xs={12} sm={4}>
-                                        <TextField
-                                            fullWidth
-                                            type="date"
-                                            InputLabelProps={{ shrink: true }}
-                                            value={dateFilter}
-                                            onChange={(e) => setDateFilter(e.target.value)}
-                                            sx={{
-                                                backgroundColor: "#fff",
-                                                borderRadius: 1,
-                                                "& .MuiInputBase-input": { color: "#000" }
-                                            }}
-                                        />
-                                    </Grid>
-                                    <Grid item xs={12} sm={4}>
-                                        <TextField
-                                            fullWidth
-                                            type="number"
-                                            placeholder="Amount"
-                                            value={amountFilter}
-                                            onChange={(e) => setAmountFilter(e.target.value)}
-                                            sx={{
-                                                backgroundColor: "#fff",
-                                                borderRadius: 1,
-                                                "& .MuiInputBase-input": { color: "#000" }
-                                            }}
-                                            InputProps={{
-                                                startAdornment: <InputAdornment position="start">RSD</InputAdornment>
-                                            }}
-                                        />
-                                    </Grid>
-                                    <Grid item xs={12} sm={3}>
-                                        <Select
-                                            fullWidth
-                                            value={statusFilter}
-                                            onChange={(e) => setStatusFilter(e.target.value)}
-                                            displayEmpty
-                                            sx={{
-                                                backgroundColor: "#fff",
-                                                borderRadius: 1,
-                                                "& .MuiSelect-select": { color: "#000" }
-                                            }}
-                                        >
-                                            <MenuItem value="">All Statuses</MenuItem>
-                                            <MenuItem value="COMPLETED">Completed</MenuItem>
-                                            <MenuItem value="PENDING">Pending</MenuItem>
-                                            <MenuItem value="REJECTED">Rejected</MenuItem>
-                                        </Select>
-                                    </Grid>
-                                    <Grid item xs={12} sm={1}>
-                                        <IconButton
-                                            onClick={resetFilters}
-                                            sx={{ backgroundColor: "#f3f3f3", color: "#000", borderRadius: 1 }}
-                                        >
-                                            <Refresh />
-                                        </IconButton>
-                                    </Grid>
-                                </Grid>
-                            </Box>
-                        </Collapse>
-
-                        <TransactionList transactions={filteredTransactions} />
-                    </CardContent>
-                </Card>
+                <TransactionList transactions={filteredTransactions} />
             </Box>
         </Box>
     );

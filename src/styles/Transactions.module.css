@@ -1,0 +1,104 @@
+.page {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    margin-left: -240px;
+}
+
+.container {
+    background-color: #131318;
+    padding: 20px;
+    border-radius: 12px;
+    width: 50%;
+    height: 600px;
+    text-align: center;
+    position: relative;
+}
+
+.title {
+    /*color: white;*/
+    position: absolute;
+    top: -40px;
+    left: 0;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.table {
+
+    width: 95%;
+    border-collapse: collapse;
+    margin-top: 40px;
+    margin-left: 15px;
+}
+
+.table th,
+.table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 2px solid #808080;
+    /*color: white;*/
+}
+
+.table th:nth-child(1),
+.table td:nth-child(1) {
+    width: 20%;
+
+}
+
+.table th:nth-child(2),
+.table td:nth-child(2) {
+    width: 50%;
+    text-align: center;
+}
+
+.table th:nth-child(3),
+.table td:nth-child(3) {
+    width: 15%;
+    text-align: end;
+}
+
+.table th:nth-child(4),
+.table td:nth-child(4) {
+    width: 15%;
+    text-align: end;
+}
+
+th {
+
+}
+
+.headerRow {
+    display: flex;
+    justify-content: space-between;
+}
+
+th .addButtonWrapper {
+    display: flex;
+    justify-content: flex-end;
+}
+
+
+
+
+
+.addButton {
+
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+
+
+}
+
+
+
+.dropdown {
+
+    margin-right: 30px;
+
+
+
+}

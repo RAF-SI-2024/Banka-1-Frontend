@@ -24,12 +24,12 @@ const EmployeeBankAccountsPortal = () => {
 
 
   const columns = [
-    { field: 'accountNumber', headerName: 'Account Number', width: 150 },
+    { field: 'accountNumber', headerName: 'Account Number', width: 200 },
     { field: 'firstName', headerName: 'Owner First Name', width: 150 },
     { field: 'lastName', headerName: 'Owner Last Name', width: 150 },
     { field: 'accountType', headerName: 'Personal/Business', width: 150 },
     { field: 'currencyType', headerName: 'Current/Foreign', width: 150 },
-    { field: 'balance', headerName: 'Balance', width: 100},
+    { field: 'balance', headerName: 'Balance', width: 150},
     { field: 'status', headerName: 'Status', width: 150}
   ];
 

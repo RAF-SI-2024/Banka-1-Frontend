@@ -23,8 +23,8 @@ const AccountsPortal = () => {
         { field: "accountNumber", headerName: "Account Number", width: 200 },
         { field: "balance", headerName: "Balance", width: 100 },
        // { field: "reservedBalance", headerName: "Reserved Balance", width: 100},
+        { field: "currencyType", headerName: "Currency", width: 100 },
         { field: "type", headerName: "Type", width: 200 },
-       // { field: "currencyType", headerName: "Currency", width: 100 },
        // { field: "subtype", headerName: "Subtype", width: 120 },
        // { field: "createdDate", headerName: "Created Date", width: 150 },
        // { field: "expirationDate", headerName: "Expiration Date", width: 150 },
@@ -32,7 +32,7 @@ const AccountsPortal = () => {
        // { field: "monthlyLimit", headerName: "Monthly Limit", width: 100 },
        // { field: "dailySpent", headerName: "Daily Spent",  width: 100 },
        // { field: "monthlySpent", headerName: "Monthly Spent", width: 100},
-       // { field: "status", headerName: "Status", width: 120 },
+       { field: "status", headerName: "Status", width: 120 },
        // { field: "employeeID", headerName: "Employee ID", width: 100 },
        // { field: "monthlyMaintenanceFee", headerName: "Maintenance Fee",  width: 100 },
         { 

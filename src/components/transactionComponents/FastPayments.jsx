@@ -103,7 +103,7 @@ const FastPayments = ({ accountId }) => {
                         //ovde kad se klikne treba da se otvori stranica za placanje sa datim recipientom
                         onClick={() => navigate("/new-payment-portal", { state: { recipient } })}
                     >
-                        {recipient.firstName}{recipient.lastName}
+                        {recipient.firstName} {recipient.lastName}
                     </Button>
                 ))}
 

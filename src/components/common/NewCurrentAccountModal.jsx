@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, {useEffect, useState} from 'react';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -160,11 +160,10 @@ const NewCurrentAccountModal = ({ open, onClose, accountType }) => {
             // Validate we got three parts
             if (!day || !month || !year) return null;
 
-            // Construct "YYYYMMDD" and parse it as a number
-            const resultString = `${year}${month}${day}`; // "20020302"
-
+            // Construct "YYYY-MM-DD" and parse it as a number
+             // "20020302"
             // Optionally add further checks for valid day/month/year ranges
-            return Number(resultString);
+            return `${day}-${month}-${year}`;
 
         } catch (error) {
             console.error('Error converting date:', error);

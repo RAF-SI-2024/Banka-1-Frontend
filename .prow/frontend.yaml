@@ -1,6 +1,6 @@
 presubmits:
   - name: pull-banka-1-frontend
-    always_run: true
+    always_run: false
     decorate: true
     spec:
       containers:

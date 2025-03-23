@@ -65,6 +65,7 @@ Cypress.Commands.add('createCard', () => {
     
     cy.contains("Add Card").should('be.visible');
     cy.contains("Add Card").click();
+    cy.wait(1000);
     //Select data
     cy.get('div[role="combobox"]').eq(0).should('be.visible').click();
     cy.get('ul[role="listbox"] li').first().click();

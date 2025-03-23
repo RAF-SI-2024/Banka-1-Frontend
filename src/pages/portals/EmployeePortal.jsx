@@ -123,6 +123,29 @@ const EmployeePortal = () => {
         }
     };
 
+    const transformDateForApi = (dateString) => {
+        // Skip if empty
+        if (!dateString) return null;
+
+        try {
+            // Expecting "DD-MM-YYYY" => split by '-'
+            const [day, month, year] = dateString.split('-');
+
+            // Validate we got three parts
+            if (!day || !month || !year) return null;
+
+            // Construct "YYYYMMDD" and parse it as a number
+            const resultString = `${year}${month}${day}`; // "20020302"
+
+            // Optionally add further checks for valid day/month/year ranges
+            return Number(resultString);
+
+        } catch (error) {
+            console.error('Error converting date:', error);
+            return null;
+        }
+    };
+
     
     
     // Handle toggle of active status
@@ -173,7 +196,7 @@ const EmployeePortal = () => {
                 email: employeeData.email,
                 phoneNumber: employeeData.phoneNumber,
                 address: employeeData.address,
-                birthDate: employeeData.birthDate,
+                birthDate: transformDateForApi(employeeData.birthDate),
                 gender: employeeData.gender,
                 position: "NONE", // Hardcoded as requested
                 department: employeeData.department,

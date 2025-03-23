@@ -18,13 +18,15 @@ presubmits:
               
               npm start &
               
-              echo "Waiting for the server to start..."
-              sleep 120
+              echo "Waiting 5 minutes for the server to start..."
+              sleep 300
               
               echo "Running Cypress tests..."
               npm install cypress --save-dev
               npx cypress run
-
+              
+              echo "Finished running Cypress tests"
+              
               cp -r ./cypress/screenshots /logs/artifacts/cypress
               ls -l ./cypress/videos
               echo "${GCSWEB_URL}/prow-logs/pr-logs/pull/${REPO_OWNER}_${REPO_NAME}/${PULL_NUMBER}/${JOB_NAME}/${BUILD_NUMBER}/artifacts/cypress" > /logs/artifacts/cypress.link.txt

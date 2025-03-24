@@ -34,7 +34,7 @@ import { useEffect, useState } from "react";
 import { Collapse } from "@mui/material";
 import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
 import CompareArrowsIcon from "@mui/icons-material/CompareArrows";
-import { LibraryBooks, FolderTwoTone } from "@mui/icons-material";
+import {LibraryBooks, FolderTwoTone, CorporateFare} from "@mui/icons-material";
 
 const drawerWidth = 240;
 
@@ -150,16 +150,15 @@ export default function Sidebar() {
 
           <List>
 
-            <ListItem disablePadding>
-              <ListItemButton onClick={() => handleNavigation('/home')}>
-                <ListItemIcon><HomeIcon /></ListItemIcon>
-                <ListItemText primary="Home" />
-              </ListItemButton>
-            </ListItem>
-
             {/* Customer Routes */}
             {position === "NONE" && (
                 <>
+                  <ListItem disablePadding>
+                    <ListItemButton onClick={() => handleNavigation('/customer-home')}>
+                      <ListItemIcon><HomeIcon /></ListItemIcon>
+                      <ListItemText primary="Home" />
+                    </ListItemButton>
+                  </ListItem>
                   <ListItem disablePadding>
                     <ListItemButton onClick={() => handleNavigation('/accounts-portal')}>
                       <ListItemIcon><AccountBalanceIcon /></ListItemIcon>
@@ -251,6 +250,10 @@ export default function Sidebar() {
             {/* Supervisor only */}
             {isEmployed && department === "SUPERVISOR" && (
                 <>
+                  <ListItemButton onClick={() => handleNavigation("/employee-home")}>
+                    <ListItemIcon><HomeIcon /></ListItemIcon>
+                    <ListItemText primary="Home" />
+                  </ListItemButton>
                   <ListItem disablePadding>
                     <ListItemButton onClick={() => handleNavigation('/actuarial-management-portal')}>
                       <ListItemIcon><CompareArrowsIcon /></ListItemIcon>
@@ -281,6 +284,10 @@ export default function Sidebar() {
             {/* Agent only */}
             {isEmployed && department === "AGENT" && (
                 <>
+                  <ListItemButton onClick={() => handleNavigation("/employee-home")}>
+                    <ListItemIcon><HomeIcon /></ListItemIcon>
+                    <ListItemText primary="Home" />
+                  </ListItemButton>
                   <ListItem disablePadding>
                     <ListItemButton onClick={() => handleNavigation('/portfolio-page')}>
                       <ListItemIcon><LibraryBooks /></ListItemIcon>
@@ -296,17 +303,13 @@ export default function Sidebar() {
                 </>
             )}
 
-            {/* Admin-Only Route */}
-            {isAdmin && (
-                <ListItemButton onClick={() => handleNavigation("/employee-portal")}>
-                  <ListItemIcon><PeopleIcon /></ListItemIcon>
-                  <ListItemText primary="Employees" />
-                </ListItemButton>
-            )}
-
             {/* Employee & Admin Routes */}
             {isEmployed && department !== "AGENT" && department !== "SUPERVISOR" && (
                 <>
+                  <ListItemButton onClick={() => handleNavigation("/employee-home")}>
+                    <ListItemIcon><HomeIcon /></ListItemIcon>
+                    <ListItemText primary="Home" />
+                  </ListItemButton>
                   <ListItemButton onClick={() => handleNavigation("/customer-portal")}>
                     <ListItemIcon><PeopleIcon /></ListItemIcon>
                     <ListItemText primary="Customers" />
@@ -336,8 +339,21 @@ export default function Sidebar() {
                       </ListItemButton>
                     </List>
                   </Collapse>
+                  <ListItemButton onClick={() => handleNavigation("/companies-portal")}>
+                    <ListItemIcon><CorporateFare /></ListItemIcon>
+                    <ListItemText primary="Companies" />
+                  </ListItemButton>
                 </>
             )}
+
+            {/* Admin-Only Route */}
+            {isAdmin && (
+                <ListItemButton onClick={() => handleNavigation("/employee-portal")}>
+                  <ListItemIcon><PeopleIcon /></ListItemIcon>
+                  <ListItemText primary="Employees" />
+                </ListItemButton>
+            )}
+
           </List>
           <Divider />
         </Drawer>

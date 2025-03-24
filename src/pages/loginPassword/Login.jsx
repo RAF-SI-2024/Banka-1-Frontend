@@ -30,9 +30,9 @@ const Login = () => {
             const decodedToken = jwtDecode(token);
 
             if(decodedToken.isEmployed)
-                navigate('/admin-home');
+                navigate('/employee-home');
             else
-                navigate('/home');
+                navigate('/customer-home');
         } catch (error) {
             console.log(error);
             alert('Invalid email or password');

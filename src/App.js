@@ -32,6 +32,9 @@ import PortfolioPage from "./pages/portals/PortfolioPage";
 import ActuarySecuritiesBuyingPortal from "./pages/portals/securitiesBuyingPortal/ActuarySecuritiesBuyingPortal";
 import ClientSecuritiesBuyingPortal from "./pages/portals/securitiesBuyingPortal/ClientSecuritiesBuyingPortal";
 import ViewOrderPortal from "./pages/portals/ViewOrderPortal";
+/*
+import CompaniesPortal from "./pages/portals/CompaniesPortal";
+ */
 
 function App() {
   return (
@@ -52,7 +55,7 @@ function App() {
 
             {/* Employee-Only Routes */}
             <Route
-              path="/admin-home"
+              path="/employee-home"
               element={
                 <AuthGuard
                   allowedPositions={[
@@ -61,6 +64,8 @@ function App() {
                     "DIRECTOR",
                     "HR",
                     "ADMIN",
+                      "SUPERVISOR",
+                      "AGENT"
                   ]}
                 >
                   <HomePage />
@@ -83,6 +88,22 @@ function App() {
                 </AuthGuard>
               }
             />
+              <Route
+                  path="/companies-portal"
+                  element={
+                      <AuthGuard
+                          allowedPositions={[
+                              "WORKER",
+                              "MANAGER",
+                              "DIRECTOR",
+                              "HR",
+                              "ADMIN",
+                          ]}
+                      >
+                          {/* <CompaniesPortal /> */}
+                      </AuthGuard>
+                  }
+              />
             <Route
               path="/employee-bank-accounts-portal"
               element={
@@ -159,15 +180,6 @@ function App() {
             />
 
             {/* Special Employee Routes (Supervisor, Agent) */}
-
-            <Route
-              path="/home"
-              element={
-                <AuthGuard allowedPositions={["AGENT", "SUPERVISOR"]}>
-                  <CustomerAccountPortal />
-                </AuthGuard>
-              }
-            />
             <Route
               path="/portfolio-page"
               element={
@@ -212,6 +224,14 @@ function App() {
             />
 
             {/* Customer-Only Routes */}
+              <Route
+                  path="/customer-home"
+                  element={
+                      <AuthGuard allowedPositions={["NONE"]}>
+                          <CustomerAccountPortal />
+                      </AuthGuard>
+                  }
+              />
             <Route
               path="/client-buying-portal"
               element={

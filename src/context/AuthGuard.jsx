@@ -52,12 +52,12 @@ const AuthGuard = ({ allowedPositions, children }) => {
 
             // If the employee tries to access customer-only page
             if (allowedPositions.includes("NONE")) {
-                return <Navigate to="/home" replace />;
+                return <Navigate to="/employee-home" replace />;
             }
             // if (isAdmin) {
             //     return children;
             // }
-            return <Navigate to="/home" replace />;
+            return <Navigate to="/employee-home" replace />;
         }
 
         // If the user is Customer (position is NONE)
@@ -65,19 +65,29 @@ const AuthGuard = ({ allowedPositions, children }) => {
 
             // If trying to access Employee-only page, deny access
             if (allowedPositions.some(pos => ["WORKER", "MANAGER", "DIRECTOR", "HR", "ADMIN"].includes(pos))) {
-                return <Navigate to="/home" replace />;
+                return <Navigate to="/customer-home" replace />;
             }
 
             // Otherwise, allow access
             return children;
         }
 
-        // If nothing matches, deny access
-        return <Navigate to="/home" replace />;
-
+        // If User is not Employee and is not Customer
+        return <Navigate to="/login" replace />;
     } catch (error) {
         console.error("Invalid token", error);
-        return <Navigate to="/home" replace />;
+
+        try {
+            const decodedToken = jwtDecode(token);
+            const isEmployed = decodedToken.department !== null || (decodedToken.position && decodedToken.position !== "NONE");
+
+            // Remote User to home page if he tries to access page that is forbidden
+            return isEmployed ? <Navigate to="/employee-home" replace /> : <Navigate to="/customer-home" replace />;
+        } catch {
+
+            // Token totally invalid, login again
+            return <Navigate to="/login" replace />;
+        }
     }
 };
 

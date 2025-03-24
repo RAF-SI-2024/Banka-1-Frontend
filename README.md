@@ -30,6 +30,12 @@ podman compose up -d --pull always
 ```<bash>
 npm start
 ```
+### Tests will be ran automaticly when commiting using husky. Or you can manually run them using:
+```<bash>
+npx cypress run
+```
+
+## Make sure to write your own simple e2e cypress tests.
 
 # Project organization:
 ```

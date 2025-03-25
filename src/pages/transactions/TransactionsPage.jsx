@@ -3,7 +3,7 @@ import Sidebar from "../../components/mainComponents/Sidebar";
 import {
     Box, Typography, Tabs, Tab, TextField,
     Select, MenuItem, Button, Grid, InputAdornment,
-    Collapse, IconButton, FormControl, InputLabel, OutlinedInput
+    Collapse, IconButton, Pagination
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import TransactionList from "../../components/transactionTable/TransactionList";
@@ -25,6 +25,8 @@ const TransactionsPage = () => {
     const [filtersVisible, setFiltersVisible] = useState(false);
     const [accounts, setAccounts] = useState([]);
     const [selectedAccount, setSelectedAccount] = useState("");
+    const [page, setPage] = useState(1);
+    const pageSize = 5;
 
     useEffect(() => {
         const loadAccounts = async () => {
@@ -56,10 +58,16 @@ const TransactionsPage = () => {
                 const accountTransactions = await fetchAccountsTransactions(selectedAccount);
                 const formattedTransactions = accountTransactions.map(transaction => {
                     const dateObj = new Date(transaction.timestamp);
+                    const formattedDate = dateObj.toLocaleDateString("sr-RS");
+                    const formattedTime = dateObj.toLocaleTimeString("sr-RS", {
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    });
+
                     return {
                         ...transaction,
-                        date: dateObj.toISOString().split("T")[0],
-                        time: dateObj.toLocaleTimeString()
+                        date: formattedDate,
+                        time: formattedTime
                     };
                 });
 
@@ -119,6 +127,15 @@ const TransactionsPage = () => {
         setStatusFilter("");
     };
 
+    const handlePageChange = (_, value) => {
+        setPage(value);
+    };
+
+    const paginatedTransactions = filteredTransactions.slice(
+        (page - 1) * pageSize,
+        page * pageSize
+    );
+
     return (
         <Box className={styles.page}>
             <Sidebar />
@@ -128,7 +145,7 @@ const TransactionsPage = () => {
                     padding: "20px",
                     borderRadius: "12px",
                     width: "50%",
-                    height: "600px",
+                    height: "700px",
                     textAlign: "center",
                     position: "relative",
                 }}
@@ -136,7 +153,6 @@ const TransactionsPage = () => {
                 <Typography variant="h5" className={styles.title}>
                     Transactions Overview
                 </Typography>
-
                 <Box className={styles.dropdown}>
                     <TextField
                         id="accounts"
@@ -173,6 +189,7 @@ const TransactionsPage = () => {
                 >
                     <Tab label="Domestic Payments" />
                     <Tab label="Exchange Transactions" />
+
                 </Tabs>
 
                 <Collapse in={filtersVisible}>
@@ -197,7 +214,7 @@ const TransactionsPage = () => {
                                     onChange={(e) => setAmountFilter(e.target.value)}
                                     inputProps={{ min: 0 }}
                                     InputProps={{
-                                        startAdornment: <InputAdornment position="start">RSD</InputAdornment>
+                                        startAdornment: <InputAdornment position="start"></InputAdornment>
                                     }}
                                 />
                             </Grid>
@@ -223,7 +240,16 @@ const TransactionsPage = () => {
                     </Box>
                 </Collapse>
 
-                <TransactionList transactions={filteredTransactions} />
+                <TransactionList transactions={paginatedTransactions} />
+
+                <Box mt={2} className={styles.paginationBox}>
+                    <Pagination
+                        count={Math.ceil(filteredTransactions.length / pageSize)}
+                        page={page}
+                        onChange={handlePageChange}
+                        color="primary"
+                    />
+                </Box>
             </Box>
         </Box>
     );

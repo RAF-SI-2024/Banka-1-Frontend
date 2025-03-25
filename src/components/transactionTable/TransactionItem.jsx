@@ -8,7 +8,7 @@ const TransactionItem = ({ transaction, onDoubleClick }) => {
 
     const receiverName = transaction.receiverName || "Unknown";
     const amount = transaction.amount
-        ? `${transaction.amount} ${transaction.currency || ""}`
+        ? `${transaction.amount} `
         : "0.00";
     const status = transaction.status || "Pending";
 

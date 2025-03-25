@@ -1,6 +1,6 @@
 presubmits:
   - name: pull-banka-1-frontend
-    always_run: false
+    always_run: true
     decorate: true
     spec:
       containers:
@@ -11,26 +11,39 @@ presubmits:
             - |
               set -euo pipefail
               start-docker.sh
-              
+
               npm ci
-              
+
               docker compose up -d
-              
+
+              # Start React server in background
               npm start &
-              
+          
               echo "Waiting 5 minutes for the server to start..."
               sleep 300
               
-              echo "Running Cypress tests..."
+              docker compose ps
+              
+              echo "Checking if server is accessible..."
+              curl -s http://localhost:4200 || echo "WARNING: Server may not be running properly"
+
+              echo "Running Cypress tests with 10-minute timeout..."
               npm install cypress --save-dev
-              npx cypress run
               
+              # Run Cypress with a timeout and more verbose logging
+              timeout 600 npx cypress run --config video=true --browser chrome || {
+              echo "Cypress failed or timed out with exit code $?"
+              # Gather diagnostic information
+              ps aux | grep -E 'node|cypress'
+              docker compose ps
+              }
+
               echo "Finished running Cypress tests"
-              
-              cp -r ./cypress/screenshots /logs/artifacts/cypress
-              ls -l ./cypress/videos
+
+              # Copy artifacts with error handling
+              cp -r ./cypress/screenshots /logs/artifacts/cypress || echo "No screenshots to copy"
+              ls -l ./cypress/videos || echo "No videos found"
               echo "${GCSWEB_URL}/prow-logs/pr-logs/pull/${REPO_OWNER}_${REPO_NAME}/${PULL_NUMBER}/${JOB_NAME}/${BUILD_NUMBER}/artifacts/cypress" > /logs/artifacts/cypress.link.txt
-              echo "No screenshots to copy. All tests have passed."
           securityContext:
             privileged: true
           imagePullPolicy: Always

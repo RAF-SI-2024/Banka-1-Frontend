@@ -31,6 +31,7 @@ podman compose up -d --pull always
 npm start
 ```
 ### Tests will be ran automaticly when commiting using husky. Or you can manually run them using:
+Before running tests, make sure to have both frontend and backend (ran from frontend using the command above) running!!
 ```<bash>
 npx cypress run
 ```

@@ -1,27 +1,35 @@
 import React from "react";
-import {
-    denyLoan
-} from "../../services/AxiosBanking";
+import { denyLoan } from "../../services/AxiosBanking";
+import { toast } from "react-toastify";
 
 const DenyLoanButton = ({ loanId, onAction }) => {
     const handleDeny = async () => {
         try {
-            
             const deniedLoan = {
                 approved: false,
-                reason: "obaljen"
-              };
+                reason: "Odbijen"
+            };
 
             await denyLoan(loanId, deniedLoan);
-            alert(`Loan ${loanId} denied successfully.`);
-            onAction(); 
+            toast.success(`Loan ${loanId} denied successfully.`);
+            onAction?.();
         } catch (error) {
-            alert(`Error denying loan ${loanId}: ${error.message}`);
+            toast.error(`Error denying loan ${loanId}: ${error.message}`);
+            console.error(error);
         }
     };
 
     return (
-        <button onClick={handleDeny} style={{ backgroundColor: "red", color: "white", padding: "5px 10px", border: "none", cursor: "pointer" }}>
+        <button
+            onClick={handleDeny}
+            style={{
+                backgroundColor: "red",
+                color: "white",
+                padding: "5px 10px",
+                border: "none",
+                cursor: "pointer"
+            }}
+        >
             Deny
         </button>
     );

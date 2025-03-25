@@ -46,12 +46,12 @@ const CustomerPortal = () => {
         loadCustomers();
     }, []);
     // Load the customer data from the API
-    const loadCustomers = async () => { 
+    const loadCustomers = async () => {
         try {
             setLoading(true);
             const data = await fetchCustomers();
             const rowData = data.data.rows;
-            
+
             const formattedRows = rowData.map((row) => ({
                 id: row.id,
                 firstName: row.firstName,
@@ -61,7 +61,7 @@ const CustomerPortal = () => {
                 // Store original data for potential updates
                 originalData: { ...row }
             }));
-            
+
             setRows(formattedRows);
         } catch (err) {
             console.error(err);
@@ -73,18 +73,18 @@ const CustomerPortal = () => {
     // Format the date in the log to YYYY-MM-DD
     const formatLogDate = (log) => {
         if (typeof log !== "string" && typeof log !== "number") return String(log);
-      
+
         const strLog = String(log);
-        
+
         if (strLog.length === 8) {
-          // Extract year, month, and day
-          const year = strLog.slice(0, 4);
-          const month = strLog.slice(4, 6);
-          const day = strLog.slice(6, 8);
-          
-          return `${year}-${month}-${day}`; // Output format: YYYY-MM-DD
+            // Extract year, month, and day
+            const year = strLog.slice(0, 4);
+            const month = strLog.slice(4, 6);
+            const day = strLog.slice(6, 8);
+
+            return `${year}-${month}-${day}`; // Output format: YYYY-MM-DD
         }
-      
+
         return strLog; // Return as-is if not in expected format
     };
 
@@ -92,9 +92,9 @@ const CustomerPortal = () => {
     const handleRowClick = async (row) => {
         try {
             const response = await fetchCustomerById(row.id);
-            
+
             const customerData = response.data || response;
-           
+
             // Create a clean customer object
             const cleanCustomerData = {
                 id: row.id,
@@ -136,30 +136,31 @@ const CustomerPortal = () => {
         if (!dateString) return null;
 
         try {
-          // Expecting "DD-MM-YYYY" => split by '-'
-          const [day, month, year] = dateString.split('-');
+            // Expecting "DD-MM-YYYY" => split by '-'
+            const [day, month, year] = dateString.split('-');
 
-          // Validate we got three parts
-          if (!day || !month || !year) return null;
+            // Validate we got three parts
+            if (!day || !month || !year) return null;
 
-          // Construct "YYYYMMDD" and parse it as a number
-          const resultString = `${year}${month}${day}`; // "20020302"
+            // Construct "YYYYMMDD" and parse it as a number
+            const resultString = `${year}${month}${day}`; // "20020302"
 
-          // Optionally add further checks for valid day/month/year ranges
-          return Number(resultString);
+            // Optionally add further checks for valid day/month/year ranges
+            return Number(resultString);
 
         } catch (error) {
-          console.error('Error converting date:', error);
-          return null;
+            console.error('Error converting date:', error);
+            return null;
         }
-      };
+    };
 
     // Add create customer handler
     const handleCreateCustomer = async (customerData) => {
         try {
-            // otvori se portal za kreiranje racuna
             customerData.birthDate = transformDateForApi(customerData.birthDate);
-            console.log(customerData);
+
+            console.log("Kreiranje korisnika – payload koji se šalje:", customerData);
+
             await createCustomer(customerData);
             setIsCreateModalOpen(false);
             resetCustomerForm();
@@ -167,6 +168,7 @@ const CustomerPortal = () => {
             loadCustomers();
         } catch (error) {
             toast.error(`Failed to create customer: ${error.message}`);
+            console.error("Greška prilikom kreiranja korisnika:", error.response?.data || error);
         }
     };
 
@@ -195,9 +197,9 @@ const CustomerPortal = () => {
         { name: 'address', label: 'Address' },
         { name: 'birthDate', label: 'Birth Date', type: 'date' },
         { name: 'gender', label: 'Gender', type: 'select', options: [
-            { value: 'MALE', label: 'Male' },
-            { value: 'FEMALE', label: 'Female' }
-        ] }
+                { value: 'MALE', label: 'Male' },
+                { value: 'FEMALE', label: 'Female' }
+            ] }
     ];
 
     // Add password field for customer creation
@@ -205,7 +207,7 @@ const CustomerPortal = () => {
         ...customerFormFields,
         // { name: 'password', label: 'Password', type: 'password', required: true }
     ];
-    
+
     return (
         <div>
             <Sidebar/>
@@ -251,7 +253,7 @@ const CustomerPortal = () => {
                     title="Create New Customer"
                 />
 
-                 {/*ovde ce biti ona 3 racuna*/}
+                {/*ovde ce biti ona 3 racuna*/}
 
                 <ToastContainer position="bottom-right" />
             </div>

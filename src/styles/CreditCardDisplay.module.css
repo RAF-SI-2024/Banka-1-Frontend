@@ -1,0 +1,105 @@
+.creditCard {
+    width: 480px;
+    height: 280px;
+    background: linear-gradient(135deg, #a8bae7, #131318);
+    color: white;
+    border-radius: 20px;
+    padding: 24px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    transition: transform 0.3s ease;
+    position: relative;
+}
+
+.creditCard:hover {
+    transform: scale(1.02);
+}
+
+.watermark {
+    position: absolute;
+    top: 15%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 48px;
+    font-weight: bold;
+    color: rgb(231, 231, 231);
+    pointer-events: none;
+    user-select: none;
+    white-space: nowrap;
+}
+
+.cardTop {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.chip {
+    width: 50px;
+    height: 35px;
+    background-color: gold;
+    border-radius: 6px;
+}
+
+.brand {
+    font-size: 26px;
+    font-weight: bold;
+}
+
+.cardNumber {
+    font-size: 28px;
+    letter-spacing: 8px;
+    margin-top: 30px;
+    margin-bottom: 10px;
+}
+
+.cardInfo {
+    font-size: 16px;
+}
+
+.cardName {
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+
+.cardLimit {
+    margin-bottom: 6px;
+}
+
+.cardStatus {
+    font-size: 14px;
+    color: #ddd;
+}
+
+.cardButtons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 16px;
+}
+
+.blockBtn,
+.deactivateBtn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.blockBtn {
+    background-color: #d32f2f;
+    color: white;
+}
+
+.deactivateBtn {
+    background-color: #27ae60;
+    color: black;
+}
+
+.blocked {
+    opacity: 0.75;
+    filter: grayscale(1);
+}

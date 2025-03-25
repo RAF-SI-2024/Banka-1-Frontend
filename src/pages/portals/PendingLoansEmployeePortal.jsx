@@ -3,7 +3,7 @@ import { Typography } from "@mui/material";
 import Sidebar from "../../components/mainComponents/Sidebar";
 import SearchDataTable from '../../components/tables/SearchDataTable';
 import { toast } from "react-toastify";
-import {fetchAllPendingLoans} from "../../services/AxiosBanking";
+import { fetchAllPendingLoans } from "../../services/AxiosBanking";
 import ApproveLoanButton from "../../components/common/ApproveLoanButton";
 import DenyLoanButton from "../../components/common/DenyLoanButton";
 
@@ -11,6 +11,7 @@ const PendingLoansEmployeePortal = () => {
     const [loans, setLoans] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [refreshKey, setRefreshKey] = useState(0);
 
     const columns = [
         { field: "id", headerName: "Loan ID", width: 100 },
@@ -34,50 +35,36 @@ const PendingLoansEmployeePortal = () => {
             field: "approve",
             headerName: "Approve",
             width: 120,
-            renderCell: (params) => <ApproveLoanButton loanId={params.row.id} onAction={() => console.log("Loan Approved")} />
+            renderCell: (params) => (
+                <ApproveLoanButton
+                    loanId={params.row.id}
+                    onAction={() => setRefreshKey(prev => prev + 1)}
+                />
+            )
         },
         {
             field: "deny",
             headerName: "Deny",
             width: 120,
-            renderCell: (params) => <DenyLoanButton loanId={params.row.id} onAction={() => console.log("Loan Denied")} />
+            renderCell: (params) => (
+                <DenyLoanButton
+                    loanId={params.row.id}
+                    onAction={() => setRefreshKey(prev => prev + 1)}
+                />
+            )
         }
     ];
-    
 
     useEffect(() => {
         loadLoans();
-    }, []);
+    }, [refreshKey]);
 
     const loadLoans = async () => {
         try {
             setLoading(true);
             const filteredLoans = await fetchAllPendingLoans();
-            console.log(filteredLoans);
-          
 
-          /*  const formattedLoans = data.data.loans;
-                data = loans.map(row => ({
-                id: row.id,
-                loanType: row.loanType,
-                numberOfInstallments: row.numberOfInstallments,
-                currencyType: row.currencyType,
-                interestType: row.interestType,
-                paymentStatus: row.paymentStatus,
-                nominalRate: row.nominalRate,
-                effectiveRate: row.effectiveRate,
-                loanAmount: row.loanAmount,
-                duration: row.duration,
-                createdDate: new Date(row.createdDate).toLocaleDateString(),
-                allowedDate: new Date(row.allowedDate).toLocaleDateString(),
-                monthlyPayment: row.monthlyPayment,
-                nextPaymentDate: new Date(row.nextPaymentDate).toLocaleDateString(),
-                remainingAmount: row.remainingAmount,
-                loanReason: row.loanReason,
-                accountId: row.account.id
-            }));*/
-
-        const formattedLoans = filteredLoans.map(loan => ({
+            const formattedLoans = filteredLoans.map(loan => ({
                 id: loan.id,
                 loanType: loan.loanType,
                 numberOfInstallments: loan.numberOfInstallments ?? "N/A",
@@ -95,8 +82,8 @@ const PendingLoansEmployeePortal = () => {
                 remainingAmount: loan.remainingAmount.toFixed(2),
                 loanReason: loan.loanReason || "N/A",
                 accountNumber: loan.account?.accountNumber ?? "N/A"
-        }));
-            
+            }));
+
             setLoans(formattedLoans);
         } catch (err) {
             console.error("Error loading loans:", err);

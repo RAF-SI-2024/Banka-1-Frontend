@@ -11,7 +11,6 @@ import NewAccountModal from "../../components/common/NewAccountModal";
 import NewCurrentAccountModal from "../../components/common/NewCurrentAccountModal";
 import NewForeignCurrencyAccountModal from "../../components/common/NewForeignCurrencyAccountModal";
 
-
 const EmployeeBankAccountsPortal = () => {
   const navigate = useNavigate();
   const [accounts, setAccounts] = useState([]);
@@ -21,7 +20,7 @@ const EmployeeBankAccountsPortal = () => {
   const [openNewCurrentAccountModal, setOpenNewCurrentAccountModal] = useState(false);
   const [openNewForeignCurrencyAccountModal, setOpenNewForeignCurrencyAccountModal] = useState(false);
   const [selectedAccountType, setSelectedAccountType] = useState('');
-
+  const [refreshKey, setRefreshKey] = useState(0);
 
   const columns = [
     { field: 'accountNumber', headerName: 'Account Number', width: 200 },
@@ -34,52 +33,48 @@ const EmployeeBankAccountsPortal = () => {
   ];
 
   useEffect(() => {
-    console.log(localStorage.getItem('token'));
     loadAccounts();
-  }, []);
+  }, [refreshKey]);
 
   const loadAccounts = async () => {
     try {
       setLoading(true);
       const accounts = await fetchAccounts();
-      
       if (!accounts || !Array.isArray(accounts)) {
         setAccounts([]);
         return;
       }
 
-      // Fetch customer details for each account
       const accountsWithOwners = await Promise.all(
-        accounts.map(async (account) => {
-          try {
-            const customerData = await fetchCustomerById(account.ownerID);
-            return {
-              id: account.id,
-              accountNumber: account.accountNumber || '',
-              firstName: customerData.data.firstName || 'N/A',
-              lastName: customerData.data.lastName || 'N/A',
-              accountType: account.subtype === "BUSINESS" ? "Business" : "Personal",
-              currencyType: account.type === "CURRENT" ? "Current" : "Foreign",
-              balance: account.balance || 0,
-              status: account.status
-            };
-          } catch (error) {
-            console.error(`Error fetching customer for account ${account.id}:`, error);
-            return {
-              id: account.id,
-              accountNumber: account.accountNumber || '',
-              firstName: 'Error',
-              lastName: 'Loading',
-              accountType: account.subtype === "BUSINESS" ? "Business" : "Personal",
-              currencyType: account.type === "CURRENT" ? "Current" : "Foreign",
-              balance: account.balance || 0,
-              status: account.status
-
-            };
-          }
-        })
+          accounts.map(async (account) => {
+            try {
+              const customerData = await fetchCustomerById(account.ownerID);
+              return {
+                id: account.id,
+                accountNumber: account.accountNumber || '',
+                firstName: customerData.data.firstName || 'N/A',
+                lastName: customerData.data.lastName || 'N/A',
+                accountType: account.subtype === "BUSINESS" ? "Business" : "Personal",
+                currencyType: account.type === "CURRENT" ? "Current" : "Foreign",
+                balance: account.balance || 0,
+                status: account.status
+              };
+            } catch (error) {
+              console.error(`Error fetching customer for account ${account.id}:`, error);
+              return {
+                id: account.id,
+                accountNumber: account.accountNumber || '',
+                firstName: 'Error',
+                lastName: 'Loading',
+                accountType: account.subtype === "BUSINESS" ? "Business" : "Personal",
+                currencyType: account.type === "CURRENT" ? "Current" : "Foreign",
+                balance: account.balance || 0,
+                status: account.status
+              };
+            }
+          })
       );
-      
+
       setAccounts(accountsWithOwners);
     } catch (err) {
       console.error('Error loading accounts:', err);
@@ -100,7 +95,7 @@ const EmployeeBankAccountsPortal = () => {
       setSelectedAccountType(accountType);
       setOpenNewAccountModal(false);
       setOpenNewCurrentAccountModal(true);
-    } else if (account === "foreign"){
+    } else if (account === "foreign") {
       setSelectedAccountType(accountType);
       setOpenNewAccountModal(false);
       setOpenNewForeignCurrencyAccountModal(true);
@@ -109,47 +104,46 @@ const EmployeeBankAccountsPortal = () => {
     }
   };
 
-
   return (
-    <div>
-      <Sidebar />
-      <div style={{ padding: '20px', marginTop: '64px' }}>
-        <Typography variant="h4" component="h1" gutterBottom>
-          Bank Accounts Management
-        </Typography>
+      <div>
+        <Sidebar />
+        <div style={{ padding: '20px', marginTop: '64px' }}>
+          <Typography variant="h4" component="h1" gutterBottom>
+            Bank Accounts Management
+          </Typography>
 
-        <SearchDataTable
-          rows={accounts}
-          columns={columns}
-          checkboxSelection={false}
-          actionButton={<AddButton onClick={() => setOpenNewAccountModal(true)} label="Add" />}
-          loading={loading}
-          error={error}
-          onRowClick={handleRowClick}
-        />
+          <SearchDataTable
+              key={refreshKey}
+              rows={accounts}
+              columns={columns}
+              checkboxSelection={false}
+              actionButton={<AddButton onClick={() => setOpenNewAccountModal(true)} label="Add" />}
+              loading={loading}
+              error={error}
+              onRowClick={handleRowClick}
+          />
 
-        {/*First screen to add an account*/}
-        <NewAccountModal
-            open={openNewAccountModal}
-            onClose={() => setOpenNewAccountModal(false)}
-            onContinue={(account, accountType) => {
-              handleContinue(account, accountType)
-            }}
-        />
-        {/*Adding Current Account*/}
-        <NewCurrentAccountModal
-            open={openNewCurrentAccountModal}
-            onClose={() => setOpenNewCurrentAccountModal(false)}
-            accountType={selectedAccountType}
-        />
-        {/*Adding Foreign Currency Account*/}
-        <NewForeignCurrencyAccountModal
-            open={openNewForeignCurrencyAccountModal}
-            onClose={() => setOpenNewForeignCurrencyAccountModal(false)}
-            accountType={selectedAccountType}
-        />
+          <NewAccountModal
+              open={openNewAccountModal}
+              onClose={() => setOpenNewAccountModal(false)}
+              onContinue={handleContinue}
+          />
+
+          <NewCurrentAccountModal
+              open={openNewCurrentAccountModal}
+              onClose={() => setOpenNewCurrentAccountModal(false)}
+              accountType={selectedAccountType}
+              onSuccess={() => setRefreshKey(prev => prev + 1)}
+          />
+
+          <NewForeignCurrencyAccountModal
+              open={openNewForeignCurrencyAccountModal}
+              onClose={() => setOpenNewForeignCurrencyAccountModal(false)}
+              accountType={selectedAccountType}
+              onSuccess={() => setRefreshKey(prev => prev + 1)}
+          />
+        </div>
       </div>
-    </div>
   );
 };
 

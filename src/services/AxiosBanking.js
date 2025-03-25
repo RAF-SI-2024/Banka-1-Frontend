@@ -9,23 +9,23 @@ const apiBanking = axios.create({
 });
 
 apiBanking.interceptors.request.use(
-  (config) => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+    (config) => {
+      const token = localStorage.getItem("token");
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
 
-      // For debugging - remove in production
-      console.log(
-        `${config.method.toUpperCase()} ${
-          config.url
-        } - Token: ${token.substring(0, 20)}...`
-      );
+        // For debugging - remove in production
+        console.log(
+            `${config.method.toUpperCase()} ${
+                config.url
+            } - Token: ${token.substring(0, 20)}...`
+        );
+      }
+      return config;
+    },
+    (error) => {
+      return Promise.reject(error);
     }
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
-  }
 );
 export const getUserIdFromToken = () => {
   const token = localStorage.getItem("token");
@@ -117,9 +117,9 @@ export const fetchRecipients = async (accountId) => {
 };
 
 export const updateRecipient = async (
-  accountId,
-  recipientId,
-  recipientData
+    accountId,
+    recipientId,
+    recipientData
 ) => {
   try {
     const newRecipientData = {
@@ -128,8 +128,8 @@ export const updateRecipient = async (
       fullName: recipientData.fullName,
     };
     const response = await apiBanking.put(
-      `/receiver/${recipientId}`,
-      newRecipientData
+        `/receiver/${recipientId}`,
+        newRecipientData
     );
     return response.data;
   } catch (error) {
@@ -169,10 +169,10 @@ export const fetchUserCards = async (accountId) => {
 
 //Create a card
 export const createCard = async (
-  accountId,
-  cardType,
-  cardBrand = "VISA",
-  authorizedPerson = null
+    accountId,
+    cardType,
+    cardBrand = "VISA",
+    authorizedPerson = null
 ) => {
   try {
     const requestBody = {
@@ -193,7 +193,7 @@ export const createCard = async (
 
 // Change card name
 export const changeCardName = async (cardId, newName) => {
-  try { 
+  try {
     const response = await apiBanking.post(`/cards/${cardId}/name`, {
       name: newName,
     });
@@ -221,13 +221,13 @@ export const changeCardLimit = async (cardId, newLimit) => {
 export const updateCardStatus = async (cardId, status) => {
   try {
     const response = await apiBanking.post(
-      `/cards/${cardId}`,
-      { status },
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      }
+        `/cards/${cardId}`,
+        { status },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
     );
 
     return response.data;
@@ -251,8 +251,8 @@ export const fetchAdminUserCards = async (accountId) => {
 export const updateCardStatusAdmin = async (accountId, cardId, status) => {
   try {
     const response = await apiBanking.post(
-      `/cards/admin/${accountId}?card_id=${cardId}`,
-      { status }
+        `/cards/admin/${accountId}?card_id=${cardId}`,
+        { status }
     );
     return response.data;
   } catch (error) {
@@ -264,7 +264,7 @@ export const updateCardStatusAdmin = async (accountId, cardId, status) => {
 export const fetchAccountsTransactions = async (accountId) => {
   try {
     const response = await apiBanking.get(
-      `/accounts/${accountId}/transactions`
+        `/accounts/${accountId}/transactions`
     );
     return response.data;
   } catch (error) {
@@ -286,8 +286,8 @@ export const fetchCardsByAccountId = async (accountId) => {
 export const updateAccount = async (accountId, ownerId, account) => {
   try {
     const response = await apiBanking.put(
-      `/accounts/user/${ownerId}/${accountId}`,
-      account
+        `/accounts/user/${ownerId}/${accountId}`,
+        account
     );
     return response.data;
   } catch (error) {
@@ -427,8 +427,8 @@ export const createRecipientt = async (recipientData) => {
     return response.data;
   } catch (error) {
     console.error(
-      "Error creating recipient:",
-      error.response?.data || error.message
+        "Error creating recipient:",
+        error.response?.data || error.message
     );
     throw error;
   }
@@ -436,8 +436,8 @@ export const createRecipientt = async (recipientData) => {
 export const updateRecipientt = async (recipientId, recipientData) => {
   try {
     console.log(
-      `Updating recipient ID: ${recipientId} with data:`,
-      recipientData
+        `Updating recipient ID: ${recipientId} with data:`,
+        recipientData
     );
 
     if (!recipientId || !recipientData || !recipientData.accountNumber) {
@@ -446,8 +446,8 @@ export const updateRecipientt = async (recipientId, recipientData) => {
     }
 
     const response = await apiBanking.put(
-      `/receiver/${recipientId}`,
-      recipientData
+        `/receiver/${recipientId}`,
+        recipientData
     );
 
     console.log("Recipient update response:", response.data);
@@ -455,8 +455,8 @@ export const updateRecipientt = async (recipientId, recipientData) => {
     return response.data;
   } catch (error) {
     console.error(
-      `Error updating recipient [${recipientId}]:`,
-      error.response?.data || error.message
+        `Error updating recipient [${recipientId}]:`,
+        error.response?.data || error.message
     );
     throw error;
   }
@@ -475,13 +475,13 @@ export const fetchAllLoansForEmployees = async () => {
 export const fetchRemainingInstallments = async (loanId) => {
   try {
     const response = await apiBanking.get(
-      `/loans/${loanId}/remaining_installments`
+        `/loans/${loanId}/remaining_installments`
     );
     return response.data;
   } catch (error) {
     console.error(
-      `Error fetching remaining installments for loan ${loanId}:`,
-      error
+        `Error fetching remaining installments for loan ${loanId}:`,
+        error
     );
     throw error;
   }
@@ -502,8 +502,8 @@ export const fetchAllPendingLoans = async () => {
 export const approveLoan = async (loan_id, approvedLoan) => {
   try {
     const response = await apiBanking.put(
-      `/loans/admin/${loan_id}/approve`,
-      approvedLoan
+        `/loans/admin/${loan_id}/approve`,
+        approvedLoan
     );
     return response;
   } catch (error) {
@@ -515,8 +515,8 @@ export const approveLoan = async (loan_id, approvedLoan) => {
 export const denyLoan = async (loan_id, deniedLoan) => {
   try {
     const response = await apiBanking.put(
-      `/loans/admin/${loan_id}/approve`,
-      deniedLoan
+        `/loans/admin/${loan_id}/approve`,
+        deniedLoan
     );
     return response;
   } catch (error) {
@@ -529,118 +529,118 @@ export const denyLoan = async (loan_id, deniedLoan) => {
 
 // Exchange Rate Functions
 export const fetchExchangeRates = async () => {
-    try {
-        // TODO: Replace with actual API key and endpoint
-        const response = await axios.get('https://api.exchangerate-api.com/v4/latest/EUR', {
-            params: {
-                base: 'EUR',
-                symbols: ['RSD', 'CHF', 'USD', 'GBP', 'JPY', 'CAD', 'AUD'].join(',')
-            }
-        });
-        return response.data;
-    } catch (error) {
-        console.error('Error fetching exchange rates:', error);
-        throw error;
-    }
+  try {
+    // TODO: Replace with actual API key and endpoint
+    const response = await axios.get('https://api.exchangerate-api.com/v4/latest/EUR', {
+      params: {
+        base: 'EUR',
+        symbols: ['RSD', 'CHF', 'USD', 'GBP', 'JPY', 'CAD', 'AUD'].join(',')
+      }
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching exchange rates:', error);
+    throw error;
+  }
 };
 
 export const convertCurrency = async (amount, fromCurrency, toCurrency) => {
-    try {
-        const { rates } = await fetchExchangeRates();
-        const COMMISSION_RATE = 0.01; // 1% commission
+  try {
+    const { rates } = await fetchExchangeRates();
+    const COMMISSION_RATE = 0.01; // 1% commission
 
-        // Calculate buy and sell rates for all currencies
-        const getRates = (currency) => {
-            const middleRate = rates[currency];
-            return {
-                // buyRate: middleRate * 0.99,  // Bank buys at 1% less
-                // sellRate: middleRate * 1.01   // Bank sells at 1% more
-                buyRate: middleRate,
-                sellRate: middleRate
-            };
-        };
+    // Calculate buy and sell rates for all currencies
+    const getRates = (currency) => {
+      const middleRate = rates[currency];
+      return {
+        // buyRate: middleRate * 0.99,  // Bank buys at 1% less
+        // sellRate: middleRate * 1.01   // Bank sells at 1% more
+        buyRate: middleRate,
+        sellRate: middleRate
+      };
+    };
 
-        let convertedAmount;
+    let convertedAmount;
 
-        if (fromCurrency === toCurrency) {
-            // Same currency, no conversion needed
-            convertedAmount = amount;
-        } else if (fromCurrency === 'RSD') {
-            // Converting FROM RSD TO foreign currency
-            // Use SELL rate because bank is selling foreign currency
-            const { sellRate } = getRates(fromCurrency);
-            convertedAmount = amount / sellRate;
+    if (fromCurrency === toCurrency) {
+      // Same currency, no conversion needed
+      convertedAmount = amount;
+    } else if (fromCurrency === 'RSD') {
+      // Converting FROM RSD TO foreign currency
+      // Use SELL rate because bank is selling foreign currency
+      const { sellRate } = getRates(fromCurrency);
+      convertedAmount = amount / sellRate;
 
-            console.log(rates);
+      console.log(rates);
 
-        } else if (toCurrency === 'RSD') {
-            // Converting FROM foreign currency TO RSD
-            // Use BUY rate because bank is buying foreign currency
-            const { buyRate } = getRates(toCurrency);
-            convertedAmount = amount * buyRate;
-        } else {
-            // Converting between two foreign currencies
-            // First convert to RSD using BUY rate (bank buys fromCurrency)
-            // Then convert to target using SELL rate (bank sells toCurrency)
-            const { buyRate: fromBuyRate } = getRates(toCurrency);
-            const { sellRate: toSellRate } = getRates(fromCurrency);
-            
-            // First get amount in RSD
-            const amountInRSD = amount * fromBuyRate;
-            // Then convert RSD to target currency
-            convertedAmount = amountInRSD / toSellRate;
-        }
+    } else if (toCurrency === 'RSD') {
+      // Converting FROM foreign currency TO RSD
+      // Use BUY rate because bank is buying foreign currency
+      const { buyRate } = getRates(toCurrency);
+      convertedAmount = amount * buyRate;
+    } else {
+      // Converting between two foreign currencies
+      // First convert to RSD using BUY rate (bank buys fromCurrency)
+      // Then convert to target using SELL rate (bank sells toCurrency)
+      const { buyRate: fromBuyRate } = getRates(toCurrency);
+      const { sellRate: toSellRate } = getRates(fromCurrency);
 
-        // Calculate commission
-        let finalAmount;
-        let commission;
-        if(fromCurrency === toCurrency){
-            finalAmount = amount;
-            commission = 0;
-        }else{
-            finalAmount = convertedAmount * (1 - COMMISSION_RATE); // Subtract commission
-            commission = convertedAmount * COMMISSION_RATE;
-        }
-
-        return {
-            originalAmount: amount,
-            convertedAmount: finalAmount,
-            commission: commission,
-            commissionRate: COMMISSION_RATE * 100,
-            rate: rates[toCurrency],
-            fromCurrency,
-            toCurrency
-        };
-    } catch (error) {
-        console.error('Error converting currency:', error);
-        throw error;
+      // First get amount in RSD
+      const amountInRSD = amount * fromBuyRate;
+      // Then convert RSD to target currency
+      convertedAmount = amountInRSD / toSellRate;
     }
-  };
 
-  // Submit loan request - podnosenje zahteva za kredit
-  export const submitLoanRequest = async (loanData) => {
-    try {
-      console.log("Submitting loan request:", loanData);
-      const response = await apiBanking.post("/loans/", {
-        loanPurpose: loanData.loanPurpose,
-        loanType: loanData.loanType,
-        numberOfInstallments: loanData.numberOfInstallments,
-        interestType: loanData.interestType,
-        loanAmount: loanData.loanAmount,
-        salaryAmount: loanData.salaryAmount,
-        employmentStatus: loanData.employmentStatus,
-        employmentDuration: loanData.employmentDuration,
-        phoneNumber: loanData.phoneNumber,
-        currencyType: loanData.currencyType,
-        accountId: loanData.accountId
-      });
-      return response.data;
-    } catch (error) {
-      console.error("Error submitting loan request:", error);
-      throw error;
+    // Calculate commission
+    let finalAmount;
+    let commission;
+    if(fromCurrency === toCurrency){
+      finalAmount = amount;
+      commission = 0;
+    }else{
+      finalAmount = convertedAmount * (1 - COMMISSION_RATE); // Subtract commission
+      commission = convertedAmount * COMMISSION_RATE;
     }
-  };
-  
+
+    return {
+      originalAmount: amount,
+      convertedAmount: finalAmount,
+      commission: commission,
+      commissionRate: COMMISSION_RATE * 100,
+      rate: rates[toCurrency],
+      fromCurrency,
+      toCurrency
+    };
+  } catch (error) {
+    console.error('Error converting currency:', error);
+    throw error;
+  }
+};
+
+// Submit loan request - podnosenje zahteva za kredit
+export const submitLoanRequest = async (loanData) => {
+  try {
+    console.log("Submitting loan request:", loanData);
+    const response = await apiBanking.post("/loans/", {
+      loanPurpose: loanData.loanPurpose,
+      loanType: loanData.loanType,
+      numberOfInstallments: loanData.numberOfInstallments,
+      interestType: loanData.interestType,
+      loanAmount: loanData.loanAmount,
+      salaryAmount: loanData.salaryAmount,
+      employmentStatus: loanData.employmentStatus,
+      employmentDuration: loanData.employmentDuration,
+      phoneNumber: loanData.phoneNumber,
+      currencyType: loanData.currencyType,
+      accountId: loanData.accountId
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error submitting loan request:", error);
+    throw error;
+  }
+};
+
 
 export const getPaymentCodes = async () => {
   try {
@@ -658,12 +658,12 @@ export const getPaymentCodes = async () => {
 // Block card
 export const blockCard = async (cardId, status) => {
   try {
-    const response = await apiBanking.patch(`/cards/${cardId}`, {
+    const response = await apiBanking.post(`/cards/${cardId}`, {
       status: status,
     });
     return response.data;
   } catch (error) {
-    console.error(`Error blocking card ${cardId}:`, error);
+    console.error(`Error blocking/unblocking card ${cardId}:`, error);
     throw error;
   }
 };
@@ -671,12 +671,12 @@ export const blockCard = async (cardId, status) => {
 // Deactive card
 export const deactivateCard = async (cardId, status) => {
   try {
-    const response = await apiBanking.patch(`/cards/admin/${cardId}`, {
+    const response = await apiBanking.post(`/cards/admin/${cardId}`, {
       status: status,
     });
     return response.data;
   } catch (error) {
-    console.error(`Error deactivating card ${cardId}:`, error);
+    console.error(`Error deactivating/activating card ${cardId}:`, error);
     throw error;
   }
 };

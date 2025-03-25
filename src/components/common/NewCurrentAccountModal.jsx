@@ -1,30 +1,21 @@
-import React, {useEffect, useState} from 'react';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogTitle from '@mui/material/DialogTitle';
-import Button from '@mui/material/Button';
-import FormControl from '@mui/material/FormControl';
-import InputLabel from '@mui/material/InputLabel';
-import Select from '@mui/material/Select';
-import MenuItem from '@mui/material/MenuItem';
-import Checkbox from '@mui/material/Checkbox';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import TextField from '@mui/material/TextField';
-import {createCustomer, fetchCustomers} from '../../services/AxiosUser';
+import React, { useEffect, useState } from 'react';
+import {
+    Dialog, DialogActions, DialogContent, DialogTitle,
+    Button, FormControl, InputLabel, Select, MenuItem,
+    Checkbox, FormControlLabel, TextField
+} from '@mui/material';
+import { createCustomer, fetchCustomers } from '../../services/AxiosUser';
 import EditModal from '../common/EditModal';
-import {toast} from "react-toastify";
-import {createAccount} from "../../services/AxiosBanking";
+import { toast } from "react-toastify";
+import { createAccount } from "../../services/AxiosBanking";
 
-
-const NewCurrentAccountModal = ({ open, onClose, accountType }) => {
+const NewCurrentAccountModal = ({ open, onClose, accountType, onSuccess }) => {
     const [customers, setCustomers] = useState([]);
     const [makeCard, setMakeCard] = useState(false);
     const [startingBalance, setStartingBalance] = useState('');
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
     const [selectedOwnerId, setSelectedOwnerId] = useState('');
 
-    // Logic is the same as creating a user in CustomerPortal
     const [newCustomer, setNewCustomer] = useState({
         firstName: '',
         lastName: '',
@@ -36,7 +27,6 @@ const NewCurrentAccountModal = ({ open, onClose, accountType }) => {
         address: ''
     });
 
-    // Loading customer is the same as in CustomerPortal
     useEffect(() => {
         loadCustomers();
     }, []);
@@ -45,71 +35,45 @@ const NewCurrentAccountModal = ({ open, onClose, accountType }) => {
         try {
             const data = await fetchCustomers();
             const rowData = data?.data?.rows || [];
-
             const formattedCustomers = rowData.map((row) => ({
                 id: row.id,
                 firstName: row.firstName,
                 lastName: row.lastName
             }));
-
             setCustomers(formattedCustomers);
         } catch (error) {
             console.error("Failed to load customers data:", error);
         }
     };
 
-    // Handling the Confirm button on the NewCurrentAccountModal screen
     const handleConfirm = async () => {
-
-        // This is what is sent to the backend
         const accountData = {
             ownerID: selectedOwnerId,
             currency: "RSD",
             type: 'CURRENT',
-            subtype: accountType.toLocaleUpperCase(),
+            subtype: accountType.toUpperCase(),
             dailyLimit: 0,
             monthlyLimit: 0,
             status: "ACTIVE",
             createCard: makeCard,
             balance: parseFloat(startingBalance),
         };
-        // {
-        //     "ownerID": 0,
-        //     "currency": "RSD",
-        //     "type": "CURRENT",
-        //     "subtype": "STANDARD",
-        //     "dailyLimit": 0,
-        //     "monthlyLimit": 0,
-        //     "status": "ACTIVE",
-        //     "createCard": true,
-        //     "balance": 0
-        // }
-
-        console.log(accountData);
-
 
         try {
-            // Calls the POST createAccount in Axios
             await createAccount(accountData);
             onClose();
+            onSuccess?.();
         } catch (error) {
             console.error('Error creating account:', error);
+            toast.error('Error creating account.');
         }
     };
 
-
-    // Creating the customer is the same as in CustomerPortal-u
     const handleCreateCustomer = async (customerData) => {
         try {
             const customerPayload = {
-                firstName: customerData.firstName,
-                lastName: customerData.lastName,
-                username: customerData.username,
+                ...customerData,
                 birthDate: transformDateForApi(customerData.birthDate),
-                gender: customerData.gender,
-                email: customerData.email,
-                phoneNumber: customerData.phoneNumber,
-                address: customerData.address,
                 accountInfo: {
                     currency: "RSD",
                     type: "CURRENT",
@@ -122,12 +86,12 @@ const NewCurrentAccountModal = ({ open, onClose, accountType }) => {
                 }
             };
 
-            const response = await createCustomer(customerPayload);
-
+            await createCustomer(customerPayload);
             setIsCreateModalOpen(false);
             onClose();
             resetCustomerForm();
             toast.success('Customer created successfully');
+            onSuccess?.();
 
         } catch (error) {
             toast.error(`Failed to create customer: ${error.message}`);
@@ -143,28 +107,15 @@ const NewCurrentAccountModal = ({ open, onClose, accountType }) => {
             phoneNumber: "",
             address: "",
             birthDate: "",
-            gender: "",
-            // password: ""
+            gender: ""
         });
     };
 
-    // Used from CustomerPortal
     const transformDateForApi = (dateString) => {
-        // Skip if empty
         if (!dateString) return null;
-
         try {
-            // Expecting "DD-MM-YYYY" => split by '-'
-            const [day, month, year] = dateString.split('-');
-
-            // Validate we got three parts
-            if (!day || !month || !year) return null;
-
-            // Construct "YYYY-MM-DD" and parse it as a number
-             // "20020302"
-            // Optionally add further checks for valid day/month/year ranges
-            return `${day}-${month}-${year}`;
-
+            const [year, month, day] = dateString.split('-'); // ISO format (yyyy-mm-dd)
+            return `${day}-${month}-${year}`; // expected format
         } catch (error) {
             console.error('Error converting date:', error);
             return null;
@@ -179,16 +130,13 @@ const NewCurrentAccountModal = ({ open, onClose, accountType }) => {
         { name: 'phoneNumber', label: 'Phone Number' },
         { name: 'address', label: 'Address' },
         { name: 'birthDate', label: 'Birth Date', type: 'date' },
-        { name: 'gender', label: 'Gender', type: 'select', options: [
+        {
+            name: 'gender', label: 'Gender', type: 'select', options: [
                 { value: 'MALE', label: 'Male' },
                 { value: 'FEMALE', label: 'Female' },
                 { value: 'OTHER', label: 'Other' }
-            ] }
-    ];
-
-    const createCustomerFormFields = [
-        ...customerFormFields,
-        // { name: 'password', label: 'Password', type: 'password', required: true }
+            ]
+        }
     ];
 
     return (
@@ -196,7 +144,6 @@ const NewCurrentAccountModal = ({ open, onClose, accountType }) => {
             <DialogTitle>Creating a {accountType} current account</DialogTitle>
 
             <DialogContent sx={{ mt: 2 }}>
-
                 <FormControlLabel
                     control={
                         <Checkbox
@@ -218,14 +165,14 @@ const NewCurrentAccountModal = ({ open, onClose, accountType }) => {
                 />
             </DialogContent>
 
-            <FormControl fullWidth sx={{ mt: 2 }}>
+            <FormControl fullWidth sx={{ mt: 2, px: 3 }}>
                 <InputLabel id="customer-label" shrink>
                     Choose a customer
                 </InputLabel>
                 <Select
                     labelId="customer-label"
-                    value={selectedOwnerId} // Using selectedOwnerId for storing the customer ID
-                    onChange={(e) => setSelectedOwnerId(e.target.value)} // Saving the customer ID here
+                    value={selectedOwnerId}
+                    onChange={(e) => setSelectedOwnerId(e.target.value)}
                     displayEmpty
                     label="Choose a customer"
                 >
@@ -236,12 +183,11 @@ const NewCurrentAccountModal = ({ open, onClose, accountType }) => {
                         </MenuItem>
                     ))}
                 </Select>
-
             </FormControl>
 
             <Button
                 variant="outlined"
-                sx={{ mt: 2, width: '100%' }}
+                sx={{ mt: 2, width: '90%', ml: 3 }}
                 onClick={() => setIsCreateModalOpen(true)}
             >
                 Create New Customer
@@ -251,7 +197,7 @@ const NewCurrentAccountModal = ({ open, onClose, accountType }) => {
                 <Button onClick={onClose}>Cancel</Button>
                 <Button
                     variant="contained"
-                    onClick={() => {handleConfirm()}}
+                    onClick={handleConfirm}
                     disabled={!selectedOwnerId || !startingBalance}
                 >
                     Confirm
@@ -265,7 +211,7 @@ const NewCurrentAccountModal = ({ open, onClose, accountType }) => {
                     resetCustomerForm();
                 }}
                 data={newCustomer}
-                formFields={createCustomerFormFields}
+                formFields={customerFormFields}
                 onSave={handleCreateCustomer}
                 title="Create New Customer"
             />

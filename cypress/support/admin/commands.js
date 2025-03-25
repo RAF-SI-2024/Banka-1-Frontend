@@ -160,3 +160,10 @@ Cypress.Commands.add('denyLoan', () => {
     cy.contains('Deny').should('be.visible').click();
   });
 });
+
+Cypress.Commands.add('blockCard', () => {
+  cy.get('button[aria-label="open drawer"]').should('be.visible').click();
+  cy.contains('Employee Bank Accounts').should('be.visible').click();
+  cy.get('.MuiDataGrid-row--firstVisible > [data-field="accountNumber"]').click();
+  cy.get(':nth-child(1) > .MuiSwitch-root > .MuiButtonBase-root > .PrivateSwitchBase-input').click();
+  });

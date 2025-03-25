@@ -3,22 +3,21 @@ import { Modal, Box, Typography, TextField, Button } from '@mui/material';
 
 const VerificationModal = ({ open, onClose, onConfirm }) => {
     const [verificationCode, setVerificationCode] = useState('');
+    const [showFullContent, setShowFullContent] = useState(false);
 
-    //  rukovanje promenom u inputu
     const handleInputChange = (event) => {
         setVerificationCode(event.target.value);
     };
 
-    // kada korisnik klikne na "Confirm"
     const handleConfirm = () => {
-        onConfirm(verificationCode); // Poziva funkciju za potvrdu sa kodom
-        setVerificationCode(''); // Resetuje input polje
+        onConfirm(verificationCode);
+        setVerificationCode('');
     };
 
     return (
         <Modal
             open={open}
-            onClose={onClose} // Zatvara modal kada se klikne izvan modalnog prozora
+            onClose={onClose}
             aria-labelledby="verification-modal-title"
             aria-describedby="verification-modal-description"
         >
@@ -39,34 +38,51 @@ const VerificationModal = ({ open, onClose, onConfirm }) => {
                     borderRadius: 2,
                 }}
             >
-                <Typography id="verification-modal-title" variant="h6" component="h2" align="center">
-                    Enter Verification Code
-                </Typography>
-
-                {/* Input polje za unos koda za verifikaciju */}
-                <TextField
-                    id="verification-code"
-                    label="Verification Code"
-                    value={verificationCode}
-                    onChange={handleInputChange}
-                    variant="outlined"
-                    fullWidth
-                />
-
-                {/* Dugmadi za potvrdu i otkazivanje */}
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', marginTop: 2 }}>
-                    <Button variant="outlined" color="secondary" onClick={onClose}>
-                        Cancel
-                    </Button>
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={handleConfirm}
-                        disabled={!verificationCode} // Onemogućava dugme dok se ne unese kod
-                    >
-                        Confirm
-                    </Button>
-                </Box>
+                {!showFullContent ? (
+                    <>
+                        <Typography variant="body1" align="center">
+                            Ovaj modal prikazuje neki uvodni tekst.
+                        </Typography>
+                        <Typography variant="body1" align="center">
+                            Kliknite na "Continue" da nastavite.
+                        </Typography>
+                        <Box sx={{ display: 'flex', justifyContent: 'space-between', marginTop: 2 }}>
+                            <Button variant="outlined" color="secondary" onClick={onClose}>
+                                Cancel
+                            </Button>
+                            <Button variant="contained" color="primary" onClick={() => setShowFullContent(true)}>
+                                Continue
+                            </Button>
+                        </Box>
+                    </>
+                ) : (
+                    <>
+                        <Typography id="verification-modal-title" variant="h6" component="h2" align="center">
+                            Enter Verification Code
+                        </Typography>
+                        <TextField
+                            id="verification-code"
+                            label="Verification Code"
+                            value={verificationCode}
+                            onChange={handleInputChange}
+                            variant="outlined"
+                            fullWidth
+                        />
+                        <Box sx={{ display: 'flex', justifyContent: 'space-between', marginTop: 2 }}>
+                            <Button variant="outlined" color="secondary" onClick={onClose}>
+                                Cancel
+                            </Button>
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                onClick={handleConfirm}
+                                disabled={!verificationCode}
+                            >
+                                Confirm
+                            </Button>
+                        </Box>
+                    </>
+                )}
             </Box>
         </Modal>
     );

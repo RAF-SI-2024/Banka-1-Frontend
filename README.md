@@ -40,6 +40,14 @@ npx cypress run
 
 # Project organization:
 ```
+cypress              <- Dir to write your cypress tests in
+│   ├── e2e   <- File where you will utalize steps / commands from the file below
+|   |    ├── Admin
+|   |    └── Customer
+│   └── commands    <- File for steps/ commands to be executed in e2e
+|        ├── Admin
+|        └── Customer
+│  
 public                <- Static files served directly
 │   ├── favicon.ico   <- Browser tab icon
 │   ├── index.html    <- Main HTML file for React app

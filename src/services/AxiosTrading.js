@@ -71,10 +71,20 @@ export const getSecurities = async () => {
 
 export const getUserSecurities = async (userId) => {
   try {
-    const response = await apiTrading.get(`/securities/user/${userId}`);
+    const response = await apiTrading.get(`/securities/${userId}`);
     return response.data;
   } catch (error) {
     console.error(`Error fetching securities for user ${userId}:`, error);
+    throw error;
+  }
+};
+
+export const getTaxForUser = async (userId) => {
+  try {
+    const response = await apiTrading.get(`/tax/dashboard/${userId}`);
+    return response.data;
+  } catch (error) {
+    console.error(`Error fetching tax for user:`, error);
     throw error;
   }
 };

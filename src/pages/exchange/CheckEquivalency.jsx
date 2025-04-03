@@ -265,7 +265,7 @@ const CheckEquivalency = () => {
                                         {'convertedAmount' in result && (
                                             <>
                                                 <Typography fontSize="1rem">Converted: {result.convertedAmount} {result.toCurrency}</Typography>
-                                                <Typography fontSize="1rem">Commission: {result.commission} {result.toCurrency}</Typography>
+                                                <Typography fontSize="1rem">Commission: {result.commission} {'RSD'}</Typography>
                                                 <Typography fontSize="1rem">Final: {result.finalAmount} {result.toCurrency}</Typography>
                                                 <Typography fontSize="1rem">Exchange Rate: {result.exchangeRate}</Typography>
                                             </>
@@ -275,7 +275,7 @@ const CheckEquivalency = () => {
                                             <>
                                                 <Typography fontSize="1rem">First Rate: {result.firstExchangeRate}</Typography>
                                                 <Typography fontSize="1rem">Second Rate: {result.secondExchangeRate}</Typography>
-                                                <Typography fontSize="1rem">Commission: {result.provision} {result.toCurrency}</Typography>
+                                                <Typography fontSize="1rem">Commission: {result.provision} {'RSD'}</Typography>
                                                 <Typography fontSize="1rem">Final: {result.finalAmount} {result.toCurrency}</Typography>
                                             </>
                                         )}

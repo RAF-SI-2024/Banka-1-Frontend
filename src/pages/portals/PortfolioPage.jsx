@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import Sidebar from "../../components/mainComponents/Sidebar";
 import { getUserIdFromToken } from "../../services/AxiosBanking";
-import { getUserSecurities } from "../../services/AxiosTrading";
+import { getTaxForUser, getUserSecurities } from "../../services/AxiosTrading";
+import ProfitInfoModal from "../../components/common/ProfitInfoModal";
+import TaxInfoModal from "../../components/common/TaxInfoModal";
 
 import {
     Box, Typography, Tabs, Tab, Button, Table, TableBody,
@@ -21,6 +23,9 @@ const PortfolioPage = () => {
     const [publicCount, setPublicCount] = useState(0);
     const [selectedIndex, setSelectedIndex] = useState(null);
     const [portfolioData, setPortfolioData] = useState([]);
+    const [taxData, setTaxData] = useState([]);
+    const [profitModalOpen, setProfitModalOpen] = useState(false); 
+    const [taxModalOpen, setTaxModalOpen] = useState(false); 
 
     const userId = getUserIdFromToken();
 
@@ -32,7 +37,11 @@ const PortfolioPage = () => {
             }
             try {
                 const data = await getUserSecurities(userId);
+                const tax = await getTaxForUser(userId);
+                console.log(tax.data);
+                //console.log(data.data);
                 setPortfolioData(data);
+                setTaxData(tax.data);
             } catch (error) {
                 console.error("Error fetching user securities:", error);
             }
@@ -59,6 +68,12 @@ const PortfolioPage = () => {
         }
         setOpenPopup(false);
     };
+
+    const handleOpenProfitModal = () => setProfitModalOpen(true);
+    const handleCloseProfitModal = () => setProfitModalOpen(false);
+
+    const handleOpenTaxModal = () => setTaxModalOpen(true);
+    const handleCloseTaxModal = () => setTaxModalOpen(false);
 
     return (
         <Box className={styles.page}>
@@ -136,8 +151,12 @@ const PortfolioPage = () => {
                 </TableContainer>
 
                 <Box sx={{ marginTop: 2, display: "flex", gap: 2, justifyContent: "center" }}>
-                    <Button variant="contained" color="primary">Profit Info</Button>
-                    <Button variant="contained" color="primary">Tax Info</Button>
+                    <Button variant="contained" color="primary" onClick={handleOpenProfitModal}>
+                        Profit Info
+                    </Button>
+                    <Button variant="contained" color="primary" onClick={handleOpenTaxModal}>
+                        Tax Info
+                    </Button>
                 </Box>
 
                 <Dialog open={openPopup} onClose={handleClosePopup}>
@@ -155,6 +174,17 @@ const PortfolioPage = () => {
                         <Button onClick={handleSavePublicCount} color="primary">Save</Button>
                     </DialogActions>
                 </Dialog>
+
+                <ProfitInfoModal 
+                open={profitModalOpen} 
+                onClose={handleCloseProfitModal}
+                portfolioData={portfolioData}
+                />
+                <TaxInfoModal 
+                open={taxModalOpen} 
+                onClose={handleCloseTaxModal} 
+                taxData={taxData}
+                />
             </Box>
         </Box>
     );

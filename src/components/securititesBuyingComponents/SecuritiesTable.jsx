@@ -11,6 +11,10 @@ import DataTable from "../tables/DataTable";
 import BuyModal from "../createOrderComponents/BuyModal";
 import SecuritiesModal from "../common/SecuritiesModal";
 
+//TODO: zakomentarisana je metoda loadSecurities koja zove available securities,
+// izmeniti kada poziv securities/available daje neku datu
+//TODO: proveriti kad se urade options, i previousClose za change!!!
+
 const SecuritiesTable = ({ role }) => {
     const [securities, setSecurities] = useState([]);
     const [search, setSearch] = useState("");
@@ -38,29 +42,24 @@ const SecuritiesTable = ({ role }) => {
 
     const loadSecurities = async () => {
         try {
-            const {data:allSecurities} = await fetchSecurities();
-           // const availableSecurities = await fetchAvailableSecurities();
-            const { data: availableSecurities } = await fetchAvailableSecurities();
-            console.log("Available Securities:", availableSecurities);
+            // Fetchujemo sve hartije (securities)
+            const { data: allSecurities } = await fetchSecurities();
 
-            // Mapa dostupnih hartija za kupovinu
-            const availableMap = new Map(availableSecurities.map(sec => [sec.ticker, sec.availableQuantity]));
+            // Računamo `change` i `initialMarginCost` za svaku hartiju
+            const mergedSecurities = allSecurities.map((sec, index) => {
+                console.log(`Processing security: ${sec.ticker}`);
 
-            // Računamo `change` i `initialMarginCost`
-            const mergedSecurities = allSecurities.map(sec => {
-
-                console.log(`Available Quantity for ${sec.ticker}:`, sec.availableQuantity);
                 // Računanje `change`
                 const change = sec.previousClose
                     ? (((sec.lastPrice - sec.previousClose) / sec.previousClose) * 100).toFixed(2) + "%"
                     : "N/A";
 
-                // Računanje `maintenanceMargin` zavisno od tipa
+                // Računanje `maintenanceMargin` zavisno od tipa hartije
                 let maintenanceMargin = 0;
                 if (sec.type === "Stock") {
                     maintenanceMargin = sec.lastPrice * 0.5;
                 } else if (sec.type === "Forex") {
-                    maintenanceMargin = 1000 * sec.lastPrice * 0.1;
+                    maintenanceMargin = sec.contractSize * sec.lastPrice * 0.1;
                 } else if (sec.type === "Future") {
                     maintenanceMargin = sec.contractSize * sec.lastPrice * 0.1;
                 } else if (sec.type === "Option") {
@@ -69,24 +68,79 @@ const SecuritiesTable = ({ role }) => {
 
                 // Računanje `initialMarginCost`
                 const initialMarginCost = (maintenanceMargin * 1.1).toFixed(2);
-                const index = 1;
 
                 return {
                     id: sec.ticker || index,
                     ...sec,
+                    // Zadržavamo availableQuantity iz originalnog objekta ili postavljamo na 0 ako ne postoji
                     availableQuantity: sec.availableQuantity || 0,
                     change,
-                    initialMarginCost
+                    initialMarginCost,
                 };
             });
 
             console.log("Merged Securities:", mergedSecurities);
-
             setSecurities(mergedSecurities);
         } catch (error) {
             console.error("Neuspešno učitavanje podataka o hartijama", error);
         }
     };
+
+
+    /*
+        const loadSecurities = async () => {
+            try {
+                const {data:allSecurities} = await fetchSecurities();
+               // const availableSecurities = await fetchAvailableSecurities();
+                const { data: availableSecurities } = await fetchAvailableSecurities();
+                console.log("Available Securities:", availableSecurities);
+
+                // Mapa dostupnih hartija za kupovinu
+                const availableMap = new Map(availableSecurities.map(sec => [sec.ticker, sec.availableQuantity]));
+
+                // Računamo `change` i `initialMarginCost`
+                const mergedSecurities = allSecurities.map(sec => {
+
+                    console.log(`Available Quantity for ${sec.ticker}:`, sec.availableQuantity);
+                    // Računanje `change`
+                    const change = sec.previousClose
+                        ? (((sec.lastPrice - sec.previousClose) / sec.previousClose) * 100).toFixed(2) + "%"
+                        : "N/A";
+
+                    // Računanje `maintenanceMargin` zavisno od tipa
+                    let maintenanceMargin = 0;
+                    if (sec.type === "Stock") {
+                        maintenanceMargin = sec.lastPrice * 0.5;
+                    } else if (sec.type === "Forex") {
+                        maintenanceMargin = 1000 * sec.lastPrice * 0.1;
+                    } else if (sec.type === "Future") {
+                        maintenanceMargin = sec.contractSize * sec.lastPrice * 0.1;
+                    } else if (sec.type === "Option") {
+                        maintenanceMargin = 100 * sec.lastPrice * 0.5;
+                    }
+
+                    // Računanje `initialMarginCost`
+                    const initialMarginCost = (maintenanceMargin * 1.1).toFixed(2);
+                    const index = 1;
+
+                    return {
+                        id: sec.ticker || index,
+                        ...sec,
+                        availableQuantity: sec.availableQuantity || 0,
+                        change,
+                        initialMarginCost
+                    };
+                });
+
+                console.log("Merged Securities:", mergedSecurities);
+
+                setSecurities(mergedSecurities);
+            } catch (error) {
+                console.error("Neuspešno učitavanje podataka o hartijama", error);
+            }
+        };
+
+     */
 
     const handleBuyClick = (security) => {
         setSelectedSecurity(security);
@@ -127,9 +181,13 @@ const SecuritiesTable = ({ role }) => {
             const matchesBid = (sec.bid !== undefined) && (bidRange.min === "" || bidRange.max === "" || (sec.bid >= parseFloat(bidRange.min) && sec.bid <= parseFloat(bidRange.max)));
             const matchesVolume = (sec.availableQuantity !== undefined) && (volumeRange.min === "" || volumeRange.max === "" || (sec.availableQuantity >= parseFloat(volumeRange.min) && sec.availableQuantity <= parseFloat(volumeRange.max)));
 
-            return matchesRole && matchesType && matchesSearch && matchesExchange && matchesAsk && matchesBid && matchesPrice && matchesVolume;
+            const matchesSettlement =
+                settlementDate === "" ||
+                (sec.settlementDate && sec.settlementDate === settlementDate);
+
+            return matchesRole && matchesType && matchesSearch && matchesExchange && matchesAsk && matchesBid && matchesPrice && matchesVolume &&  matchesSettlement;
         });
-    }, [securities, selectedType, search, exchangeFilter, askRange, bidRange, priceRange, volumeRange, role]);
+    }, [securities, selectedType, search, exchangeFilter, askRange, bidRange, priceRange, volumeRange, role, settlementDate]);
 
 
     const resetFilter = (filterName) => {
@@ -190,7 +248,7 @@ const SecuritiesTable = ({ role }) => {
     const columns = [
         { field: "ticker", headerName: "Ticker", width: 180 },
         { field: "lastPrice", headerName: "Price", width: 180, type: "number" },
-       /* { field: "change", headerName: "Promena", width: 180, type: "number" }, */
+        { field: "change", headerName: "Promena", width: 180, type: "number" },
         { field: "availableQuantity", headerName: "Volume", width: 160, type: "number" },
         {
             field: "initialMarginCost",
@@ -275,7 +333,24 @@ const SecuritiesTable = ({ role }) => {
                                onChange={(e) => handleChange(e, "volumeRange")}/>
                     <TextField label="Volume max" variant="outlined" type="number" name="max" value={volumeRange.max}
                                onChange={(e) => handleChange(e, "volumeRange")}/>
+                    <span></span> <span></span> <span></span> <span></span>
+                    {/* Treći red: Settlement Date filter (prikazuje se samo za Futures, Options ili All) */}
+                    {(selectedType.toLowerCase() === "future" ||
+                        selectedType.toLowerCase() === "option" ||
+                        selectedType.toLowerCase() === "all") && (
+                        <div style={{marginBottom: "10px"}}>
+                            <TextField
+                                label="Settlement Date"
+                                type="date"
+                                InputLabelProps={{shrink: true}}
+                                variant="outlined"
+                                value={settlementDate}
+                                onChange={(e) => handleChange(e, "settlementDate")}
+                            />
+                        </div>
+                    )}
                 </Box>
+
 
             </div>
 

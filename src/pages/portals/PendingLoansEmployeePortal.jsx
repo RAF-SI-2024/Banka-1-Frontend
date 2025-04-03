@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import { fetchAllPendingLoans } from "../../services/AxiosBanking";
 import ApproveLoanButton from "../../components/common/ApproveLoanButton";
 import DenyLoanButton from "../../components/common/DenyLoanButton";
+import {fetchCustomerById} from "../../services/AxiosUser";
 
 const PendingLoansEmployeePortal = () => {
     const [loans, setLoans] = useState([]);
@@ -31,6 +32,9 @@ const PendingLoansEmployeePortal = () => {
         { field: "remainingAmount", headerName: "Remaining Amount", width: 150 },
         { field: "loanReason", headerName: "Loan Reason", width: 200 },
         { field: "accountNumber", headerName: "Account Number", width: 200 },
+        { field: "employmentStatus", headerName: "Employment Status", width: 180 },
+        { field: "employmentPeriod", headerName: "Employment Period (years)", width: 180 },
+        { field: "contactPhone", headerName: "Contact Phone", width: 180 },
         {
             field: "approve",
             headerName: "Approve",
@@ -62,7 +66,40 @@ const PendingLoansEmployeePortal = () => {
     const loadLoans = async () => {
         try {
             setLoading(true);
-            const filteredLoans = await fetchAllPendingLoans();
+            const fetchedLoans = await fetchAllPendingLoans();
+
+            const loansWithCustomerData = await Promise.all(fetchedLoans.map(async (loan) => {
+                let phoneNumber = "N/A";
+                if (loan.account?.ownerID) {
+                    try {
+                        const customerData = await fetchCustomerById(loan.account.ownerID);
+                        phoneNumber = customerData.data.phoneNumber || "N/A";
+                    } catch (err) {
+                        console.error(`Error fetching customer ${loan.account.ownerID}:`, err);
+                    }
+                }
+                return {
+                    id: loan.id,
+                    loanType: loan.loanType,
+                    numberOfInstallments: loan.numberOfInstallments ?? "N/A",
+                    currencyType: loan.currencyType,
+                    interestType: loan.interestType,
+                    paymentStatus: loan.paymentStatus,
+                    nominalRate: loan.nominalRate,
+                    effectiveRate: loan.effectiveRate,
+                    loanAmount: loan.loanAmount.toFixed(2),
+                    duration: !isNaN(parseFloat(loan.duration)) ? parseFloat(loan.duration).toFixed(2) : "N/A",
+                    createdDate: new Date(loan.createdDate).toLocaleDateString(),
+                    allowedDate: new Date(loan.allowedDate).toLocaleDateString(),
+                    monthlyPayment: loan.monthlyPayment.toFixed(2),
+                    nextPaymentDate: new Date(loan.nextPaymentDate).toLocaleDateString(),
+                    remainingAmount: loan.remainingAmount.toFixed(2),
+                    loanReason: loan.loanReason || "N/A",
+                    accountNumber: loan.account?.accountNumber ?? "N/A",
+                    contactPhone: phoneNumber,
+                };
+            }));
+           /* const filteredLoans = await fetchAllPendingLoans();
 
             const formattedLoans = filteredLoans.map(loan => ({
                 id: loan.id,
@@ -74,17 +111,23 @@ const PendingLoansEmployeePortal = () => {
                 nominalRate: loan.nominalRate,
                 effectiveRate: loan.effectiveRate,
                 loanAmount: loan.loanAmount.toFixed(2),
-                duration: loan.duration,
+                duration: !isNaN(parseFloat(loan.duration)) ? parseFloat(loan.duration).toFixed(2) : "N/A",
                 createdDate: new Date(loan.createdDate).toLocaleDateString(),
                 allowedDate: new Date(loan.allowedDate).toLocaleDateString(),
                 monthlyPayment: loan.monthlyPayment.toFixed(2),
                 nextPaymentDate: new Date(loan.nextPaymentDate).toLocaleDateString(),
                 remainingAmount: loan.remainingAmount.toFixed(2),
                 loanReason: loan.loanReason || "N/A",
-                accountNumber: loan.account?.accountNumber ?? "N/A"
+                accountNumber: loan.account?.accountNumber ?? "N/A",
+                // polja koja fale po specifikaciji, ali su prazna nema odgovora na njih
+                employmentStatus: loan.employmentStatus ?? "N/A",
+                employmentPeriod: loan.employmentPeriod ?? "N/A",
+                contactPhone: loan.contactPhone ?? "N/A"
             }));
 
-            setLoans(formattedLoans);
+            */
+
+            setLoans(loansWithCustomerData);
         } catch (err) {
             console.error("Error loading loans:", err);
             setError("Failed to load loans data");

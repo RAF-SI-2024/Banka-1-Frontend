@@ -70,6 +70,34 @@ const CustomerPortal = () => {
             setLoading(false);
         }
     };
+
+    const formatLogDate = (log) => {
+        // Check if it's a valid date string or timestamp
+        if (typeof log === "string" || typeof log === "number") {
+            let strLog = String(log);
+
+            // If the date is in 'DDMMYYYY' format (e.g., 01011970)
+            if (strLog.length === 8) {
+                const year = strLog.slice(4, 8);
+                const month = strLog.slice(2, 4);
+                const day = strLog.slice(0, 2);
+
+                return `${year}-${month}-${day}`; // Format as 'YYYY-MM-DD'
+            }
+
+            // If it's a timestamp or date in any other valid format, ensure it's in 'YYYY-MM-DD'
+            const date = new Date(strLog);
+            if (!isNaN(date.getTime())) {
+                return date.toISOString().split('T')[0]; // Format as 'YYYY-MM-DD'
+            }
+        }
+
+        return log; // Return as-is if it's not in a recognized format
+    };
+
+
+
+    /*
     // Format the date in the log to YYYY-MM-DD
     const formatLogDate = (log) => {
         if (typeof log !== "string" && typeof log !== "number") return String(log);
@@ -88,12 +116,16 @@ const CustomerPortal = () => {
         return strLog; // Return as-is if not in expected format
     };
 
+     */
+
     // Handle the row click event to open the edit modal with the customer data pre-filled in the form fields
     const handleRowClick = async (row) => {
         try {
             const response = await fetchCustomerById(row.id);
 
             const customerData = response.data || response;
+            const formattedBirthDate = formatLogDate(customerData.birthDate); // Format as 'yyyy-MM-dd'
+            console.log("Rodjenda"+formattedBirthDate)
 
             // Create a clean customer object
             const cleanCustomerData = {
@@ -104,7 +136,7 @@ const CustomerPortal = () => {
                 email: customerData.email,
                 phoneNumber: customerData.phoneNumber,
                 address: customerData.address,
-                birthDate: formatLogDate(customerData.birthDate),
+                birthDate: formattedBirthDate,
                 gender: customerData.gender
             };
             // Set the selected customer data and open the edit modal with the data pre-filled in the form fields
@@ -121,6 +153,7 @@ const CustomerPortal = () => {
 
             updatedCustomerData.birthDate = transformDateForApi(updatedCustomerData.birthDate);
 
+            console.log(updatedCustomerData);
             // Update the customer data and show a success message
             await updateCustomer(updatedCustomerData.id, updatedCustomerData);
             setIsEditModalOpen(false);
@@ -131,6 +164,37 @@ const CustomerPortal = () => {
         }
     };
 
+    const transformDateForApi = (dateString) => {
+        // Skip if empty
+        if (!dateString) return null;
+
+        // Ensure dateString is a string
+        if (typeof dateString !== 'string') {
+            if (typeof dateString === 'number') {
+                // If it's a timestamp, convert it to a string
+                dateString = new Date(dateString).toISOString().split('T')[0]; // Format as 'YYYY-MM-DD'
+            } else {
+                console.error('Expected a string or number for dateString, but got:', typeof dateString);
+                return null;
+            }
+        }
+
+        try {
+            // Expecting "DD-MM-YYYY" => split by '-'
+            const [day, month, year] = dateString.split('-');
+
+            if (!day || !month || !year) return null;
+
+            // Convert to "YYYY-MM-DD" format
+            return `${year}-${month}-${day}`;
+        } catch (error) {
+            console.error('Error converting date:', error);
+            return null;
+        }
+    };
+
+
+    /*
     const transformDateForApi = (dateString) => {
         // Skip if empty
         if (!dateString) return null;
@@ -153,6 +217,8 @@ const CustomerPortal = () => {
             return null;
         }
     };
+
+     */
 
     // Add create customer handler
     const handleCreateCustomer = async (customerData) => {

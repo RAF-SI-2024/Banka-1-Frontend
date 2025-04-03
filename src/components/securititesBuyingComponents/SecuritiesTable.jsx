@@ -260,7 +260,7 @@ const SecuritiesTable = ({ role }) => {
         { field: "actions", headerName: "Action", width: 100, renderCell: (params) => (
                 <>
                     {params.row.availableQuantity > 0 && ( /*Treba da se zove dunjin BuyModal */
-                        <Button variant="outlined" onClick={() => handleBuyClick(selectedSecurity)}>Buy</Button>
+                        <Button variant="outlined" onClick={() => handleBuyClick(params.row)}>Buy</Button>
                     )}
                 </>
             )}
@@ -409,8 +409,8 @@ const SecuritiesTable = ({ role }) => {
             {
                 isModalOpen && (
                     <BuyModal
-                        open={true}
                         security={selectedSecurity}
+                        open={true}
                         onClose={handleCloseModal}  // Funkcija koja zatvara modal
                     />
                 )

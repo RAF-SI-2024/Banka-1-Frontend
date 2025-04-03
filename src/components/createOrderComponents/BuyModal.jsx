@@ -4,7 +4,7 @@ import {createOrder} from "../../services/AxiosTrading";
 import MenuItem from "@mui/material/MenuItem";
 import {fetchAccountsForUser, getUserIdFromToken} from "../../services/AxiosBanking";
 
-const BuyModal = ({ open, onClose, selectedSecurity }) => {
+const BuyModal = ({ open, onClose, security }) => {
     const [quantity, setQuantity] = useState(1);
     const [limitValue, setLimitValue] = useState("");
     const [stopValue, setStopValue] = useState("");
@@ -13,12 +13,16 @@ const BuyModal = ({ open, onClose, selectedSecurity }) => {
     const [isOverview, setIsOverview] = useState(false);
     const [orderType, setOrderType] = useState("market");
     const [pricePerUnit, setPricePerUnit] = useState(0);
-    const contractSize = 1; //izmeniti
+    const contractSize = security?.contractSize || 1; // Podrazumevana vrednost ako nije definisana
     const [approximatePrice, setApproximatePrice] = useState(0);
     const [accounts, setAccounts] = useState([]);
     const [outflowAccount, setOutflowAccount] = useState('');
-    const id = 1; //izmeniti
 
+    useEffect(() => {
+        if (open) {
+            console.log("Selected Security Object:", security);
+        }
+    }, [open, security]);
 
     //racuni klijenta
     useEffect(() => {
@@ -56,7 +60,7 @@ const BuyModal = ({ open, onClose, selectedSecurity }) => {
 
     //odredjivanje tipa ordera i cene
     useEffect(() => {
-        let newPricePerUnit = selectedSecurity.lastPrice || 0;
+        let newPricePerUnit = security?.lastPrice || 0;
 
         if (limitValue && stopValue) {
             setOrderType("stop-limit");
@@ -73,14 +77,14 @@ const BuyModal = ({ open, onClose, selectedSecurity }) => {
 
         setPricePerUnit(newPricePerUnit);
         setApproximatePrice(contractSize * newPricePerUnit * quantity);
-    }, [limitValue, stopValue, selectedSecurity, quantity]);
+    }, [limitValue, stopValue, security, quantity]);
 
 
 
     //kolicina ne moze da bude manja od 1
     const handleQuantityChange = (event) => {
-        const value = event.target.value;
-        if (value >= 1) {
+        const value = parseInt(event.target.value, 10);
+        if (!isNaN(value) && value >= 1) {
             setQuantity(value);
         }
     };
@@ -89,18 +93,16 @@ const BuyModal = ({ open, onClose, selectedSecurity }) => {
     const handleConfirm = async () => {
 
         const orderData = {
-            user_id: getUserIdFromToken(),
-            security_id: id,
-            order_type: orderType,
-            quantity: quantity,
-            contract_size: contractSize,
-            stopPricePerUnit : stopValue,
-            limitPricePerUnit: limitValue,
-            pricePerUnit: pricePerUnit,
-            direction: "buy",
+            account_id: outflowAccount,
             aon:allOrNone,
+            contract_size: contractSize,
+            direction: "Buy",
+            limit_price_per_unit: limitValue ? parseFloat(limitValue) : null,
             margin: margin,
-            accountId: outflowAccount
+            quantity: parseInt(quantity, 10),
+            security_id: security?.id,
+            stop_price_per_unit : stopValue ? parseFloat(stopValue) : null,
+            user_id: getUserIdFromToken()
         };
 
         console.log("Order Data:", orderData);
@@ -182,9 +184,6 @@ const BuyModal = ({ open, onClose, selectedSecurity }) => {
                                 variant="standard"
 
                             />
-                            <Typography variant="body1">
-                                {currency} {/* valuta koju ima account */}
-                            </Typography>
                         </Box>
 
                         {/* Stop Value */}
@@ -199,9 +198,7 @@ const BuyModal = ({ open, onClose, selectedSecurity }) => {
                                 variant="standard"
 
                             />
-                            <Typography variant="body1">
-                                {currency} {/* valuta koju ima account */}
-                            </Typography>
+
                         </Box>
 
                         <Box sx={{ display: "flex", flexDirection: "column", alignItems: "start", mt: 2 }}>
@@ -223,6 +220,7 @@ const BuyModal = ({ open, onClose, selectedSecurity }) => {
                                 variant="contained"
                                 color="primary"
                                 onClick={() => setIsOverview(true)}
+                                disabled={!outflowAccount}
                             >
                                 Continue
                             </Button>
@@ -238,7 +236,7 @@ const BuyModal = ({ open, onClose, selectedSecurity }) => {
                             <strong>Order Type:</strong> {orderType} order
                         </Typography>
                         <Typography variant="body1">
-                            <strong>Approximate Price:</strong> {approximatePrice.toFixed(2)} {currency}
+                            <strong>Approximate Price:</strong> {approximatePrice.toFixed(2)}
                         </Typography>
 
                         <Box sx={{ mt: 3, display: "flex", justifyContent: "space-between" }}>

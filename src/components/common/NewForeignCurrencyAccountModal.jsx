@@ -132,6 +132,13 @@ const NewForeignCurrencyAccountModal = ({ open, onClose, accountType, onSuccess 
                 console.error("Failed to load companies:", error);
             }
         };
+
+    useEffect(() => {
+        if (accountType === 'business') {
+            console.log("Business account type selected, setting makeCard to true");
+            setMakeCard(true);
+        }
+    }, [accountType]);
     
     useEffect(() => {
         if (accountType === 'business' && selectedOwnerId) {
@@ -148,6 +155,12 @@ const NewForeignCurrencyAccountModal = ({ open, onClose, accountType, onSuccess 
     const handleConfirm = async () => {
         const isNewCustomer = !selectedOwnerId;
 
+        if (accountType === 'business') {
+            console.log("Business account type selected, setting makeCard to true");
+            setMakeCard(true);
+        }
+        console.log("making a card", makeCard);
+
         if (!startingBalance || (isNewCustomer && !newCustomer.username)) return;
 
         try {
@@ -160,7 +173,7 @@ const NewForeignCurrencyAccountModal = ({ open, onClose, accountType, onSuccess 
                     birthDate: transformDateForApi(newCustomer.birthDate),
                     accountInfo: {
                         currency: selectedCurrency.toUpperCase(),
-                        type: "CURRENT",
+                        type: "FOREIGN_CURRENCY",
                         subtype: accountType.toUpperCase(),
                         dailyLimit: 0,
                         monthlyLimit: 0,
@@ -188,7 +201,7 @@ const NewForeignCurrencyAccountModal = ({ open, onClose, accountType, onSuccess 
                 const accountData = {
                     ownerID: createdCustomerId,
                     currency: selectedCurrency.toUpperCase(),
-                    type: 'CURRENT',
+                    type: 'FOREIGN_CURRENCY',
                     subtype: accountType.toUpperCase(),
                     dailyLimit: 0,
                     monthlyLimit: 0,

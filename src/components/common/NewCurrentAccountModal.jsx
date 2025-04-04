@@ -144,10 +144,23 @@ const NewCurrentAccountModal = ({ open, onClose, accountType, onSuccess }) => {
         }
     }, [selectedOwnerId, companies, accountType]);
 
+    useEffect(() => {
+            if (accountType === 'business') {
+                console.log("Business account type selected, setting makeCard to true");
+                setMakeCard(true);
+            }
+        }, [accountType]);
+
     const handleConfirm = async () => {
         const isNewCustomer = !selectedOwnerId;
 
         if (!startingBalance || (isNewCustomer && !newCustomer.username)) return;
+
+        if (accountType === 'business') {
+            console.log("Business account type selected, setting makeCard to true");
+            setMakeCard(true);
+        }
+        console.log("making a card", makeCard);
 
         try {
             let createdCustomerId = selectedOwnerId;

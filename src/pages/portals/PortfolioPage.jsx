@@ -46,6 +46,8 @@ const PortfolioPage = () => {
       try {
         const data = await getUserSecurities(userId);
         const tax = await getTaxForUser(userId);
+        console.log(data)
+        console.log(tax);
         setPortfolioData(data);
         setTaxData(tax.data);
       } catch (error) {

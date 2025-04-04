@@ -13,7 +13,8 @@ const ProfitInfoModal = ({ open, onClose, portfolioData }) => {
 
   useEffect(() => {
     if (portfolioData && Array.isArray(portfolioData)) {
-      const totalProfit = portfolioData.reduce((acc, security) => acc + security.Profit, 0);
+      const totalProfit = portfolioData.reduce((acc, security) => acc + security.profit, 0);
+      console.log(totalProfit);
       setProfit(totalProfit);
     } else {
       console.error("portfolioData is invalid or null");

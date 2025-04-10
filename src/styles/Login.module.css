@@ -98,30 +98,31 @@
 
 .input {
     width: 100%;
-    padding: 6.6px 11px;
-    font-size: 0.77rem;
-    border-radius: 6.6px;
-    border: 1px solid #C8C5D0;
-    background-color: #FFFFFF;
-    color: #000;
-    box-sizing: border-box;
+    padding: 8px 4px;
+    font-size: 16px;
+    background: none;
+    border: none;
+    border-bottom: 2px solid #ccc;
+    outline: none;
+    color: inherit;
+    box-shadow: none;
+    position: relative;
 }
 
 .input.dark {
-    background-color: #2a2a2a;
-    border-color: #47464F;
+    border-bottom: 2px solid #666;
+    background: none;
     color: #E4E1E9;
 }
 
 .input:focus {
-    outline: none;
-    border-color: #595992;
-    box-shadow: 0 0 0 2.2px rgba(89, 89, 146, 0.2);
+    border-bottom: 2px solid #595992;
+    box-shadow: none;
 }
 
 .input.dark:focus {
-    border-color: #C2C1FF;
-    box-shadow: 0 0 0 2.2px rgba(194, 193, 255, 0.2);
+    border-bottom: 2px solid #C2C1FF;
+    box-shadow: none;
 }
 
 /* ===== Buttons & Links ===== */

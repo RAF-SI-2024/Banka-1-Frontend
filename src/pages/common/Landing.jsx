@@ -54,15 +54,15 @@ const Landing = () => {
         : '/logo-removebg-invert.png';
 
     const handleLoginScroll = async () => {
+        const isDark = theme.palette.mode === 'dark';
+
         await bgControls.start({
-            backgroundColor: [
-                theme.palette.background.default,
-                theme.palette.mode === 'dark' ? '#1a1a1a' : '#f2f2f2',
-                '#595992'
-            ],
+            backgroundImage: isDark
+                ? 'linear-gradient(135deg, #1a1a1a, #414178)'
+                : 'linear-gradient(135deg, #595992, #C2C1FF)',
             transition: {
                 duration: 1.5,
-                ease: 'easeInOut'
+                ease: 'easeInOut',
             }
         });
 

@@ -12,7 +12,7 @@ import { Autocomplete, TextField, Button, IconButton } from "@mui/material";
 import { jwtDecode } from "jwt-decode";
 import VerificationModal from "../../components/transferComponents/VerificationModal";
 import FlashOnIcon from "@mui/icons-material/FlashOn";
-import AddFastPayment from "../../components/transactionComponents/AddFastPayment";
+import FastPaymentPopup from "../../components/transactionComponents/FastPaymentPopup";
 
 const NewPaymentPortal = () => {
     const location = useLocation();
@@ -411,8 +411,8 @@ const NewPaymentPortal = () => {
                 <ToastContainer position="bottom-right" />
                 <VerificationModal open={showModal} onClose={handleCancel} onConfirm={handleVerificationConfirm} />
                 <PaymentResultModal open={openModal} onClose={() => setOpenModal(false)} success={isSuccess} paymentMessage={paymentMessage} onConfirm={handleConfirm} />
-                <AddFastPayment open={fastPaymentOpen} onClose={() => setFastPaymentOpen(false)} onSelectRecipient={handleFastPaymentSelect} />
-                </div>
+                <FastPaymentPopup open={fastPaymentOpen} onClose={() => setFastPaymentOpen(false)} onSelect={handleFastPaymentSelect} />
+            </div>
         </div>
     );
 };

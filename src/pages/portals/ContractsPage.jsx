@@ -82,8 +82,8 @@ const ContractsPage = () => {
       filter === "valid" ? isValid(c) : !isValid(c)
   );
 
-  const buyerContracts = filteredContracts.filter((c) => c.BuyerID === userId);
-  const sellerContracts = filteredContracts.filter((c) => c.SellerID === userId);
+  const buyerContracts = filteredContracts.filter((c) => c.BuyerID === userId || c.BuyerID === "111".concat(userId));
+  const sellerContracts = filteredContracts.filter((c) => c.SellerID === c.BuyerID === "111".concat(userId));
 
   const renderContracts = (title, data, showExecute = false, role) => (
       <Box sx={{ mb: 6 }}>
